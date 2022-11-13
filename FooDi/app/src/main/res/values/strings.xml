@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">FooDi</string>
+    <string name="search_edit_text_hint">검색할 음식을 입력해주세요.</string>
 </resources>

@@ -3,16 +3,34 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    >
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <TextView
-        android:text="검색"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/searchInputTextLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="50sp"
+        android:orientation="horizontal"
+        android:layout_marginTop="20dp"
         app:layout_constraintTop_toTopOf="parent"
+        app:endIconMode="custom"
+        app:endIconDrawable="@drawable/ic_baseline_search_24"
+        >
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/searchInputText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            android:hint="@string/search_edit_text_hint"
+            />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/searchFoodRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/searchInputTextLayout"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:gravity="center"
+        tools:listitem="@layout/search_food_item"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
