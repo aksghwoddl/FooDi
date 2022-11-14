@@ -1,5 +1,6 @@
 package com.lee.foodi.ui.search
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.lee.foodi.common.PAGE_ONE
+import com.lee.foodi.data.model.FoodInfoData
 import com.lee.foodi.data.repository.RestRepository
 import com.lee.foodi.databinding.FragmentSearchBinding
 import com.lee.foodi.ui.adapter.SearchFoodRecyclerAdapter
@@ -20,6 +22,8 @@ class SearchFragment : Fragment() {
     private lateinit var binding : FragmentSearchBinding
     private lateinit var mViewModel : FoodInfoViewModel
     private lateinit var mSearchFoodRecyclerAdapter: SearchFoodRecyclerAdapter
+
+    private var mCurrentPage = 0
 
     companion object{
         fun newInstance() = SearchFragment()
@@ -38,10 +42,7 @@ class SearchFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.searchInputTextLayout.setEndIconOnClickListener {
-            val foodName = binding.searchInputText.text.toString()
-            mViewModel.getSearchFoodList(foodName , PAGE_ONE)
-        }
+        addListeners()
         observeData()
     }
 
@@ -53,41 +54,82 @@ class SearchFragment : Fragment() {
         }
     }
 
+    private fun addListeners(){
+        with(binding){
+            // Search Button Listener
+            searchInputTextLayout.setEndIconOnClickListener {
+                val foodName = searchInputText.text.toString()
+                mViewModel.getSearchFoodList(foodName , PAGE_ONE)
+                mCurrentPage = 1
+            }
+
+            // Next Button Listener
+            nextButton.setOnClickListener {
+                val foodName = searchInputText.text.toString()
+                mViewModel.getSearchFoodList(foodName , (++mCurrentPage).toString())
+                mViewModel.isPreviousEnable.postValue(true)
+                binding.searchFoodRecyclerView.smoothScrollToPosition(0)
+            }
+
+            // Previous Button Listener
+            previousButton.setOnClickListener {
+                if(mCurrentPage > 1){
+                    val foodName = searchInputText.text.toString()
+                    mViewModel.getSearchFoodList(foodName , (--mCurrentPage).toString())
+                    binding.searchFoodRecyclerView.smoothScrollToPosition(0)
+                } else {
+                    mViewModel.isPreviousEnable.postValue(false)
+                }
+            }
+        }
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
     private fun observeData() {
        with(mViewModel){
            foodList.observe(viewLifecycleOwner){
                it?.let {
                    mSearchFoodRecyclerAdapter.setList(it)
-                   mSearchFoodRecyclerAdapter.notifyItemRangeChanged(0 , mSearchFoodRecyclerAdapter.itemCount)
+                   mSearchFoodRecyclerAdapter.notifyDataSetChanged()
                    mViewModel.addFoodLayoutVisible.postValue(false)
                }?:run {
-                   Toast.makeText(context , "검색결과가 존재하지 않습니다!!" , Toast.LENGTH_SHORT).show()
-                   mViewModel.isProgressVisible.postValue(false)
                    mViewModel.addFoodLayoutVisible.postValue(true)
+                   mViewModel.isProgressVisible.postValue(false)
                }
            }
-           mViewModel.isProgressVisible.observe(viewLifecycleOwner){
+
+           isProgressVisible.observe(viewLifecycleOwner){
                if(it){
                    binding.progressBar.visibility = View.VISIBLE
                } else {
                    binding.progressBar.visibility = View.GONE
                }
            }
+
            errorMessage.observe(viewLifecycleOwner){
                Toast.makeText(context , it , Toast.LENGTH_SHORT).show()
            }
+
            addFoodLayoutVisible.observe(viewLifecycleOwner){
                if(it){
                    with(binding){
-                       searchFoodRecyclerView.visibility = View.GONE
+                       searchFoodRecyclerScrollView.visibility = View.GONE
                        noSearchFoodLayout.visibility = View.VISIBLE
                    }
                } else {
                    with(binding){
-                       searchFoodRecyclerView.visibility = View.VISIBLE
+                       searchFoodRecyclerScrollView.visibility = View.VISIBLE
                        noSearchFoodLayout.visibility = View.GONE
                    }
                }
+           }
+
+           isNextEnable.observe(viewLifecycleOwner){
+               binding.nextButton.isEnabled = it
+           }
+
+           isPreviousEnable.observe(viewLifecycleOwner){
+               binding.previousButton.isEnabled = it
            }
        }
     }

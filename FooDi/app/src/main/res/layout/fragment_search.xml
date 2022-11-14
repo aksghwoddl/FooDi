@@ -37,11 +37,12 @@
             />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <androidx.core.widget.NestedScrollView
+    <ScrollView
         android:id="@+id/searchFoodRecyclerScrollView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/searchInputTextLayout"
+        app:layout_constraintBottom_toBottomOf="parent"
         >
         <LinearLayout
             android:layout_width="match_parent"
@@ -51,21 +52,40 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/searchFoodRecyclerView"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/food_recycler_scrollview_height"
                 app:layout_constraintTop_toBottomOf="@id/searchInputTextLayout"
                 app:layout_constraintBottom_toBottomOf="parent"
                 tools:listitem="@layout/search_food_item"
                 />
-            <Button
-                android:id="@+id/nextButton"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_gravity="end"
-                android:layout_marginEnd="20dp"
-                android:background="@drawable/ic_baseline_arrow_right_alt_24"
-                />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="20dp"
+                >
+                <Button
+                    android:id="@+id/previousButton"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="start"
+                    android:layout_marginEnd="20dp"
+                    android:background="@drawable/ic_baseline_arrow_circle_left_24"
+                    android:layout_marginStart="20dp"
+                    android:enabled="false"
+                    />
+
+                <Button
+                    android:id="@+id/nextButton"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="20dp"
+                    android:background="@drawable/ic_baseline_arrow_circle_right_24"
+                    android:enabled="false"
+                    />
+            </RelativeLayout>
         </LinearLayout>
-    </androidx.core.widget.NestedScrollView>
+    </ScrollView>
 
     <LinearLayout
         android:id="@+id/noSearchFoodLayout"
@@ -84,6 +104,7 @@
             android:gravity="center"
             android:textSize="@dimen/no_search_food_text_size"
             android:fontFamily="@font/swagger"
+            android:textColor="#000"
             />
 
         <Button
