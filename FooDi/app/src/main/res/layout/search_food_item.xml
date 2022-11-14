@@ -8,6 +8,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="음식이름"
+        android:fontFamily="@font/swagger"
+        android:textSize="20sp"
+        android:gravity="center"
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="20dp"
+        android:textColor="#000"
         />
 
 </LinearLayout>

@@ -2,16 +2,17 @@ package com.lee.foodi.data.rest
 
 import com.lee.foodi.common.FOOD_TARGET_URL
 import com.lee.foodi.common.SERVICE_KEY
+import com.lee.foodi.data.model.FoodData
+import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
-import retrofit2.http.Path
+import retrofit2.http.Query
 
 
 interface RestService {
-    @GET("serviceKey=$SERVICE_KEY&desc_kor={foodName} &pageNo={page}&numOfRows=10&bgn_year=&animal_plant=&type=json")
-    fun getSearchFood(@Path("foodName") foodName : String
-                      , @Path("page") page : String)
+    @GET("getFoodNtrItdntList1?serviceKey=$SERVICE_KEY&numOfRows=10&bgn_year=&animal_plant=&type=json")
+    suspend fun getSearchFood(@Query("desc_kor") foodName : String, @Query("pageNo") page : String) : Response<FoodData>
 }
 
 class RestServiceInstance{

@@ -5,6 +5,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:indeterminateTint="@color/black"
+        android:visibility="gone"
+        android:elevation="32dp"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/searchInputTextLayout"
         android:layout_width="match_parent"
@@ -21,16 +33,67 @@
             android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="parent"
             android:hint="@string/search_edit_text_hint"
+            android:background="#fff"
             />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/searchFoodRecyclerView"
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/searchFoodRecyclerScrollView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/searchInputTextLayout"
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            >
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/searchFoodRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/searchInputTextLayout"
+                app:layout_constraintBottom_toBottomOf="parent"
+                tools:listitem="@layout/search_food_item"
+                />
+            <Button
+                android:id="@+id/nextButton"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="end"
+                android:layout_marginEnd="20dp"
+                android:background="@drawable/ic_baseline_arrow_right_alt_24"
+                />
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <LinearLayout
+        android:id="@+id/noSearchFoodLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@id/searchInputTextLayout"
         app:layout_constraintBottom_toBottomOf="parent"
-        tools:listitem="@layout/search_food_item"
-        />
+        android:visibility="gone"
+        >
+        <TextView
+            android:id="@+id/noSearchFoodTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/no_search_food"
+            android:gravity="center"
+            android:textSize="@dimen/no_search_food_text_size"
+            android:fontFamily="@font/swagger"
+            />
+
+        <Button
+            android:id="@+id/addFoodButton"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/ic_baseline_add_circle_24"
+            />
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

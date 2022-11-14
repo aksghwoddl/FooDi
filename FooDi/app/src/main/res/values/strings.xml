@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">FooDi</string>
     <string name="search_edit_text_hint">검색할 음식을 입력해주세요.</string>
+    <string name="no_search_food">검색한 음식이 존재하지 않습니다. \n 새로 추가 하시겠습니까?</string>
 </resources>

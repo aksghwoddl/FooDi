@@ -1,9 +1,9 @@
 package com.lee.foodi.data.model
 
-class FoodData (
-    val header : Header,
-    val body : Body
-)
+class FoodData {
+    val header : Header? = null
+    val body : Body? = null
+}
 
 
 data class Header(
