@@ -33,6 +33,7 @@
             android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="parent"
             android:hint="@string/search_edit_text_hint"
+            android:fontFamily="@font/swagger"
             android:background="#fff"
             />
     </com.google.android.material.textfield.TextInputLayout>

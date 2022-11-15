@@ -17,8 +17,6 @@
         android:layout_centerVertical="true"
         android:layout_marginStart="20dp"
         android:singleLine="true"
-        android:ellipsize="marquee"
-
         />
 
     <RadioButton

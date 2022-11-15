@@ -1,6 +1,7 @@
 package com.lee.foodi.data.model
 
 import com.google.gson.annotations.SerializedName
+import java.io.Serializable
 
 data class FoodInfoData (
     @SerializedName("DESC_KOR")
@@ -29,4 +30,4 @@ data class FoodInfoData (
     val beginYear : String ,
     @SerializedName("ANIMAL_PLANT")
     val company : String
-)
+) : Serializable

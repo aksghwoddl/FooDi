@@ -1,6 +1,7 @@
 package com.lee.foodi.ui.search
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -11,7 +12,9 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.lee.foodi.common.EXTRA_SELECTED_FOOD
 import com.lee.foodi.common.PAGE_ONE
+import com.lee.foodi.data.model.FoodInfoData
 import com.lee.foodi.data.repository.RestRepository
 import com.lee.foodi.databinding.FragmentSearchBinding
 import com.lee.foodi.ui.adapter.SearchFoodRecyclerAdapter
@@ -50,6 +53,16 @@ class SearchFragment : Fragment() {
 
     private fun initRecyclerView(){
         mSearchFoodRecyclerAdapter = SearchFoodRecyclerAdapter()
+        mSearchFoodRecyclerAdapter.setOnItemClickListener(object : SearchFoodRecyclerAdapter.OnItemClickListener{
+            // move to FoodDetailActivity when item selected
+            override fun onItemClick(v: View, model: FoodInfoData, position: Int) {
+                super.onItemClick(v, model, position)
+                with(Intent(requireContext() , FoodDetailActivity::class.java)){
+                    putExtra(EXTRA_SELECTED_FOOD , model)
+                    startActivity(this)
+                }
+            }
+        })
         with(binding.searchFoodRecyclerView){
             layoutManager = LinearLayoutManager(context , RecyclerView.VERTICAL , false)
             adapter = mSearchFoodRecyclerAdapter
@@ -86,6 +99,10 @@ class SearchFragment : Fragment() {
             }
         }
     }
+
+    /**
+     * Function for observing ViewModel Data
+     * **/
 
     @SuppressLint("NotifyDataSetChanged")
     private fun observeData() {

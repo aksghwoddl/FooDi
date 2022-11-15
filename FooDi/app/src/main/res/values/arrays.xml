@@ -5,4 +5,9 @@
         <item>다이어리</item>
         <item>설정</item>
     </string-array>
+
+    <string-array name="unit_array">
+        <item>g</item>
+        <item>oz</item>
+    </string-array>
 </resources>

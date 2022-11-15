@@ -24,11 +24,13 @@ class ContainerActivity : AppCompatActivity() {
         }
         mFragmentStateAdapter = ContainerFragmentStateAdapter(this)
 
-        savedInstanceState?:let {
-            initFragmentAdapter()
-        }
+        savedInstanceState?: initFragmentAdapter()
     }
 
+
+    /**
+     * Function for init FragmentStateAdapter
+     * **/
     private fun initFragmentAdapter() {
         val tabNameArray = resources.getStringArray(R.array.bottom_tab_array)
         mSearchFragment = SearchFragment.newInstance()
