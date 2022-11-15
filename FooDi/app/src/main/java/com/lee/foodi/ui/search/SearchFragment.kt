@@ -2,6 +2,7 @@ package com.lee.foodi.ui.search
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,16 +12,17 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.lee.foodi.common.PAGE_ONE
-import com.lee.foodi.data.model.FoodInfoData
 import com.lee.foodi.data.repository.RestRepository
 import com.lee.foodi.databinding.FragmentSearchBinding
 import com.lee.foodi.ui.adapter.SearchFoodRecyclerAdapter
-import com.lee.foodi.ui.viewmodel.FoodInfoViewModel
-import com.lee.foodi.ui.viewmodel.factory.FoodViewModelFactory
+import com.lee.foodi.ui.search.viewmodel.SearchFoodViewModel
+import com.lee.foodi.ui.factory.FoodViewModelFactory
 
 class SearchFragment : Fragment() {
+    private val TAG = "SearchFragment"
+
     private lateinit var binding : FragmentSearchBinding
-    private lateinit var mViewModel : FoodInfoViewModel
+    private lateinit var mViewModel : SearchFoodViewModel
     private lateinit var mSearchFoodRecyclerAdapter: SearchFoodRecyclerAdapter
 
     private var mCurrentPage = 0
@@ -35,7 +37,7 @@ class SearchFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentSearchBinding.inflate(inflater , container , false)
-        mViewModel = ViewModelProvider(this , FoodViewModelFactory(RestRepository()))[FoodInfoViewModel::class.java]
+        mViewModel = ViewModelProvider(this , FoodViewModelFactory(RestRepository()))[SearchFoodViewModel::class.java]
         initRecyclerView()
         return binding.root
     }
@@ -76,9 +78,10 @@ class SearchFragment : Fragment() {
                 if(mCurrentPage > 1){
                     val foodName = searchInputText.text.toString()
                     mViewModel.getSearchFoodList(foodName , (--mCurrentPage).toString())
+                    if(mCurrentPage == 1){
+                        mViewModel.isPreviousEnable.postValue(false)
+                    }
                     binding.searchFoodRecyclerView.smoothScrollToPosition(0)
-                } else {
-                    mViewModel.isPreviousEnable.postValue(false)
                 }
             }
         }
@@ -91,10 +94,10 @@ class SearchFragment : Fragment() {
                it?.let {
                    mSearchFoodRecyclerAdapter.setList(it)
                    mSearchFoodRecyclerAdapter.notifyDataSetChanged()
-                   mViewModel.addFoodLayoutVisible.postValue(false)
+                   addFoodLayoutVisible.postValue(false)
                }?:run {
-                   mViewModel.addFoodLayoutVisible.postValue(true)
-                   mViewModel.isProgressVisible.postValue(false)
+                       addFoodLayoutVisible.postValue(true)
+                       isProgressVisible.postValue(false)
                }
            }
 

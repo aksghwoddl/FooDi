@@ -1,4 +1,4 @@
-package com.lee.foodi.ui.viewmodel
+package com.lee.foodi.ui.search.viewmodel
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
@@ -8,8 +8,9 @@ import com.lee.foodi.data.model.FoodInfoData
 import com.lee.foodi.data.repository.RestRepository
 import kotlinx.coroutines.*
 import java.net.SocketTimeoutException
+import kotlin.math.ceil
 
-class FoodInfoViewModel(private val repository: RestRepository) : ViewModel() {
+class SearchFoodViewModel(private val repository: RestRepository) : ViewModel() {
     private val TAG = "FoodInfoViewModel"
 
     private var mJob : Job? = null
@@ -20,6 +21,10 @@ class FoodInfoViewModel(private val repository: RestRepository) : ViewModel() {
     var addFoodLayoutVisible = MutableLiveData<Boolean>() // Manage status that no food
     var isNextEnable = MutableLiveData<Boolean>()
     var isPreviousEnable = MutableLiveData<Boolean>()
+
+    /**
+     * For Get FoodList that searched from repository
+     * **/
 
     fun getSearchFoodList(foodName : String , page : String) {
         mJob = CoroutineScope(Dispatchers.IO).launch {
@@ -32,7 +37,8 @@ class FoodInfoViewModel(private val repository: RestRepository) : ViewModel() {
                         if(response.isSuccessful){
                             foodList.value = foodResponse?.body?.items
                             isProgressVisible.postValue(false)
-                            isNextEnable.value = foodResponse?.body?.totalCount!! >= 10
+                            val totalCount = foodResponse?.body?.totalCount!!
+                            isNextEnable.value = totalCount >= 10 && ceil(totalCount.toDouble())/10 > page.toInt()
                         } else {
                             Log.d(TAG, "getSearchFoodList: ${response.message()}")
                             errorMessage.postValue("서버에서 정상적으로 값을 받아오지 못했습니다!!")
