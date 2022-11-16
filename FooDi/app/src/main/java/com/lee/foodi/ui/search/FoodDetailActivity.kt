@@ -33,15 +33,15 @@ class FoodDetailActivity : AppCompatActivity() {
             foodNameTextView.text = mFoodInfoData.foodName
             foodNameTextView.isSelected = true // for marquee setting
             companyNameTextView.text = mFoodInfoData.company
-            calorieTextView.text = getString(R.string.calories) + Utils.checkErrorValue(mFoodInfoData.calorie)
-            carbohydrateTextView.text = getString(R.string.carbohydrate) + Utils.checkErrorValue(mFoodInfoData.carbohydrate)
-            proteinTextView.text = getString(R.string.protein) + Utils.checkErrorValue(mFoodInfoData.protein)
-            fatTextView.text = getString(R.string.fat) + Utils.checkErrorValue(mFoodInfoData.fat)
-            sugarTextView.text = getString(R.string.sugar) + Utils.checkErrorValue(mFoodInfoData.sugar)
-            saltTextView.text = getString(R.string.salt) + Utils.checkErrorValue(mFoodInfoData.salt)
-            cholesterolTextView.text = getString(R.string.cholesterol) + Utils.checkErrorValue(mFoodInfoData.cholesterol)
-            saturatedFat.text = getString(R.string.saturated_fat) + Utils.checkErrorValue(mFoodInfoData.saturatedFat)
-            transFatTextView.text = getString(R.string.trans_fat) + Utils.checkErrorValue(mFoodInfoData.transFat)
+            calorieTextView.text = getString(R.string.calories) + Utils.checkErrorValue(mFoodInfoData.calorie) + " kcal"
+            carbohydrateTextView.text = getString(R.string.carbohydrate) + Utils.checkErrorValue(mFoodInfoData.carbohydrate) + " g"
+            proteinTextView.text = getString(R.string.protein) + Utils.checkErrorValue(mFoodInfoData.protein) + " g"
+            fatTextView.text = getString(R.string.fat) + Utils.checkErrorValue(mFoodInfoData.fat) + " g"
+            sugarTextView.text = getString(R.string.sugar) + Utils.checkErrorValue(mFoodInfoData.sugar) + " g"
+            saltTextView.text = getString(R.string.salt) + Utils.checkErrorValue(mFoodInfoData.salt) + " g"
+            cholesterolTextView.text = getString(R.string.cholesterol) + Utils.checkErrorValue(mFoodInfoData.cholesterol) + " g"
+            saturatedFat.text = getString(R.string.saturated_fat) + Utils.checkErrorValue(mFoodInfoData.saturatedFat) + " g"
+            transFatTextView.text = getString(R.string.trans_fat) + Utils.checkErrorValue(mFoodInfoData.transFat) + " g"
             calculateEditText.text = Editable.Factory.getInstance().newEditable(mFoodInfoData.servingWeight)
         }
         initSpinner()

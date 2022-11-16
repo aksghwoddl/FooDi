@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">FOODI</string>
-    <string name="sub_title">내손안에 다이어트 플래너</string>
+    <string name="sub_title">내손안에 식단 플래너</string>
+    <string name="network_dialog_header">네트워크 연결 상태를 \n확인 해주세요.</string>
+    <string name="confirm">확인</string>
     <string name="search_edit_text_hint">검색할 음식을 입력해주세요.</string>
     <string name="food_name">음식이름</string>
     <string name="company_name">회사이름</string>
