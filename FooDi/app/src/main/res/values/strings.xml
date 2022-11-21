@@ -6,10 +6,13 @@
     <string name="confirm">확인</string>
     <string name="add">추가하기</string>
     <string name="search_edit_text_hint">검색할 음식을 입력해주세요.</string>
+    <string name="add_food_header_title">추가할 음식 정보를 입력해주세요.</string>
 
     <!-- Food Info -->
     <string name="food_name">음식이름</string>
+    <string name="add_food_name">음식이름 : </string>
     <string name="company_name">회사이름</string>
+    <string name="add_company_name">회사이름 : </string>
     <string name="no_search_food">검색한 음식이 존재하지 않습니다. \n 새로 추가 하시겠습니까?</string>
     <string name="serving_size">1회 제공량 : </string>
     <string name="calories">칼로리 : </string>

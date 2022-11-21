@@ -1,4 +1,4 @@
-package com.lee.foodi.ui.splash
+package com.lee.foodi.ui.activities.splash
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -7,8 +7,8 @@ import android.net.ConnectivityManager
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.lee.foodi.databinding.ActivitySplashBinding
-import com.lee.foodi.ui.ContainerActivity
-import com.lee.foodi.ui.splash.dialog.NetworkDialog
+import com.lee.foodi.ui.activities.ContainerActivity
+import com.lee.foodi.ui.activities.splash.dialog.NetworkDialog
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay

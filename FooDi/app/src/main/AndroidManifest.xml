@@ -16,24 +16,28 @@
         android:usesCleartextTraffic="true"
         >
         <activity
-            android:name=".ui.ContainerActivity"
+            android:name=".ui.activities.ContainerActivity"
             android:windowSoftInputMode="adjustPan"
             android:exported="true">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
-        <activity android:name=".ui.search.FoodDetailActivity"
+        <activity android:name=".ui.fragments.search.FoodDetailActivity"
             android:exported="true"
             >
         </activity>
 
-        <activity android:name=".ui.splash.SplashActivity"
+        <activity android:name=".ui.activities.splash.SplashActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+
+        <activity android:name=".ui.activities.add.AddFoodActivity">
+
         </activity>
     </application>
 

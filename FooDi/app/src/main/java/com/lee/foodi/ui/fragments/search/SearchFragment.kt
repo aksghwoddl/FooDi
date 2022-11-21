@@ -1,4 +1,4 @@
-package com.lee.foodi.ui.search
+package com.lee.foodi.ui.fragments.search
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -13,12 +13,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.lee.foodi.R
 import com.lee.foodi.common.EXTRA_SELECTED_FOOD
+import com.lee.foodi.common.FoodiNewApplication
 import com.lee.foodi.common.PAGE_ONE
 import com.lee.foodi.data.model.FoodInfoData
 import com.lee.foodi.data.repository.FoodiRepository
 import com.lee.foodi.databinding.FragmentSearchBinding
+import com.lee.foodi.ui.activities.add.AddFoodActivity
 import com.lee.foodi.ui.adapter.SearchFoodRecyclerAdapter
-import com.lee.foodi.ui.search.viewmodel.SearchFoodViewModel
+import com.lee.foodi.ui.fragments.search.viewmodel.SearchFoodViewModel
 import com.lee.foodi.ui.factory.FoodiViewModelFactory
 
 class SearchFragment : Fragment() {
@@ -95,6 +97,12 @@ class SearchFragment : Fragment() {
                         mViewModel.isPreviousEnable.postValue(false)
                     }
                     binding.searchFoodRecyclerView.smoothScrollToPosition(0)
+                }
+            }
+
+            addFoodButton.setOnClickListener {
+                with(Intent(FoodiNewApplication.getInstance() , AddFoodActivity::class.java)){
+                    startActivity(this)
                 }
             }
         }

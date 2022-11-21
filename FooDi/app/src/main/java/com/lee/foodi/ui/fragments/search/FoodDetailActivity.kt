@@ -1,4 +1,4 @@
-package com.lee.foodi.ui.search
+package com.lee.foodi.ui.fragments.search
 
 import android.annotation.SuppressLint
 import android.os.Bundle

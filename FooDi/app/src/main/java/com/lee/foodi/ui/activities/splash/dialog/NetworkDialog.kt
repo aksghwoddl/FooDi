@@ -1,10 +1,10 @@
-package com.lee.foodi.ui.splash.dialog
+package com.lee.foodi.ui.activities.splash.dialog
 
 import android.app.Dialog
 import android.os.Bundle
 import com.lee.foodi.common.Utils
 import com.lee.foodi.databinding.DialogNetworkCheckBinding
-import com.lee.foodi.ui.splash.SplashActivity
+import com.lee.foodi.ui.activities.splash.SplashActivity
 
 class NetworkDialog(private val owner : SplashActivity) : Dialog(owner) {
     private lateinit var binding : DialogNetworkCheckBinding

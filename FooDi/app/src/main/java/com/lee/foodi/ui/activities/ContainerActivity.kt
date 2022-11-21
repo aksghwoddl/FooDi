@@ -1,4 +1,4 @@
-package com.lee.foodi.ui
+package com.lee.foodi.ui.activities
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -6,9 +6,9 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.lee.foodi.R
 import com.lee.foodi.databinding.ActivityContainerBinding
 import com.lee.foodi.ui.adapter.ContainerFragmentStateAdapter
-import com.lee.foodi.ui.diary.DiaryFragment
-import com.lee.foodi.ui.search.SearchFragment
-import com.lee.foodi.ui.user.UserFragment
+import com.lee.foodi.ui.fragments.diary.DiaryFragment
+import com.lee.foodi.ui.fragments.search.SearchFragment
+import com.lee.foodi.ui.fragments.user.UserFragment
 
 class ContainerActivity : AppCompatActivity() {
     private lateinit var binding : ActivityContainerBinding

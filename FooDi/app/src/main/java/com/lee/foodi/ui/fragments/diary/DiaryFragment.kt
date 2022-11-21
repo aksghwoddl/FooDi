@@ -1,17 +1,17 @@
-package com.lee.foodi.ui.user
+package com.lee.foodi.ui.fragments.diary
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.lee.foodi.databinding.FragmentUserBinding
+import com.lee.foodi.databinding.FragmentDiaryBinding
 
-class UserFragment : Fragment() {
-    private lateinit var binding : FragmentUserBinding
+class DiaryFragment : Fragment() {
+    private lateinit var binding : FragmentDiaryBinding
 
     companion object{
-        fun newInstance() = UserFragment()
+        fun newInstance() = DiaryFragment()
     }
 
     override fun onCreateView(
@@ -19,7 +19,7 @@ class UserFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentUserBinding.inflate(inflater , container , false)
+        binding = FragmentDiaryBinding.inflate(inflater , container , false)
         return binding.root
     }
 

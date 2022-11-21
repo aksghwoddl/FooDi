@@ -1,4 +1,4 @@
-package com.lee.foodi.ui.search.viewmodel
+package com.lee.foodi.ui.fragments.search.viewmodel
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
