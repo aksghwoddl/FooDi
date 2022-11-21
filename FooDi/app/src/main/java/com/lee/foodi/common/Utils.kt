@@ -6,6 +6,7 @@ import android.graphics.Point
 import android.os.Build
 import android.util.Log
 import android.view.WindowManager
+import android.widget.Toast
 
 const val PAGE_ONE = "1"
 const val EXTRA_SELECTED_FOOD = "selectedFood"
@@ -58,6 +59,14 @@ class Utils {
 
                 window?.setLayout(x, y)
             }
+        }
+
+        /**
+         * Function for toast message
+         * **/
+
+        fun toastMessage(message : String){
+            Toast.makeText(FoodiNewApplication.getInstance() , message , Toast.LENGTH_SHORT).show()
         }
     }
 }

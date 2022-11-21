@@ -3,7 +3,6 @@ package com.lee.foodi.ui.search
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,14 +11,15 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.lee.foodi.R
 import com.lee.foodi.common.EXTRA_SELECTED_FOOD
 import com.lee.foodi.common.PAGE_ONE
 import com.lee.foodi.data.model.FoodInfoData
-import com.lee.foodi.data.repository.RestRepository
+import com.lee.foodi.data.repository.FoodiRepository
 import com.lee.foodi.databinding.FragmentSearchBinding
 import com.lee.foodi.ui.adapter.SearchFoodRecyclerAdapter
 import com.lee.foodi.ui.search.viewmodel.SearchFoodViewModel
-import com.lee.foodi.ui.factory.FoodViewModelFactory
+import com.lee.foodi.ui.factory.FoodiViewModelFactory
 
 class SearchFragment : Fragment() {
     private val TAG = "SearchFragment"
@@ -40,7 +40,7 @@ class SearchFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentSearchBinding.inflate(inflater , container , false)
-        mViewModel = ViewModelProvider(this , FoodViewModelFactory(RestRepository()))[SearchFoodViewModel::class.java]
+        mViewModel = ViewModelProvider(this , FoodiViewModelFactory(FoodiRepository()))[SearchFoodViewModel::class.java]
         initRecyclerView()
         return binding.root
     }
@@ -74,14 +74,14 @@ class SearchFragment : Fragment() {
             // Search Button Listener
             searchInputTextLayout.setEndIconOnClickListener {
                 val foodName = searchInputText.text.toString()
-                mViewModel.getSearchFoodList(foodName , PAGE_ONE)
+                mViewModel.getSearchFoodList(resources.getString(R.string.food_info_service_key) , foodName , PAGE_ONE)
                 mCurrentPage = 1
             }
 
             // Next Button Listener
             nextButton.setOnClickListener {
                 val foodName = searchInputText.text.toString()
-                mViewModel.getSearchFoodList(foodName , (++mCurrentPage).toString())
+                mViewModel.getSearchFoodList(resources.getString(R.string.food_info_service_key) , foodName , (++mCurrentPage).toString())
                 mViewModel.isPreviousEnable.postValue(true)
                 binding.searchFoodRecyclerView.smoothScrollToPosition(0)
             }
@@ -90,7 +90,7 @@ class SearchFragment : Fragment() {
             previousButton.setOnClickListener {
                 if(mCurrentPage > 1){
                     val foodName = searchInputText.text.toString()
-                    mViewModel.getSearchFoodList(foodName , (--mCurrentPage).toString())
+                    mViewModel.getSearchFoodList(resources.getString(R.string.food_info_service_key) , foodName , (--mCurrentPage).toString())
                     if(mCurrentPage == 1){
                         mViewModel.isPreviousEnable.postValue(false)
                     }

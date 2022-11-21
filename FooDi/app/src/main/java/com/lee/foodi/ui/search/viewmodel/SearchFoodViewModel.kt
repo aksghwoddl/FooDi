@@ -5,12 +5,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.lee.foodi.data.model.FoodData
 import com.lee.foodi.data.model.FoodInfoData
-import com.lee.foodi.data.repository.RestRepository
+import com.lee.foodi.data.repository.FoodiRepository
 import kotlinx.coroutines.*
 import java.net.SocketTimeoutException
 import kotlin.math.ceil
 
-class SearchFoodViewModel(private val repository: RestRepository) : ViewModel() {
+class SearchFoodViewModel(private val repository: FoodiRepository) : ViewModel() {
     private val TAG = "FoodInfoViewModel"
 
     private var mJob : Job? = null
@@ -26,12 +26,12 @@ class SearchFoodViewModel(private val repository: RestRepository) : ViewModel() 
      * For Get FoodList that searched from repository
      * **/
 
-    fun getSearchFoodList(foodName : String , page : String) {
+    fun getSearchFoodList(key : String  , foodName : String , page : String) {
         mJob = CoroutineScope(Dispatchers.IO).launch {
             try {
                 isProgressVisible.postValue(true)
                 if(foodName.isNotEmpty()){
-                    val response = repository.getSearchFood(foodName , page)
+                    val response = repository.getSearchFood(key , foodName , page)
                     foodResponse = response.body()
                     withContext(Dispatchers.Main) {
                         if(response.isSuccessful){
