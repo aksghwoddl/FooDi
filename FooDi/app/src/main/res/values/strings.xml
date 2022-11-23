@@ -39,5 +39,6 @@
     <string name="weight">뭄무게 : </string>
     <string name="setting_timer">식단 타이머 설정하기</string>
     <string name="setting_lock">잠금화면 설정</string>
+    <string name="input_maintenance_calorie">유지칼로리</string>
     <!---->
 </resources>

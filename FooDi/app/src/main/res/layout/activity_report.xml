@@ -15,13 +15,19 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             >
-            <Spinner
-                android:id="@+id/reportSelection"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="30dp"
-                />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/header_toolbar_height"
+                android:background="@color/main_color"
+                >
+                <Spinner
+                    android:id="@+id/reportSelection"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentEnd="true"
+                    />
+            </RelativeLayout>
+
             <FrameLayout
                 android:id="@+id/reportGraphLayout"
                 android:layout_width="match_parent"
@@ -35,7 +41,8 @@
                 android:gravity="center"
                 android:fontFamily="@font/swagger"
                 android:textColor="#000"
-                android:layout_marginTop="20dp"
+                android:padding="10dp"
+                android:background="@color/main_color"
                 />
         </LinearLayout>
     </ScrollView>
