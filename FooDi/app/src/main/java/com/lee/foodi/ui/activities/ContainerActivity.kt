@@ -1,10 +1,12 @@
 package com.lee.foodi.ui.activities
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.tabs.TabLayoutMediator
 import com.lee.foodi.R
 import com.lee.foodi.databinding.ActivityContainerBinding
+import com.lee.foodi.ui.activities.report.ReportActivity
 import com.lee.foodi.ui.adapter.ContainerFragmentStateAdapter
 import com.lee.foodi.ui.fragments.diary.DiaryFragment
 import com.lee.foodi.ui.fragments.search.SearchFragment
@@ -25,6 +27,11 @@ class ContainerActivity : AppCompatActivity() {
         mFragmentStateAdapter = ContainerFragmentStateAdapter(this)
 
         savedInstanceState?: initFragmentAdapter()
+        binding.reportButton.setOnClickListener {
+            with(Intent(this , ReportActivity::class.java)){
+                startActivity(this)
+            }
+        }
     }
 
 

@@ -10,4 +10,10 @@
         <item>g</item>
         <item>oz</item>
     </string-array>
+
+    <string-array name="report_selection_array">
+        <item>최근</item>
+        <item>7일</item>
+        <item>한달</item>
+    </string-array>
 </resources>
