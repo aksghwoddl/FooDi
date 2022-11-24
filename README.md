@@ -1,1 +1,1 @@
-# FooDi
+# 푸디 (FOODI)
