@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">FOODI</string>
-    <string name="food_info_service_key">kSh3QnPHhrIKWvXEVaiTxPZRMErAsaXXy7Xszy%2FCBI7YSBsbd4S0Vfrf5KRnoZhT9GhcQ9L9fYMbbaBEG33dXA%3D%3D</string>
     <string name="sub_title">내손안에 식단 플래너</string>
     <string name="network_dialog_header">네트워크 연결 상태를 \n확인 해주세요.</string>
     <string name="confirm">확인</string>

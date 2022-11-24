@@ -26,12 +26,12 @@ class SearchFoodViewModel(private val repository: FoodiRepository) : ViewModel()
      * For Get FoodList that searched from repository
      * **/
 
-    fun getSearchFoodList(key : String  , foodName : String , page : String) {
+    fun getSearchFoodList(foodName : String , page : String) {
         mJob = CoroutineScope(Dispatchers.IO).launch {
             try {
                 isProgressVisible.postValue(true)
                 if(foodName.isNotEmpty()){
-                    val response = repository.getSearchFood(key , foodName , page)
+                    val response = repository.getSearchFood(foodName , page)
                     foodResponse = response.body()
                     withContext(Dispatchers.Main) {
                         if(response.isSuccessful){

@@ -12,8 +12,7 @@ private const val SERVICE_KEY = "kSh3QnPHhrIKWvXEVaiTxPZRMErAsaXXy7Xszy%2FCBI7YS
 interface RestService {
     @GET("getFoodNtrItdntList1?serviceKey=$SERVICE_KEY&numOfRows=10&bgn_year=&animal_plant=&type=json")
     suspend fun getSearchFood(
-        @Query("serviceKey") key : String
-        , @Query("desc_kor") foodName : String
+        @Query("desc_kor") foodName : String
         , @Query("pageNo") page : String
         ) : Response<FoodData>
 }

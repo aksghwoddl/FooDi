@@ -11,7 +11,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.lee.foodi.R
 import com.lee.foodi.common.EXTRA_SELECTED_FOOD
 import com.lee.foodi.common.FoodiNewApplication
 import com.lee.foodi.common.PAGE_ONE
@@ -20,8 +19,8 @@ import com.lee.foodi.data.repository.FoodiRepository
 import com.lee.foodi.databinding.FragmentSearchBinding
 import com.lee.foodi.ui.activities.add.AddFoodActivity
 import com.lee.foodi.ui.adapter.SearchFoodRecyclerAdapter
-import com.lee.foodi.ui.fragments.search.viewmodel.SearchFoodViewModel
 import com.lee.foodi.ui.factory.FoodiViewModelFactory
+import com.lee.foodi.ui.fragments.search.viewmodel.SearchFoodViewModel
 
 class SearchFragment : Fragment() {
     private val TAG = "SearchFragment"
@@ -76,14 +75,14 @@ class SearchFragment : Fragment() {
             // Search Button Listener
             searchInputTextLayout.setEndIconOnClickListener {
                 val foodName = searchInputText.text.toString()
-                mViewModel.getSearchFoodList(resources.getString(R.string.food_info_service_key) , foodName , PAGE_ONE)
+                mViewModel.getSearchFoodList(foodName , PAGE_ONE)
                 mCurrentPage = 1
             }
 
             // Next Button Listener
             nextButton.setOnClickListener {
                 val foodName = searchInputText.text.toString()
-                mViewModel.getSearchFoodList(resources.getString(R.string.food_info_service_key) , foodName , (++mCurrentPage).toString())
+                mViewModel.getSearchFoodList(foodName , (++mCurrentPage).toString())
                 mViewModel.isPreviousEnable.postValue(true)
                 binding.searchFoodRecyclerView.smoothScrollToPosition(0)
             }
@@ -92,7 +91,7 @@ class SearchFragment : Fragment() {
             previousButton.setOnClickListener {
                 if(mCurrentPage > 1){
                     val foodName = searchInputText.text.toString()
-                    mViewModel.getSearchFoodList(resources.getString(R.string.food_info_service_key) , foodName , (--mCurrentPage).toString())
+                    mViewModel.getSearchFoodList(foodName , (--mCurrentPage).toString())
                     if(mCurrentPage == 1){
                         mViewModel.isPreviousEnable.postValue(false)
                     }
