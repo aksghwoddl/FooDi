@@ -2,28 +2,26 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="300dp"
     android:layout_height="200dp"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_gravity="center">
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/calorieInputLayout"
+    <TextView
+        android:id="@+id/dialogTitle"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        app:endIconMode="clear_text"
-        >
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/calorieInputText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/input_goal_calorie"
-            android:fontFamily="@font/swagger"
-            android:textColor="#000"
-            android:background="#fff"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="20dp"
-            />
-    </com.google.android.material.textfield.TextInputLayout>
+        android:layout_height="50dp"
+        android:text="유지칼로리를 입력해주세요."
+        android:background="@color/main_color"
+        android:textSize="15sp"
+        android:gravity="center"
+        android:fontFamily="@font/swagger"
+        android:textColor="#000"
+        />
+
+    <NumberPicker
+        android:id="@+id/caloriePicker"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_gravity="center"
+        />
 
     <Button
         android:id="@+id/confirmButton"

@@ -42,47 +42,92 @@
             android:src="@drawable/ic_baseline_create_24"
             android:layout_gravity="center_vertical"
             android:layout_width="15dp"
-            android:layout_height="15dp"/>
+            android:layout_height="15dp"
+            android:layout_marginStart="10dp"
+            />
     </LinearLayout>
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/heightInputLayout"
-        android:layout_width="match_parent"
+    <LinearLayout
+        android:id="@+id/agePickerLayout"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:orientation="horizontal"
         app:layout_constraintTop_toBottomOf="@id/goalCalorieLayout"
-        android:layout_marginTop="30dp"
+        app:layout_constraintRight_toLeftOf="@id/weightPickerLayout"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginTop="20dp"
         >
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/heightInputText"
-            android:layout_width="200dp"
+        <TextView
+            android:id="@+id/ageTextView"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:hint="@string/height"
-            android:background="#fff"
-            android:fontFamily="@font/swagger"
+            android:text="@string/age"
             android:textColor="#000"
-            android:layout_gravity="center"
+            android:fontFamily="@font/swagger"
+            android:textSize="20sp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginEnd="10dp"
             />
-    </com.google.android.material.textfield.TextInputLayout>
+        <NumberPicker
+            android:id="@+id/agePicker"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
+    </LinearLayout>
 
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/weightLayout"
-        android:layout_width="match_parent"
+    <LinearLayout
+        android:id="@+id/weightPickerLayout"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/heightInputLayout"
-        android:layout_marginTop="30dp"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@id/goalCalorieLayout"
+        app:layout_constraintLeft_toRightOf="@id/agePickerLayout"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginTop="20dp"
         >
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/weightInputText"
-            android:layout_width="200dp"
+        <TextView
+            android:id="@+id/weightTextView"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:hint="@string/weight"
-            android:background="#fff"
-            android:fontFamily="@font/swagger"
+            android:text="@string/weight"
             android:textColor="#000"
-            android:layout_gravity="center"
+            android:fontFamily="@font/swagger"
+            android:textSize="20sp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginEnd="10dp"
             />
-    </com.google.android.material.textfield.TextInputLayout>
+        <NumberPicker
+            android:id="@+id/weightPicker"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
+    </LinearLayout>
+
+    <ToggleButton
+        android:id="@+id/genderToggleButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/weightPickerLayout"
+        app:layout_constraintBottom_toTopOf="@id/confirmButton"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:textOff="@string/male"
+        android:textOn="@string/female"
+        android:fontFamily="@font/swagger"
+        android:textColor="#fff"
+        android:background="#00a1ff"
+        />
+
+    <Button
+        android:id="@+id/confirmButton"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/genderToggleButton"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/settingLayout"
+        android:text="@string/user_setting"
+        />
 
     <LinearLayout
         android:id="@+id/settingLayout"

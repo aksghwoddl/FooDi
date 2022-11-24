@@ -10,12 +10,12 @@
         android:id="@+id/dialogHeaderTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
         android:fontFamily="@font/swagger"
         android:text="@string/network_dialog_header"
         android:textSize="30sp"
         android:gravity="center"
         android:textColor="#000"
+        android:background="@color/main_color"
         />
 
     <Button

@@ -17,6 +17,9 @@ import java.util.regex.Pattern
 
 private const val TAG = "SettingGoalCalorieDialog"
 
+private const val MIN_CALORIE = 1000
+private const val MAX_CALORIE = 10000
+
 class SettingGoalCalorieDialog(context : Context , private val caller : UserFragment) : Dialog(context) {
     private lateinit var binding : DialogSettingGoalCalorieBinding
 
@@ -27,6 +30,7 @@ class SettingGoalCalorieDialog(context : Context , private val caller : UserFrag
         }
         addListeners()
         Utils.dialogResize(context , this , 0.8f , 0.3f)
+        initNumberPicker()
     }
 
     private fun addListeners() {
@@ -34,42 +38,19 @@ class SettingGoalCalorieDialog(context : Context , private val caller : UserFrag
             //Confirm Button
             confirmButton.setOnClickListener {
                 Log.d(TAG, "addListeners: Goal calorie is updated")
-                if(calorieInputText.text!!.isNotEmpty()){
-                    val calorie = calorieInputText.text.toString()
-                    FooDiPreferenceManager.getInstance(FoodiNewApplication.getInstance()).setGoaCalorie(calorie)
-                    Toast.makeText(FoodiNewApplication.getInstance() , "정상적으로 업데이트 되었습니다." , Toast.LENGTH_SHORT).show()
-                    caller.updateGoalCalorie()
-                    dismiss()
-                } else {
-                    Toast.makeText(FoodiNewApplication.getInstance() , "목표 칼로리를 입력해주세요." , Toast.LENGTH_SHORT).show()
-                }
+                FooDiPreferenceManager.getInstance(FoodiNewApplication.getInstance()).goalCalorie = caloriePicker.value.toString()
+                caller.updateGoalCalorie()
+                dismiss()
             }
-
-            // Calorie InputText
-            calorieInputText.addTextChangedListener(GoalCalorieTextWatcher(binding))
-            calorieInputText.filters = arrayOf(InputFilter { source, _, _, _, _, _ ->
-                val numRegex = "^[0-9]*$"
-                val numPattern = Pattern.compile(numRegex)
-                if(numPattern.matcher(source).matches()){
-                    return@InputFilter source
-                }
-                source.dropLast(1)
-            })
         }
     }
 
-    /**
-     * Input Text Watcher for goal calorie
-     * **/
-    private class GoalCalorieTextWatcher(private val binding : DialogSettingGoalCalorieBinding) : TextWatcher {
-        override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) { }
-
-        override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) { }
-
-        override fun afterTextChanged(text : Editable?) {
-            val numRegex = "^[0-9]*$"
-            val numPattern = Pattern.compile(numRegex)
-            binding.confirmButton.isEnabled = numPattern.matcher(text.toString()).matches()
+    private fun initNumberPicker() {
+        binding.caloriePicker.run {
+            minValue = MIN_CALORIE
+            maxValue = MAX_CALORIE
+            wrapSelectorWheel = false
+            value = 2000
         }
     }
 }

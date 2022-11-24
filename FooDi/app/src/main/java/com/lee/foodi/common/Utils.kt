@@ -6,6 +6,7 @@ import android.graphics.Point
 import android.os.Build
 import android.util.Log
 import android.view.WindowManager
+import android.widget.TextView
 import android.widget.Toast
 
 const val PAGE_ONE = "1"
@@ -15,16 +16,18 @@ class Utils {
     companion object{
         private val TAG = "Utils"
         /**
-         * Function that check value received from server (sometimes received minus or N/A)
+         * Function that check and convert value received from server (sometimes received minus or N/A)
          * **/
-        fun checkErrorValue(value : String) : String {
-            return if(value.contains("-")){
-                Log.d(TAG , "convertErrorString: value = $value is minus")
-                "0"
+
+        fun convertValueWithErrorCheck(textView : TextView , string : String ,value : String) {
+            Log.d(TAG, "convertValueWithErrorCheck: value is $value")
+            if(value.contains("-")){
+                Log.d(TAG, "convertValueWithErrorCheck: value is minus")
+               textView.text = String.format(string, "0")
             } else if(value == "N/A"){
-                ""
+                textView.text = ""
             } else {
-                value
+                textView.text = String.format(string , value)
             }
         }
 
