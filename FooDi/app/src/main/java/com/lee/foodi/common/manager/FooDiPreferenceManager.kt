@@ -8,6 +8,8 @@ private const val NETWORK_PERMISSION = "network_permission"
 private const val GOAL_CALORIE = "goal_calorie"
 private const val MAINTENANCE_CALORIE = "maintenance_calorie"
 private const val GENDER = "gender"
+private const val AGE = "age"
+private const val WEIGHT = "weight"
 
 class FooDiPreferenceManager {
     companion object{
@@ -53,6 +55,22 @@ class FooDiPreferenceManager {
     set(gender){
         with(sharedPreferenceEditor){
             putBoolean(GENDER , gender)
+        }
+    }
+
+    var age : Int
+    get() = sharedPreference.getInt(AGE , 18)
+    set(age) {
+        with(sharedPreferenceEditor){
+            putInt(AGE , age)
+        }
+    }
+
+    var weight : Int
+    get() = sharedPreference.getInt(WEIGHT , 60)
+    set(weight){
+        with(sharedPreferenceEditor){
+            putInt(WEIGHT , weight)
         }
     }
 }

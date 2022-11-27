@@ -19,10 +19,6 @@ import com.lee.foodi.databinding.FragmentUserBinding
 import com.lee.foodi.ui.factory.FoodiViewModelFactory
 import com.lee.foodi.ui.fragments.user.dialog.SettingGoalCalorieDialog
 import com.lee.foodi.ui.fragments.user.viewmodel.SettingUserViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
 private const val TAG = "UserFragment"
@@ -82,7 +78,7 @@ class UserFragment : Fragment() {
            agePicker.run {
                minValue = MIN_AGE_PICKER_VALUE
                maxValue = MAX_AGE_VALUE
-               value = 18
+               value = mPreferenceManager.age
                mViewModel.age = value
                wrapSelectorWheel = false
                descendantFocusability = NumberPicker.FOCUS_BLOCK_DESCENDANTS
@@ -90,7 +86,7 @@ class UserFragment : Fragment() {
            weightPicker.run {
                minValue = MIN_WEIGHT_PICKER_VALUE
                maxValue = MAX_WEIGHT_VALUE
-               value = 60
+               value = mPreferenceManager.weight
                mViewModel.weight = value
                wrapSelectorWheel = false
                descendantFocusability = NumberPicker.FOCUS_BLOCK_DESCENDANTS
@@ -124,7 +120,11 @@ class UserFragment : Fragment() {
 
             //Confirm Button
             confirmButton.setOnClickListener {
-                mPreferenceManager.gender = isToggled
+                with(mPreferenceManager){
+                    gender = isToggled
+                    age = mViewModel.age
+                    weight = mViewModel.weight
+                }
                 updateMaintenanceCalorie(mViewModel.age , mViewModel.weight , mViewModel.gender)
                 if(mPreferenceManager.gender != isToggled){
                     Log.d(TAG, "addListeners: Did not update preference update one more")
