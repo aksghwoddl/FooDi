@@ -3,7 +3,7 @@ package com.lee.foodi.ui.factory
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.lee.foodi.data.repository.FoodiRepository
-import com.lee.foodi.ui.fragments.search.viewmodel.SearchFoodViewModel
+import com.lee.foodi.ui.activities.search.viewmodel.SearchFoodViewModel
 import com.lee.foodi.ui.fragments.user.viewmodel.SettingUserViewModel
 
 class FoodiViewModelFactory(private val repository: FoodiRepository) : ViewModelProvider.Factory {

@@ -5,6 +5,39 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     >
 
+    <RelativeLayout
+        android:id="@+id/headerToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/header_toolbar_height"
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="@color/main_color"
+        >
+
+        <TextView
+            android:id="@+id/headerSearchTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/search"
+            android:fontFamily="@font/swagger"
+            android:textSize="15sp"
+            android:textColor="#000"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="40dp"
+            android:layout_centerVertical="true"
+            />
+
+        <Button
+            android:id="@+id/searchButton"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/ic_baseline_search_24"
+            android:layout_marginEnd="5dp"
+            android:theme="@style/Theme.AppCompat"
+            />
+    </RelativeLayout>
+
     <LinearLayout
         android:id="@+id/noDiaryItemLayout"
         android:layout_width="match_parent"

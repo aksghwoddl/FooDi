@@ -1,7 +1,6 @@
 package com.lee.foodi.ui.fragments.user
 
 import android.annotation.SuppressLint
-import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -20,6 +19,10 @@ import com.lee.foodi.databinding.FragmentUserBinding
 import com.lee.foodi.ui.factory.FoodiViewModelFactory
 import com.lee.foodi.ui.fragments.user.dialog.SettingGoalCalorieDialog
 import com.lee.foodi.ui.fragments.user.viewmodel.SettingUserViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
 private const val TAG = "UserFragment"
@@ -60,7 +63,14 @@ class UserFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         Log.d(TAG, "onViewCreated()")
-        mViewModel.maintenanceCalorie.postValue(mPreferenceManager.maintenanceCalorie) // Set maintenance calorie if it is in the SharedPreference
+        isToggled = mPreferenceManager.gender
+        Log.d(TAG, "onViewCreated: gender is $isToggled")
+
+        with(mViewModel){
+            maintenanceCalorie.postValue(mPreferenceManager.maintenanceCalorie) // Set maintenance calorie if it is in the SharedPreference
+            genderButtonToggled.postValue(isToggled)
+        }
+
         binding.goalCalorieTextView.text = String.format(getString(R.string.goal_calorie) , mPreferenceManager.goalCalorie)
         addListeners()
         observeDate()
@@ -99,7 +109,7 @@ class UserFragment : Fragment() {
             // Gender Button
             genderToggleButton.setOnClickListener {
                 isToggled = !isToggled
-               mViewModel.genderButtonToggled.postValue(isToggled)
+                mViewModel.genderButtonToggled.postValue(isToggled)
             }
 
             // Age NumberPicker
@@ -114,7 +124,13 @@ class UserFragment : Fragment() {
 
             //Confirm Button
             confirmButton.setOnClickListener {
+                mPreferenceManager.gender = isToggled
                 updateMaintenanceCalorie(mViewModel.age , mViewModel.weight , mViewModel.gender)
+                if(mPreferenceManager.gender != isToggled){
+                    Log.d(TAG, "addListeners: Did not update preference update one more")
+                    mPreferenceManager.gender = isToggled
+                }
+                Log.d(TAG, "addListeners: isToggled = $isToggled")
             }
         }
     }
@@ -126,9 +142,15 @@ class UserFragment : Fragment() {
             }
             genderButtonToggled.observe(viewLifecycleOwner){
                 if(it){
-                    binding.genderToggleButton.setBackgroundColor(resources.getColor(R.color.toggle_female))
+                    with(binding.genderToggleButton){
+                        setBackgroundColor(resources.getColor(R.color.toggle_female))
+                        text = resources.getString(R.string.female)
+                    }
                 } else {
-                    binding.genderToggleButton.setBackgroundColor(resources.getColor(R.color.toggle_male))
+                    with(binding.genderToggleButton){
+                        setBackgroundColor(resources.getColor(R.color.toggle_male))
+                        text = resources.getString(R.string.male)
+                    }
                 }
                 gender = binding.genderToggleButton.text.toString()
             }

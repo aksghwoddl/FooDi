@@ -1,13 +1,11 @@
-package com.lee.foodi.ui.fragments.search
+package com.lee.foodi.ui.activities.search
 
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
-import androidx.fragment.app.Fragment
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -16,38 +14,28 @@ import com.lee.foodi.common.FoodiNewApplication
 import com.lee.foodi.common.PAGE_ONE
 import com.lee.foodi.data.model.FoodInfoData
 import com.lee.foodi.data.repository.FoodiRepository
-import com.lee.foodi.databinding.FragmentSearchBinding
+import com.lee.foodi.databinding.ActivitySearchBinding
 import com.lee.foodi.ui.activities.add.AddFoodActivity
+import com.lee.foodi.ui.activities.search.viewmodel.SearchFoodViewModel
 import com.lee.foodi.ui.adapter.SearchFoodRecyclerAdapter
 import com.lee.foodi.ui.factory.FoodiViewModelFactory
-import com.lee.foodi.ui.fragments.search.viewmodel.SearchFoodViewModel
 
-class SearchFragment : Fragment() {
+class SearchActivity : AppCompatActivity() {
     private val TAG = "SearchFragment"
 
-    private lateinit var binding : FragmentSearchBinding
+    private lateinit var binding : ActivitySearchBinding
     private lateinit var mViewModel : SearchFoodViewModel
     private lateinit var mSearchFoodRecyclerAdapter: SearchFoodRecyclerAdapter
 
     private var mCurrentPage = 0
 
-    companion object{
-        fun newInstance() = SearchFragment()
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = FragmentSearchBinding.inflate(inflater , container , false)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = ActivitySearchBinding.inflate(layoutInflater).also {
+            setContentView(it.root)
+        }
         mViewModel = ViewModelProvider(this , FoodiViewModelFactory(FoodiRepository()))[SearchFoodViewModel::class.java]
         initRecyclerView()
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
         addListeners()
         observeData()
     }
@@ -58,7 +46,7 @@ class SearchFragment : Fragment() {
             // move to FoodDetailActivity when item selected
             override fun onItemClick(v: View, model: FoodInfoData, position: Int) {
                 super.onItemClick(v, model, position)
-                with(Intent(requireContext() , FoodDetailActivity::class.java)){
+                with(Intent(this@SearchActivity , FoodDetailActivity::class.java)){
                     putExtra(EXTRA_SELECTED_FOOD , model)
                     startActivity(this)
                 }
@@ -114,7 +102,7 @@ class SearchFragment : Fragment() {
     @SuppressLint("NotifyDataSetChanged")
     private fun observeData() {
        with(mViewModel){
-           foodList.observe(viewLifecycleOwner){
+           foodList.observe(this@SearchActivity){
                it?.let {
                    mSearchFoodRecyclerAdapter.setList(it)
                    mSearchFoodRecyclerAdapter.notifyDataSetChanged()
@@ -125,7 +113,7 @@ class SearchFragment : Fragment() {
                }
            }
 
-           isProgressVisible.observe(viewLifecycleOwner){
+           isProgressVisible.observe(this@SearchActivity){
                if(it){
                    binding.progressBar.visibility = View.VISIBLE
                } else {
@@ -133,11 +121,11 @@ class SearchFragment : Fragment() {
                }
            }
 
-           errorMessage.observe(viewLifecycleOwner){
-               Toast.makeText(context , it , Toast.LENGTH_SHORT).show()
+           errorMessage.observe(this@SearchActivity){
+               Toast.makeText(this@SearchActivity , it , Toast.LENGTH_SHORT).show()
            }
 
-           addFoodLayoutVisible.observe(viewLifecycleOwner){
+           addFoodLayoutVisible.observe(this@SearchActivity){
                if(it){
                    with(binding){
                        searchFoodRecyclerScrollView.visibility = View.GONE
@@ -151,11 +139,11 @@ class SearchFragment : Fragment() {
                }
            }
 
-           isNextEnable.observe(viewLifecycleOwner){
+           isNextEnable.observe(this@SearchActivity){
                binding.nextButton.isEnabled = it
            }
 
-           isPreviousEnable.observe(viewLifecycleOwner){
+           isPreviousEnable.observe(this@SearchActivity){
                binding.previousButton.isEnabled = it
            }
        }

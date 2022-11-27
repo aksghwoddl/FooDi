@@ -7,6 +7,7 @@ import android.preference.PreferenceManager
 private const val NETWORK_PERMISSION = "network_permission"
 private const val GOAL_CALORIE = "goal_calorie"
 private const val MAINTENANCE_CALORIE = "maintenance_calorie"
+private const val GENDER = "gender"
 
 class FooDiPreferenceManager {
     companion object{
@@ -44,6 +45,14 @@ class FooDiPreferenceManager {
     set(calorie : String?) {
         with(sharedPreferenceEditor){
             putString(MAINTENANCE_CALORIE , calorie).apply()
+        }
+    }
+
+    var gender : Boolean
+    get() = sharedPreference.getBoolean(GENDER , false)
+    set(gender){
+        with(sharedPreferenceEditor){
+            putBoolean(GENDER , gender)
         }
     }
 }

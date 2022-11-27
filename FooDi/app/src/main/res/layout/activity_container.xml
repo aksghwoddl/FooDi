@@ -6,25 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".ui.activities.ContainerActivity"
     >
-
-    <RelativeLayout
-        android:id="@+id/headerToolbar"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/header_toolbar_height"
-        app:layout_constraintTop_toTopOf="parent"
-        android:background="@color/main_color"
-        >
-        <Button
-            android:id="@+id/reportButton"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:background="@drawable/graph_button"
-            android:theme="@style/Theme.AppCompat"
-            />
-    </RelativeLayout>
-
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/containerViewPager"
         android:layout_width="match_parent"
@@ -32,7 +13,7 @@
         app:layout_constraintBottom_toTopOf="@id/bottomTabLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/headerToolbar" />
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/bottomTabLayout"

@@ -1,20 +1,19 @@
 package com.lee.foodi.ui.activities
 
-import android.content.Intent
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.tabs.TabLayoutMediator
 import com.lee.foodi.R
 import com.lee.foodi.databinding.ActivityContainerBinding
-import com.lee.foodi.ui.activities.report.ReportActivity
 import com.lee.foodi.ui.adapter.ContainerFragmentStateAdapter
 import com.lee.foodi.ui.fragments.diary.DiaryFragment
-import com.lee.foodi.ui.fragments.search.SearchFragment
+import com.lee.foodi.ui.fragments.report.ReportFragment
 import com.lee.foodi.ui.fragments.user.UserFragment
 
 class ContainerActivity : AppCompatActivity() {
     private lateinit var binding : ActivityContainerBinding
-    private lateinit var mSearchFragment : SearchFragment
+    private lateinit var mReportFragment : ReportFragment
     private lateinit var mDiaryFragment : DiaryFragment
     private lateinit var mUserFragment: UserFragment
     private lateinit var mFragmentStateAdapter : ContainerFragmentStateAdapter
@@ -27,31 +26,36 @@ class ContainerActivity : AppCompatActivity() {
         mFragmentStateAdapter = ContainerFragmentStateAdapter(this)
 
         savedInstanceState?: initFragmentAdapter()
-        binding.reportButton.setOnClickListener {
-            with(Intent(this , ReportActivity::class.java)){
-                startActivity(this)
-            }
-        }
     }
 
 
     /**
      * Function for init FragmentStateAdapter
      * **/
+    @SuppressLint("UseCompatLoadingForDrawables")
     private fun initFragmentAdapter() {
         val tabNameArray = resources.getStringArray(R.array.bottom_tab_array)
-        mSearchFragment = SearchFragment.newInstance()
+
+        val tabImageArray = arrayOf(
+            resources.getDrawable(R.drawable.graph_icon  , null),
+            resources.getDrawable(R.drawable.note , null),
+            resources.getDrawable(R.drawable.ic_baseline_settings_24 , null)
+        )
+
+        mReportFragment = ReportFragment.newInstance()
         mDiaryFragment = DiaryFragment.newInstance()
         mUserFragment = UserFragment.newInstance()
-        mFragmentStateAdapter.appendFragment(mSearchFragment)
+        mFragmentStateAdapter.appendFragment(mReportFragment)
         mFragmentStateAdapter.appendFragment(mDiaryFragment)
         mFragmentStateAdapter.appendFragment(mUserFragment)
 
         with(binding){
             containerViewPager.adapter = mFragmentStateAdapter
             TabLayoutMediator(bottomTabLayout , containerViewPager){tab , position ->
-                tab.text = tabNameArray[position]
+                tab.icon = tabImageArray[position]
             }.attach()
+            val initialTab = binding.bottomTabLayout.getTabAt(1)
+            initialTab?.select()
         }
     }
 }

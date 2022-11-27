@@ -42,6 +42,7 @@
 
     <!-- Diary -->
     <string name="no_diary_item">아직 식단이 존재하지 않습니다.\n먼저 추가해주세요.</string>
+    <string name="search">검색하기</string>
     <!---->
 
     <!--User -->

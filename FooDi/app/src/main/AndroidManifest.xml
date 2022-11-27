@@ -25,14 +25,13 @@
 
         <activity
             android:name=".ui.activities.ContainerActivity"
-            android:windowSoftInputMode="adjustPan"
             android:exported="true">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
 
-        <activity android:name=".ui.fragments.search.FoodDetailActivity"
+        <activity android:name=".ui.activities.search.FoodDetailActivity"
             android:exported="true"
             >
         </activity>
@@ -40,7 +39,8 @@
         <activity android:name=".ui.activities.add.AddFoodActivity">
         </activity>
 
-        <activity android:name=".ui.activities.report.ReportActivity">
+        <activity android:name=".ui.activities.search.SearchActivity"
+            android:windowSoftInputMode="adjustPan">
         </activity>
     </application>
 
