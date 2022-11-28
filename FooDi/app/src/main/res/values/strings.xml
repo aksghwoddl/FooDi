@@ -7,6 +7,11 @@
     <string name="search_edit_text_hint">검색할 음식을 입력해주세요.</string>
     <string name="add_food_header_title">추가할 음식 정보를 입력해주세요.</string>
     <string name="average_calorie">평균 섭취 칼로리 : </string>
+    <string name="common_carbohydrate">탄수화물</string>
+    <string name="common_protein">단백질</string>
+    <string name="common_fat">지방</string>
+    <string name="zero_gram">0g</string>
+    <string name="spend_calorie">소비 칼로리 : %s kcal</string>
 
     <!-- Food Info -->
     <string name="food_name">음식이름</string>
@@ -41,7 +46,7 @@
     <!---->
 
     <!-- Diary -->
-    <string name="no_diary_item">아직 식단이 존재하지 않습니다.\n먼저 추가해주세요.</string>
+    <string name="no_diary_item">아직 기록한 음식이 없네요. \n 추가해보세요.</string>
     <string name="search">검색하기</string>
     <!---->
 
