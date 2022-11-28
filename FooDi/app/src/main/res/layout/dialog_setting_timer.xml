@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="400dp"
+    android:layout_height="350dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_gravity="center"
+    >
+
+    <RelativeLayout
+        android:id="@+id/headerToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/header_toolbar_height"
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="@color/main_color"
+        >
+        <TextView
+            android:id="@+id/headerTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/setting_timer_header"
+            android:fontFamily="@font/swagger"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:textColor="#000"
+            android:textSize="20sp"
+            />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/hourPickerLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@id/headerToolbar"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/minutePickerLayout"
+        android:layout_marginTop="20dp"
+        >
+        <NumberPicker
+            android:id="@+id/hourPicker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            />
+        <TextView
+            android:id="@+id/hourTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/hour"
+            android:textColor="#000"
+            android:fontFamily="@font/swagger"
+            android:textSize="20sp"
+            android:layout_gravity="center_vertical"
+
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/minutePickerLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@id/headerToolbar"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toRightOf="@id/hourPickerLayout"
+        android:layout_marginTop="20dp"
+        >
+        <NumberPicker
+            android:id="@+id/minutePicker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            />
+        <TextView
+            android:id="@+id/minuteTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/minute"
+            android:textColor="#000"
+            android:fontFamily="@font/swagger"
+            android:textSize="20sp"
+            android:layout_gravity="center_vertical"
+            />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/settingButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/hourPickerLayout"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:text="@string/confirm"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="10dp"
+        android:fontFamily="@font/swagger"
+        />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

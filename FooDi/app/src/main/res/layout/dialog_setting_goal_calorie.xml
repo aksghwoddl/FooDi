@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="300dp"
-    android:layout_height="200dp"
+    android:layout_height="250dp"
     android:layout_gravity="center">
 
     <TextView
         android:id="@+id/dialogTitle"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:text="유지칼로리를 입력해주세요."
+        android:text="@string/input_goal_calorie"
         android:background="@color/main_color"
         android:textSize="15sp"
         android:gravity="center"
@@ -16,12 +16,32 @@
         android:textColor="#000"
         />
 
-    <NumberPicker
-        android:id="@+id/caloriePicker"
+    <LinearLayout
+        android:id="@+id/hourPickerLayout"
         android:layout_width="wrap_content"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+
         android:layout_gravity="center"
-        />
+        >
+        <NumberPicker
+            android:id="@+id/caloriePicker"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_marginEnd="10dp"
+            />
+        <TextView
+            android:id="@+id/hourTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/unit_calorie"
+            android:textColor="#000"
+            android:fontFamily="@font/swagger"
+            android:textSize="20sp"
+            android:layout_gravity="center_vertical"
+
+            />
+    </LinearLayout>
 
     <Button
         android:id="@+id/confirmButton"
@@ -29,7 +49,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:text="@string/confirm"
-        android:layout_gravity="bottom|end"
+        android:layout_gravity="bottom|center_horizontal"
+        android:fontFamily="@font/swagger"
         />
 
 </androidx.cardview.widget.CardView>

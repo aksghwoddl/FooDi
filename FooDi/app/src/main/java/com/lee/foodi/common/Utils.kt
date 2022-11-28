@@ -5,9 +5,11 @@ import android.content.Context
 import android.graphics.Point
 import android.os.Build
 import android.util.Log
+import android.view.View
 import android.view.WindowManager
 import android.widget.TextView
 import android.widget.Toast
+import androidx.lifecycle.VIEW_MODEL_STORE_OWNER_KEY
 
 const val PAGE_ONE = "1"
 const val EXTRA_SELECTED_FOOD = "selectedFood"
@@ -26,6 +28,7 @@ class Utils {
                textView.text = String.format(string, "0")
             } else if(value == "N/A"){
                 textView.text = ""
+                textView.visibility = View.GONE
             } else {
                 textView.text = String.format(string , value)
             }

@@ -22,15 +22,29 @@ private const val MAX_CALORIE = 10000
 
 class SettingGoalCalorieDialog(context : Context , private val caller : UserFragment) : Dialog(context) {
     private lateinit var binding : DialogSettingGoalCalorieBinding
+    private lateinit var mPreferenceManager: FooDiPreferenceManager
+    private var mPickerValue = mutableListOf<String>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DialogSettingGoalCalorieBinding.inflate(layoutInflater).also {
             setContentView(it.root)
         }
+        mPreferenceManager = FooDiPreferenceManager.getInstance(FoodiNewApplication.getInstance())
         addListeners()
-        Utils.dialogResize(context , this , 0.8f , 0.3f)
+        Utils.dialogResize(context , this , 0.9f , 0.4f)
         initNumberPicker()
+    }
+
+    /**
+     * Function for generate NumberPicker's values
+     * **/
+    private fun generatePickerValues() {
+        var calorieValue = MIN_CALORIE
+        while(calorieValue <= MAX_CALORIE){
+            mPickerValue.add(calorieValue.toString())
+            calorieValue += 100
+        }
     }
 
     private fun addListeners() {
@@ -38,7 +52,7 @@ class SettingGoalCalorieDialog(context : Context , private val caller : UserFrag
             //Confirm Button
             confirmButton.setOnClickListener {
                 Log.d(TAG, "addListeners: Goal calorie is updated")
-                FooDiPreferenceManager.getInstance(FoodiNewApplication.getInstance()).goalCalorie = caloriePicker.value.toString()
+                mPreferenceManager.goalCalorie = (caloriePicker.value*100 + MIN_CALORIE).toString()
                 caller.updateGoalCalorie()
                 dismiss()
             }
@@ -46,11 +60,13 @@ class SettingGoalCalorieDialog(context : Context , private val caller : UserFrag
     }
 
     private fun initNumberPicker() {
+        generatePickerValues()
         binding.caloriePicker.run {
-            minValue = MIN_CALORIE
-            maxValue = MAX_CALORIE
+            minValue = 0
+            maxValue = (MAX_CALORIE -1000)/100
+            displayedValues = mPickerValue.toTypedArray()
             wrapSelectorWheel = false
-            value = 2000
+            value = (mPreferenceManager.goalCalorie!!.toInt() - 1000 ) / 100
         }
     }
 }

@@ -35,7 +35,7 @@ class FooDiPreferenceManager {
         }
 
     var goalCalorie : String?
-        get() = sharedPreference.getString(GOAL_CALORIE , "")
+        get() = sharedPreference.getString(GOAL_CALORIE , "0")
         set(calorie : String?){
             with(sharedPreferenceEditor){
                 putString(GOAL_CALORIE , calorie).apply()

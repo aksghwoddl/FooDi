@@ -53,13 +53,18 @@
     <!--User -->
     <string name="maintenance_calorie">유지 칼로리 : %s kcal</string>
     <string name="goal_calorie">목표 칼로리 : %s kcal</string>
+    <string name="unit_calorie">kcal</string>
     <string name="age">나이 : </string>
     <string name="weight">몸무게 : </string>
     <string name="setting_timer">식단 타이머 설정하기</string>
     <string name="setting_lock">잠금화면 설정</string>
-    <string name="input_goal_calorie">목표칼로리</string>
+    <string name="input_goal_calorie">목표칼로리를 입력해주세요.</string>
     <string name="male">남</string>
     <string name="female">여</string>
     <string name="user_setting">설정 변경하기</string>
+    <string name="setting_timer_header">몇시간 마다 식사 하시나요?</string>
+    <string name="hour">시간</string>
+    <string name="minute">분</string>
     <!---->
+
 </resources>

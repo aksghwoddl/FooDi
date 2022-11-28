@@ -18,6 +18,7 @@ import com.lee.foodi.data.repository.FoodiRepository
 import com.lee.foodi.databinding.FragmentUserBinding
 import com.lee.foodi.ui.factory.FoodiViewModelFactory
 import com.lee.foodi.ui.fragments.user.dialog.SettingGoalCalorieDialog
+import com.lee.foodi.ui.fragments.user.dialog.SettingTimerDialog
 import com.lee.foodi.ui.fragments.user.viewmodel.SettingUserViewModel
 import kotlin.math.roundToInt
 
@@ -33,6 +34,7 @@ private const val FEMALE = "여"
 class UserFragment : Fragment() {
     private lateinit var binding : FragmentUserBinding
     private lateinit var mGoalCalorieDialog: SettingGoalCalorieDialog
+    private lateinit var mSettingTimerDialog : SettingTimerDialog
     private lateinit var mPreferenceManager: FooDiPreferenceManager
     private lateinit var mViewModel : SettingUserViewModel
 
@@ -132,6 +134,12 @@ class UserFragment : Fragment() {
                 }
                 Log.d(TAG, "addListeners: isToggled = $isToggled")
             }
+
+            // Setting Timer Button
+            settingTimerButton.setOnClickListener {
+                mSettingTimerDialog = SettingTimerDialog(requireContext() , this@UserFragment)
+                mSettingTimerDialog.show()
+            }
         }
     }
 
@@ -165,6 +173,10 @@ class UserFragment : Fragment() {
                 , mPreferenceManager.goalCalorie!!)
             Toast.makeText(FoodiNewApplication.getInstance() , "정상적으로 업데이트 되었습니다." , Toast.LENGTH_SHORT).show()
         }
+    }
+
+    fun updateSettingTimer() {
+        Toast.makeText(FoodiNewApplication.getInstance() , "알람시간이 설정 되었습니다!" , Toast.LENGTH_SHORT).show()
     }
 
     /**
