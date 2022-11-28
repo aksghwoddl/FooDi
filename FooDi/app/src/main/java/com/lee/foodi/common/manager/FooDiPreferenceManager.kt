@@ -10,6 +10,8 @@ private const val MAINTENANCE_CALORIE = "maintenance_calorie"
 private const val GENDER = "gender"
 private const val AGE = "age"
 private const val WEIGHT = "weight"
+private const val HOUR = "hour"
+private const val MINUTE = "minute"
 
 class FooDiPreferenceManager {
     companion object{
@@ -54,7 +56,7 @@ class FooDiPreferenceManager {
     get() = sharedPreference.getBoolean(GENDER , false)
     set(gender){
         with(sharedPreferenceEditor){
-            putBoolean(GENDER , gender)
+            putBoolean(GENDER , gender).apply()
         }
     }
 
@@ -62,7 +64,7 @@ class FooDiPreferenceManager {
     get() = sharedPreference.getInt(AGE , 18)
     set(age) {
         with(sharedPreferenceEditor){
-            putInt(AGE , age)
+            putInt(AGE , age).apply()
         }
     }
 
@@ -70,7 +72,23 @@ class FooDiPreferenceManager {
     get() = sharedPreference.getInt(WEIGHT , 60)
     set(weight){
         with(sharedPreferenceEditor){
-            putInt(WEIGHT , weight)
+            putInt(WEIGHT , weight).apply()
         }
     }
+
+    var hour : Int
+        get() = sharedPreference.getInt(HOUR , 0)
+        set(hour){
+            with(sharedPreferenceEditor){
+                putInt(HOUR , hour).apply()
+            }
+        }
+
+    var minute : Int
+        get() = sharedPreference.getInt(MINUTE , 0)
+        set(minute){
+            with(sharedPreferenceEditor){
+                putInt(MINUTE , minute).apply()
+            }
+        }
 }

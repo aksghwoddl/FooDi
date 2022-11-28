@@ -37,7 +37,7 @@ class SettingGoalCalorieDialog(context : Context , private val caller : UserFrag
     }
 
     /**
-     * Function for generate NumberPicker's values
+     * Function for generate NumberPicker's values, it is increased by 100
      * **/
     private fun generatePickerValues() {
         var calorieValue = MIN_CALORIE
