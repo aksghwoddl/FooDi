@@ -13,6 +13,8 @@ import androidx.lifecycle.VIEW_MODEL_STORE_OWNER_KEY
 
 const val PAGE_ONE = "1"
 const val EXTRA_SELECTED_FOOD = "selectedFood"
+const val MALE = "남"
+const val FEMALE = "여"
 
 class Utils {
     companion object{

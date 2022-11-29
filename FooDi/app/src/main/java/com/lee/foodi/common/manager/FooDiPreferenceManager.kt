@@ -12,6 +12,7 @@ private const val AGE = "age"
 private const val WEIGHT = "weight"
 private const val HOUR = "hour"
 private const val MINUTE = "minute"
+private const val SWITCH_ON_OFF = "timer_on"
 
 class FooDiPreferenceManager {
     companion object{
@@ -89,6 +90,14 @@ class FooDiPreferenceManager {
         set(minute){
             with(sharedPreferenceEditor){
                 putInt(MINUTE , minute).apply()
+            }
+        }
+
+    var isTimerOn : Boolean
+        get() = sharedPreference.getBoolean(SWITCH_ON_OFF , false)
+        set(on){
+            with(sharedPreferenceEditor){
+                putBoolean(SWITCH_ON_OFF , on).apply()
             }
         }
 }

@@ -15,7 +15,7 @@ class NetworkDialog(private val owner : SplashActivity) : Dialog(owner) {
             setContentView(it.root)
         }
         addListeners()
-        Utils.dialogResize(owner ,this@NetworkDialog , 0.8f , 0.3f)
+        Utils.dialogResize(owner ,this@NetworkDialog , 0.9f , 0.4f)
     }
     private fun addListeners(){
         binding.confirmButton.setOnClickListener {

@@ -6,12 +6,16 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.CompoundButton
+import android.widget.CompoundButton.OnCheckedChangeListener
 import android.widget.NumberPicker
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.lee.foodi.R
+import com.lee.foodi.common.FEMALE
 import com.lee.foodi.common.FoodiNewApplication
+import com.lee.foodi.common.MALE
 import com.lee.foodi.common.Utils
 import com.lee.foodi.common.manager.FooDiPreferenceManager
 import com.lee.foodi.data.repository.FoodiRepository
@@ -28,8 +32,6 @@ private const val MIN_WEIGHT_PICKER_VALUE = 0
 private const val MIN_AGE_PICKER_VALUE = 18
 private const val MAX_AGE_VALUE = 99
 private const val MAX_WEIGHT_VALUE = 200
-private const val MALE = "남"
-private const val FEMALE = "여"
 
 class UserFragment : Fragment() {
     private lateinit var binding : FragmentUserBinding
@@ -62,11 +64,11 @@ class UserFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         Log.d(TAG, "onViewCreated()")
         isToggled = mPreferenceManager.gender
-        Log.d(TAG, "onViewCreated: gender is $isToggled")
 
         with(mViewModel){
-            maintenanceCalorie.postValue(mPreferenceManager.maintenanceCalorie) // Set maintenance calorie if it is in the SharedPreference
-            genderButtonToggled.postValue(isToggled)
+            maintenanceCalorie.postValue(mPreferenceManager.maintenanceCalorie) // Set maintenance calorie that in the SharedPreference
+            genderButtonToggled.postValue(isToggled) // Set Gender Button value that in the SharedPreference
+            isOnSettingTimer.postValue(mPreferenceManager.isTimerOn)
         }
 
         binding.goalCalorieTextView.text = String.format(getString(R.string.goal_calorie) , mPreferenceManager.goalCalorie)
@@ -122,23 +124,19 @@ class UserFragment : Fragment() {
 
             //Confirm Button
             confirmButton.setOnClickListener {
-                with(mPreferenceManager){
-                    gender = isToggled
-                    age = mViewModel.age
-                    weight = mViewModel.weight
-                }
-                updateMaintenanceCalorie(mViewModel.age , mViewModel.weight , mViewModel.gender)
-                if(mPreferenceManager.gender != isToggled){
-                    Log.d(TAG, "addListeners: Did not update preference update one more")
-                    mPreferenceManager.gender = isToggled
-                }
-                Log.d(TAG, "addListeners: isToggled = $isToggled")
+                mViewModel.updateAllUserInfo(mPreferenceManager)
+                mViewModel.updateMaintenanceCalorie(mPreferenceManager)
             }
 
             // Setting Timer Button
             settingTimerButton.setOnClickListener {
                 mSettingTimerDialog = SettingTimerDialog(requireContext() , this@UserFragment)
                 mSettingTimerDialog.show()
+            }
+
+            // Setting Timer Switch
+            settingTimerSwitch.setOnCheckedChangeListener { _ , isOn ->
+                mViewModel.isOnSettingTimer.postValue(isOn)
             }
         }
     }
@@ -162,6 +160,13 @@ class UserFragment : Fragment() {
                 }
                 gender = binding.genderToggleButton.text.toString()
             }
+            isOnSettingTimer.observe(viewLifecycleOwner){
+                mPreferenceManager.isTimerOn = it
+                with(binding){
+                    settingTimerSwitch.isChecked = it
+                    settingTimerButton.isEnabled = it
+                }
+            }
         }
     }
 
@@ -171,56 +176,11 @@ class UserFragment : Fragment() {
             Utils.convertValueWithErrorCheck(binding.goalCalorieTextView
                 , resources.getString(R.string.goal_calorie)
                 , mPreferenceManager.goalCalorie!!)
-            Toast.makeText(FoodiNewApplication.getInstance() , "정상적으로 업데이트 되었습니다." , Toast.LENGTH_SHORT).show()
+            Utils.toastMessage("정상적으로 업데이트 되었습니다.")
         }
     }
 
     fun updateSettingTimer() {
-        Toast.makeText(FoodiNewApplication.getInstance() , "알람시간이 설정 되었습니다!" , Toast.LENGTH_SHORT).show()
-    }
-
-    /**
-     * Function For calculate maintenance calorie
-     * **/
-
-    private fun updateMaintenanceCalorie(age : Int , weight : Int , gender : String) {
-        Log.d(TAG, "updateMaintenanceCalorie()")
-        var calorie = 0
-        when(gender){
-            MALE -> {
-                when{
-                    age in 18..29  ->{
-                         calorie = (15.1* weight + 692).roundToInt()
-                        mViewModel.maintenanceCalorie.postValue(calorie.toString())
-                    }
-                    age in 30 .. 59 ->{
-                         calorie = (11.5* weight + 873).roundToInt()
-                        mViewModel.maintenanceCalorie.postValue(calorie.toString())
-                    }
-                    age > 60 -> {
-                         calorie = (11.7* weight + 588).roundToInt()
-                        mViewModel.maintenanceCalorie.postValue(calorie.toString())
-                    }
-                }
-            }
-            FEMALE -> {
-                when{
-                    age in 18..29  ->{
-                         calorie = (14.8* weight + 487).roundToInt()
-                        mViewModel.maintenanceCalorie.postValue(calorie.toString())
-                    }
-                    age in 30 .. 59 ->{
-                         calorie = (8.1* weight + 846).roundToInt()
-                        mViewModel.maintenanceCalorie.postValue(calorie.toString())
-                    }
-                    age > 60 -> {
-                         calorie = (9.1* weight + 659).roundToInt()
-                        mViewModel.maintenanceCalorie.postValue(calorie.toString())
-                    }
-                }
-            }
-        }
-        mPreferenceManager.maintenanceCalorie = calorie.toString()
-        Toast.makeText(FoodiNewApplication.getInstance() , "정보를 성공적으로 업데이트 했습니다." , Toast.LENGTH_SHORT).show()
+        Utils.toastMessage("알람시간이 설정 되었습니다!")
     }
 }

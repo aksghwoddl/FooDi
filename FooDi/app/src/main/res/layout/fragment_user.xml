@@ -141,13 +141,13 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:text="@string/setting_timer"
+            android:text="@string/setting_timer_clock"
             android:fontFamily="@font/swagger"
             android:layout_weight="1"
             />
        <com.google.android.material.switchmaterial.SwitchMaterial
-           android:text="@string/setting_lock"
-           android:id="@+id/settingLockSwitch"
+           android:id="@+id/settingTimerSwitch"
+           android:text="@string/setting_timer"
            android:layout_width="match_parent"
            android:layout_height="0dp"
            android:fontFamily="@font/swagger"

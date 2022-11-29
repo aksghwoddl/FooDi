@@ -56,8 +56,8 @@
     <string name="unit_calorie">kcal</string>
     <string name="age">나이 : </string>
     <string name="weight">몸무게 : </string>
-    <string name="setting_timer">식단 타이머 설정하기</string>
-    <string name="setting_lock">잠금화면 설정</string>
+    <string name="setting_timer_clock">식단 타이머 설정하기</string>
+    <string name="setting_timer">타이머 설정</string>
     <string name="input_goal_calorie">목표칼로리를 입력해주세요.</string>
     <string name="male">남</string>
     <string name="female">여</string>
