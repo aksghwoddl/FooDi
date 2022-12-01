@@ -24,7 +24,6 @@ import java.time.format.DateTimeFormatter
 class FoodDetailActivity : AppCompatActivity() {
     private lateinit var binding : ActivityFoodDetailBinding
     private lateinit var mFoodInfoData : FoodInfoData
-    private var mSelectedUnit = ""
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {

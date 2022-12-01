@@ -23,6 +23,8 @@
             android:textSize="15sp"
             android:layout_weight="1"
             android:gravity="center"
+            android:singleLine="true"
+            android:ellipsize="end"
             />
         <TextView
             android:id="@+id/foodNameTextView"
@@ -35,6 +37,8 @@
             android:textSize="15sp"
             android:layout_weight="1"
             android:gravity="center"
+            android:singleLine="true"
+            android:ellipsize="end"
             />
 
         <TextView
@@ -48,6 +52,8 @@
             android:textSize="15sp"
             android:layout_weight="1"
             android:gravity="center"
+            android:singleLine="true"
+            android:ellipsize="end"
             />
     </LinearLayout>
 

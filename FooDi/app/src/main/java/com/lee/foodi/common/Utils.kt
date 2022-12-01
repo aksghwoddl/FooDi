@@ -10,6 +10,7 @@ import android.view.WindowManager
 import android.widget.TextView
 import android.widget.Toast
 import androidx.lifecycle.VIEW_MODEL_STORE_OWNER_KEY
+import kotlin.math.abs
 
 const val PAGE_ONE = "1"
 const val EXTRA_SELECTED_FOOD = "selectedFood"
@@ -27,7 +28,8 @@ class Utils {
             Log.d(TAG, "convertValueWithErrorCheck: value is $value")
             if(value.contains("-")){
                 Log.d(TAG, "convertValueWithErrorCheck: value is minus")
-               textView.text = String.format(string, "0")
+                val convertValue = abs(value.toDouble()).toString()
+               textView.text = String.format(string, convertValue)
             } else if(value == "N/A"){
                 textView.text = ""
                 textView.visibility = View.GONE

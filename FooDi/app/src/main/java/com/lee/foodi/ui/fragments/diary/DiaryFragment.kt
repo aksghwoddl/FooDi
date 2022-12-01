@@ -11,25 +11,21 @@ import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.lee.foodi.R
 import com.lee.foodi.common.FoodiNewApplication
 import com.lee.foodi.common.Utils
 import com.lee.foodi.common.manager.FooDiPreferenceManager
 import com.lee.foodi.data.repository.FoodiRepository
-import com.lee.foodi.data.rest.model.FoodInfoData
-import com.lee.foodi.data.room.db.DiaryDatabase
+import com.lee.foodi.data.room.entity.DiaryItem
 import com.lee.foodi.databinding.FragmentDiaryBinding
 import com.lee.foodi.ui.activities.search.SearchActivity
 import com.lee.foodi.ui.adapter.DiaryFoodItemRecyclerAdapter
 import com.lee.foodi.ui.factory.FoodiViewModelFactory
 import com.lee.foodi.ui.fragments.diary.viewmodel.DiaryViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import kotlin.math.roundToInt
 
 private const val TAG = "DiaryFragment"
 
@@ -38,6 +34,8 @@ class DiaryFragment : Fragment() {
     private lateinit var mPreferenceManager: FooDiPreferenceManager
     private lateinit var mViewModel : DiaryViewModel
     private lateinit var mDiaryFoodItemRecyclerAdapter : DiaryFoodItemRecyclerAdapter
+
+    private var mDiaryFoodItems = mutableListOf<DiaryItem>()
 
     companion object{
         fun newInstance() = DiaryFragment()
@@ -58,21 +56,23 @@ class DiaryFragment : Fragment() {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        CoroutineScope(Dispatchers.IO).launch {
-            getDiaryItem()
-        }
         init()
         addListeners()
         observeDate()
+        CoroutineScope(Dispatchers.IO).launch {
+            mDiaryFoodItems = getDiaryItem()
+            mViewModel.diaryItems.postValue(mDiaryFoodItems)
+        }
     }
 
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onResume() {
         super.onResume()
-        updateCalories()
+        mViewModel.goalCalorie.postValue(mPreferenceManager.goalCalorie)
         CoroutineScope(Dispatchers.IO).launch {
-            getDiaryItem()
+            mDiaryFoodItems = getDiaryItem()
+            mViewModel.diaryItems.postValue(mDiaryFoodItems)
         }
     }
 
@@ -93,61 +93,60 @@ class DiaryFragment : Fragment() {
                     binding.diaryListLayout.visibility = View.VISIBLE
                     mDiaryFoodItemRecyclerAdapter.setDiaryList(it)
                     mDiaryFoodItemRecyclerAdapter.notifyItemRangeChanged(0 , mDiaryFoodItemRecyclerAdapter.itemCount)
+                    updateFoodSummary()
                 }
             }
 
             // Goal Calorie
             goalCalorie.observe(viewLifecycleOwner){
-                Utils.convertValueWithErrorCheck(binding.goalCalorieTextView
-                    , getString(R.string.goal_calorie)
-                    , it
-                )
+                Utils.convertValueWithErrorCheck(binding.goalCalorieTextView, getString(R.string.goal_calorie), it)
             }
 
             // Spend Calorie
             spendCalories.observe(viewLifecycleOwner){
-                Utils.convertValueWithErrorCheck(binding.spendCalorieTextView
-                    , getString(R.string.spend_calorie)
-                    , "0")
+                Utils.convertValueWithErrorCheck(binding.spendCalorieTextView, getString(R.string.spend_calorie), it)
+            }
+
+            // Food Summary Layout observer
+            amountCarbon.observe(viewLifecycleOwner){
+                Utils.convertValueWithErrorCheck(binding.amountCarbonTextView , getString(R.string.summary_format) , it)
+            }
+
+            amountProtein.observe(viewLifecycleOwner){
+                Utils.convertValueWithErrorCheck(binding.amountProteinTextView , getString(R.string.summary_format) , it)
+            }
+
+            amountFat.observe(viewLifecycleOwner){
+                Utils.convertValueWithErrorCheck(binding.amountFatTextView , getString(R.string.summary_format) , it)
             }
         }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    suspend fun getDiaryItem() {
-         CoroutineScope(Dispatchers.IO).launch {
-            val date = LocalDate.now().format(DateTimeFormatter.ISO_DATE)
+    suspend fun getDiaryItem() : MutableList<DiaryItem> {
+        return withContext(CoroutineScope(Dispatchers.IO).coroutineContext) {
+            val date = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy년MM월dd일"))
             mViewModel.getDiaryItems(date)
         }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun init() {
-        // Setting Today date format at header
-        mViewModel.date.postValue(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy년MM월dd일")))
-
         // Init RecyclerView
         binding.diaryRecyclerView.run {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = mDiaryFoodItemRecyclerAdapter
-
         }
-        updateCalories() // Update Calories
+
+        // Setting Today date format at header
+        mViewModel.date.postValue(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy년MM월dd일")))
         binding.spendCalorieProgressBar.progress = 70 // Set Progress need to update
-
-    }
-
-    private fun updateCalories() {
-        with(mViewModel){
-            goalCalorie.postValue(mPreferenceManager.goalCalorie)
-            spendCalories.postValue("0") // Need to add spend set calorie
-        }
 
     }
 
     private fun addListeners() {
         with(binding){
-            searchButton.setOnClickListener {
+            headerSearchLayout.setOnClickListener {
                 with(Intent(FoodiNewApplication.getInstance() , SearchActivity::class.java)){
                     startActivity(this)
                 }
@@ -158,6 +157,25 @@ class DiaryFragment : Fragment() {
                     startActivity(this)
                 }
             }
+        }
+    }
+
+    private fun updateFoodSummary(){
+        var calorie = 0
+        var carbondydrate = 0
+        var protein = 0
+        var fat  = 0
+        mDiaryFoodItems.forEach {
+            calorie+= it.food?.calorie!!.toDouble().roundToInt()
+            carbondydrate += it.food?.carbohydrate!!.toDouble().roundToInt()
+            protein += it.food?.protein!!.toDouble().roundToInt()
+            fat += it.food?.fat!!.toDouble().roundToInt()
+        }
+        with(mViewModel) {
+            spendCalories.postValue(calorie.toString())
+            amountCarbon.postValue(carbondydrate.toString())
+            amountProtein.postValue(protein.toString())
+            amountFat.postValue(fat.toString())
         }
     }
 }
