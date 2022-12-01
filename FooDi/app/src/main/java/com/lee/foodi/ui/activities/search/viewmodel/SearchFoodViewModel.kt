@@ -3,8 +3,8 @@ package com.lee.foodi.ui.activities.search.viewmodel
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.lee.foodi.data.model.FoodData
-import com.lee.foodi.data.model.FoodInfoData
+import com.lee.foodi.data.rest.model.FoodData
+import com.lee.foodi.data.rest.model.FoodInfoData
 import com.lee.foodi.data.repository.FoodiRepository
 import kotlinx.coroutines.*
 import java.net.SocketTimeoutException

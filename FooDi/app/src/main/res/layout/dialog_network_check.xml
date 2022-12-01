@@ -18,6 +18,17 @@
         android:background="@color/main_color"
         />
 
+    <TextView
+        android:id="@+id/dialogContentTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/swagger"
+        android:text="@string/network_dialog_content"
+        android:layout_gravity="center_vertical"
+        android:gravity="center"
+        android:textSize="15sp"
+        />
+
     <Button
         android:id="@+id/confirmButton"
         android:layout_width="wrap_content"
@@ -26,7 +37,7 @@
         android:fontFamily="@font/swagger"
         android:textColor="#fff"
         android:text="@string/confirm"
-        android:layout_gravity="end|bottom"
+        android:layout_gravity="bottom|center"
         />
 
 </androidx.cardview.widget.CardView>

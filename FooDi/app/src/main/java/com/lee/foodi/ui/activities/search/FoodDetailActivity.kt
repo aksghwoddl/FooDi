@@ -1,20 +1,30 @@
 package com.lee.foodi.ui.activities.search
 
 import android.annotation.SuppressLint
+import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.widget.ArrayAdapter
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.lee.foodi.R
 import com.lee.foodi.common.EXTRA_SELECTED_FOOD
 import com.lee.foodi.common.Utils
-import com.lee.foodi.data.model.FoodInfoData
+import com.lee.foodi.data.rest.model.FoodInfoData
+import com.lee.foodi.data.room.db.DiaryDatabase
+import com.lee.foodi.data.room.entity.DiaryItemEntity
 import com.lee.foodi.databinding.ActivityFoodDetailBinding
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 class FoodDetailActivity : AppCompatActivity() {
     private lateinit var binding : ActivityFoodDetailBinding
     private lateinit var mFoodInfoData : FoodInfoData
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityFoodDetailBinding.inflate(layoutInflater).also {
@@ -27,6 +37,7 @@ class FoodDetailActivity : AppCompatActivity() {
     /**
      * Init Functions
      * **/
+    @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("SetTextI18n")
     private fun init() {
         with(binding){
@@ -45,11 +56,29 @@ class FoodDetailActivity : AppCompatActivity() {
             calculateEditText.text = Editable.Factory.getInstance().newEditable(mFoodInfoData.servingWeight)
         }
         initSpinner()
+        addListeners()
     }
 
     private fun initSpinner() {
         val unitArray = resources.getStringArray(R.array.unit_array)
         val adapter = ArrayAdapter(this , com.google.android.material.R.layout.support_simple_spinner_dropdown_item , unitArray)
         binding.unitSpinner.adapter = adapter
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun addListeners() {
+        with(binding){
+            addButton.setOnClickListener {
+                CoroutineScope(Dispatchers.IO).launch {
+                    val db = DiaryDatabase.getInstance()
+                    val date = LocalDate.now().format(DateTimeFormatter.ISO_DATE)
+                    val queryFood = DiaryItemEntity(null , date , mFoodInfoData)
+                    db.diaryDao().addDiaryItem(queryFood)
+                    CoroutineScope(Dispatchers.Main).launch {
+                        Utils.toastMessage("정상적으로 추가 되었습니다.")
+                    }
+                }
+            }
+        }
     }
 }

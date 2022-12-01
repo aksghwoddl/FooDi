@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.lee.foodi.data.model.FoodInfoData
+import com.lee.foodi.data.rest.model.FoodInfoData
 import com.lee.foodi.databinding.SearchFoodItemBinding
 
 class SearchFoodRecyclerAdapter : RecyclerView.Adapter<SearchFoodRecyclerAdapter.SearchFoodViewHolder>() {
@@ -12,7 +12,7 @@ class SearchFoodRecyclerAdapter : RecyclerView.Adapter<SearchFoodRecyclerAdapter
     private var mItemClickListener : OnItemClickListener? = null
 
     interface OnItemClickListener{
-        fun onItemClick(v: View, model : FoodInfoData , position: Int) {}
+        fun onItemClick(v: View, model : FoodInfoData, position: Int) {}
     }
 
     fun setOnItemClickListener(listener: OnItemClickListener) {

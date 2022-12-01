@@ -1,7 +1,7 @@
 package com.lee.foodi.data.rest
 
 import com.lee.foodi.common.FOOD_TARGET_URL
-import com.lee.foodi.data.model.FoodData
+import com.lee.foodi.data.rest.model.FoodData
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory

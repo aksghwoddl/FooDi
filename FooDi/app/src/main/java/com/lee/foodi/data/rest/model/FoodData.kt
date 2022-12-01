@@ -1,4 +1,4 @@
-package com.lee.foodi.data.model
+package com.lee.foodi.data.rest.model
 
 class FoodData {
     val header : Header? = null

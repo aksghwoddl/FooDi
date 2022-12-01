@@ -1,6 +1,7 @@
-package com.lee.foodi.data.model
+package com.lee.foodi.data.rest.model
 
 import com.google.gson.annotations.SerializedName
+import org.jetbrains.annotations.NotNull
 import java.io.Serializable
 
 data class FoodInfoData (
