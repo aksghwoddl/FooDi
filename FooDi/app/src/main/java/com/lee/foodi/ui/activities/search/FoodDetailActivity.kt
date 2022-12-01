@@ -18,11 +18,13 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 class FoodDetailActivity : AppCompatActivity() {
     private lateinit var binding : ActivityFoodDetailBinding
     private lateinit var mFoodInfoData : FoodInfoData
+    private var mSelectedUnit = ""
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -63,6 +65,7 @@ class FoodDetailActivity : AppCompatActivity() {
         val unitArray = resources.getStringArray(R.array.unit_array)
         val adapter = ArrayAdapter(this , com.google.android.material.R.layout.support_simple_spinner_dropdown_item , unitArray)
         binding.unitSpinner.adapter = adapter
+
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -71,8 +74,10 @@ class FoodDetailActivity : AppCompatActivity() {
             addButton.setOnClickListener {
                 CoroutineScope(Dispatchers.IO).launch {
                     val db = DiaryDatabase.getInstance()
-                    val date = LocalDate.now().format(DateTimeFormatter.ISO_DATE)
-                    val queryFood = DiaryItemEntity(null , date , mFoodInfoData)
+                    val date = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy년MM월dd일"))
+                    val time = LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH : mm"))
+                    val servingSize = binding.calculateEditText.text.toString() + binding.unitSpinner.selectedItem.toString()
+                    val queryFood = DiaryItemEntity(null , date , mFoodInfoData , time , servingSize)
                     db.diaryDao().addDiaryItem(queryFood)
                     CoroutineScope(Dispatchers.Main).launch {
                         Utils.toastMessage("정상적으로 추가 되었습니다.")

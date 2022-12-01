@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:id="@+id/listLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toTopOf="parent"
+        android:weightSum="3"
+        >
+        <TextView
+            android:id="@+id/timeTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/time"
+            android:padding="10dp"
+            android:fontFamily="@font/swagger"
+            android:textColor="#000"
+            android:textSize="15sp"
+            android:layout_weight="1"
+            android:gravity="center"
+            />
+        <TextView
+            android:id="@+id/foodNameTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/food"
+            android:padding="10dp"
+            android:fontFamily="@font/swagger"
+            android:textColor="#000"
+            android:textSize="15sp"
+            android:layout_weight="1"
+            android:gravity="center"
+            />
+
+        <TextView
+            android:id="@+id/servingSizeTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/serving"
+            android:padding="10dp"
+            android:fontFamily="@font/swagger"
+            android:textColor="#000"
+            android:textSize="15sp"
+            android:layout_weight="1"
+            android:gravity="center"
+            />
+    </LinearLayout>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -34,8 +34,6 @@ class ContainerActivity : AppCompatActivity() {
      * **/
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun initFragmentAdapter() {
-        val tabNameArray = resources.getStringArray(R.array.bottom_tab_array)
-
         val tabImageArray = arrayOf(
             resources.getDrawable(R.drawable.graph_icon  , null),
             resources.getDrawable(R.drawable.note , null),

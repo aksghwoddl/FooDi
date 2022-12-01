@@ -15,6 +15,19 @@
         >
 
         <TextView
+            android:id="@+id/headerDateTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/search"
+            android:fontFamily="@font/swagger"
+            android:textSize="15sp"
+            android:textColor="#000"
+            android:layout_centerInParent="true"
+            android:layout_marginEnd="40dp"
+            android:layout_centerVertical="true"
+            />
+
+        <TextView
             android:id="@+id/headerSearchTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -95,6 +108,7 @@
             android:background="@drawable/border_textview"
             >
             <TextView
+                android:id="@+id/amountCarbonTextView"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -106,6 +120,7 @@
                 android:gravity="center"
                 />
             <TextView
+                android:id="@+id/amountProteinTextView"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -116,6 +131,7 @@
                 android:text="@string/zero_gram"
                 />
             <TextView
+                android:id="@+id/amountFatTextView"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -129,12 +145,80 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/diaryListLayout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@id/nutritionSummaryLayout"
+        app:layout_constraintBottom_toTopOf="@id/calorieLayout"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginTop="20dp"
+        >
+        <LinearLayout
+            android:id="@+id/listLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toTopOf="parent"
+            android:weightSum="3"
+            >
+            <TextView
+                android:id="@+id/timeTextView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/time"
+                android:padding="10dp"
+                android:fontFamily="@font/swagger"
+                android:textColor="#000"
+                android:textSize="20sp"
+                android:layout_weight="1"
+                android:gravity="center"
+                />
+            <TextView
+                android:id="@+id/foodNameTextView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/food"
+                android:padding="10dp"
+                android:fontFamily="@font/swagger"
+                android:textColor="#000"
+                android:textSize="20sp"
+                android:layout_weight="1"
+                android:gravity="center"
+                />
+
+            <TextView
+                android:id="@+id/servingSizeTextView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/serving"
+                android:padding="10dp"
+                android:fontFamily="@font/swagger"
+                android:textColor="#000"
+                android:textSize="20sp"
+                android:layout_weight="1"
+                android:gravity="center"
+                />
+        </LinearLayout>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/diaryRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:listitem="@layout/diary_food_item"
+            android:layout_marginTop="10dp"
+            />
+    </LinearLayout>
+
+
+    <LinearLayout
         android:id="@+id/noDiaryItemLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         android:orientation="vertical"
+        android:visibility="gone"
         >
         <TextView
             android:id="@+id/noDiaryItemTextView"
