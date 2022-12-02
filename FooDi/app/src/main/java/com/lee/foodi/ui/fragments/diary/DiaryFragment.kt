@@ -55,6 +55,7 @@ class DiaryFragment : Fragment() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        Log.d(TAG, "onViewCreated()")
         super.onViewCreated(view, savedInstanceState)
         init()
         addListeners()
@@ -68,6 +69,7 @@ class DiaryFragment : Fragment() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onResume() {
+        Log.d(TAG, "onResume()")
         super.onResume()
         mViewModel.goalCalorie.postValue(mPreferenceManager.goalCalorie)
         CoroutineScope(Dispatchers.IO).launch {
@@ -76,6 +78,7 @@ class DiaryFragment : Fragment() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun observeDate() {
         with(mViewModel){
             // Header Date
@@ -94,6 +97,7 @@ class DiaryFragment : Fragment() {
                     mDiaryFoodItemRecyclerAdapter.setDiaryList(it)
                     mDiaryFoodItemRecyclerAdapter.notifyItemRangeChanged(0 , mDiaryFoodItemRecyclerAdapter.itemCount)
                     updateFoodSummary()
+                    updateCalorieProgress()
                 }
             }
 
@@ -105,6 +109,11 @@ class DiaryFragment : Fragment() {
             // Spend Calorie
             spendCalories.observe(viewLifecycleOwner){
                 Utils.convertValueWithErrorCheck(binding.spendCalorieTextView, getString(R.string.spend_calorie), it)
+            }
+
+            // Progress bar
+            calorieProgress.observe(viewLifecycleOwner){
+                binding.spendCalorieProgressBar.progress = it.toInt()
             }
 
             // Food Summary Layout observer
@@ -124,9 +133,10 @@ class DiaryFragment : Fragment() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     suspend fun getDiaryItem() : MutableList<DiaryItem> {
+        Log.d(TAG, "getDiaryItem()")
         return withContext(CoroutineScope(Dispatchers.IO).coroutineContext) {
-            val date = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy년MM월dd일"))
-            mViewModel.getDiaryItems(date)
+            val date = mViewModel.date.value
+            mViewModel.getDiaryItems(date!!)
         }
     }
 
@@ -137,11 +147,6 @@ class DiaryFragment : Fragment() {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = mDiaryFoodItemRecyclerAdapter
         }
-
-        // Setting Today date format at header
-        mViewModel.date.postValue(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy년MM월dd일")))
-        binding.spendCalorieProgressBar.progress = 70 // Set Progress need to update
-
     }
 
     private fun addListeners() {
@@ -161,6 +166,7 @@ class DiaryFragment : Fragment() {
     }
 
     private fun updateFoodSummary(){
+        Log.d(TAG, "updateFoodSummary()")
         var calorie = 0
         var carbondydrate = 0
         var protein = 0
@@ -172,10 +178,21 @@ class DiaryFragment : Fragment() {
             fat += it.food?.fat!!.toDouble().roundToInt()
         }
         with(mViewModel) {
-            spendCalories.postValue(calorie.toString())
+            spendCalories.value = calorie.toString()
             amountCarbon.postValue(carbondydrate.toString())
             amountProtein.postValue(protein.toString())
             amountFat.postValue(fat.toString())
+        }
+    }
+
+    private fun updateCalorieProgress() {
+        Log.d(TAG, "updateCalorieProgress()")
+        with(mViewModel){
+            if(spendCalories.value != "0" && goalCalorie.value != "0"){
+                val progress = spendCalories.value!!.toDouble()/goalCalorie.value!!.toInt() * 100
+                calorieProgress.postValue(progress)
+                Log.d(TAG, "updateCalorieProgress: progress = $progress")
+            }
         }
     }
 }

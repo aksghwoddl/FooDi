@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -12,8 +11,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.lee.foodi.common.EXTRA_SELECTED_FOOD
 import com.lee.foodi.common.FoodiNewApplication
 import com.lee.foodi.common.PAGE_ONE
-import com.lee.foodi.data.rest.model.FoodInfoData
+import com.lee.foodi.common.Utils
 import com.lee.foodi.data.repository.FoodiRepository
+import com.lee.foodi.data.rest.model.FoodInfoData
 import com.lee.foodi.databinding.ActivitySearchBinding
 import com.lee.foodi.ui.activities.add.AddFoodActivity
 import com.lee.foodi.ui.activities.search.viewmodel.SearchFoodViewModel
@@ -122,7 +122,7 @@ class SearchActivity : AppCompatActivity() {
            }
 
            errorMessage.observe(this@SearchActivity){
-               Toast.makeText(this@SearchActivity , it , Toast.LENGTH_SHORT).show()
+               Utils.toastMessage(it)
            }
 
            addFoodLayoutVisible.observe(this@SearchActivity){

@@ -61,7 +61,7 @@ class FooDiPreferenceManager {
         }
     }
 
-    var age : Int
+    var setting_age : Int
     get() = sharedPreference.getInt(AGE , 18)
     set(age) {
         with(sharedPreferenceEditor){
@@ -69,7 +69,7 @@ class FooDiPreferenceManager {
         }
     }
 
-    var weight : Int
+    var setting_weight : Int
     get() = sharedPreference.getInt(WEIGHT , 60)
     set(weight){
         with(sharedPreferenceEditor){
