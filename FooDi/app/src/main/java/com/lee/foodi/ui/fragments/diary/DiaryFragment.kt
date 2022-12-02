@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.lee.foodi.R
+import com.lee.foodi.common.EXTRA_SELECTED_DATE
 import com.lee.foodi.common.FoodiNewApplication
 import com.lee.foodi.common.Utils
 import com.lee.foodi.common.manager.FooDiPreferenceManager
@@ -40,6 +41,9 @@ class DiaryFragment : Fragment() {
     private lateinit var mDiaryFoodItemRecyclerAdapter : DiaryFoodItemRecyclerAdapter
 
     private var mDiaryFoodItems = mutableListOf<DiaryItem>()
+    private var mYear = Calendar.getInstance().get(Calendar.YEAR)
+    private var mMonth = Calendar.getInstance().get(Calendar.MONTH)
+    private var mDay = Calendar.getInstance().get(Calendar.DATE)
 
     companion object{
         fun newInstance() = DiaryFragment()
@@ -102,7 +106,7 @@ class DiaryFragment : Fragment() {
                     binding.noDiaryItemLayout.visibility = View.GONE
                     binding.diaryListLayout.visibility = View.VISIBLE
                     mDiaryFoodItemRecyclerAdapter.setDiaryList(it)
-                    mDiaryFoodItemRecyclerAdapter.notifyItemRangeChanged(0 , mDiaryFoodItemRecyclerAdapter.itemCount)
+                    mDiaryFoodItemRecyclerAdapter.notifyDataSetChanged()
                     updateFoodSummary()
                     updateCalorieProgress()
                     CoroutineScope(Dispatchers.IO).launch {
@@ -165,25 +169,23 @@ class DiaryFragment : Fragment() {
             // Food Search Listeners
             headerSearchLayout.setOnClickListener {
                 with(Intent(FoodiNewApplication.getInstance() , SearchActivity::class.java)){
+                    putExtra(EXTRA_SELECTED_DATE , mViewModel.date.value)
                     startActivity(this)
                 }
             }
 
             addButton.setOnClickListener {
                 with(Intent(FoodiNewApplication.getInstance() , SearchActivity::class.java)){
+                    putExtra(EXTRA_SELECTED_DATE , mViewModel.date.value)
                     startActivity(this)
                 }
             }
 
             // Calendar Listener
             calendarButton.setOnClickListener {
-                val calendar = Calendar.getInstance()
-                val year = calendar.get(Calendar.YEAR)
-                val month = calendar.get(Calendar.MONTH)
-                val day = calendar.get(Calendar.DATE)
                 val listener = DatePickerListener()
-                Log.d(TAG, "addListeners: year = $year , month = $month , day = $day")
-                val calendarDialog = DatePickerDialog(requireContext() , listener ,year , month , day)
+                Log.d(TAG, "addListeners: year = $mYear , month = $mMonth , day = $mDay")
+                val calendarDialog = DatePickerDialog(requireContext() , listener ,mYear , mMonth , mDay)
                 calendarDialog.show()
             }
         }
@@ -233,6 +235,7 @@ class DiaryFragment : Fragment() {
         @RequiresApi(Build.VERSION_CODES.O)
         override fun onDateSet(datePicker: DatePicker?, year: Int, month: Int, day: Int) {
             val selectedDate = LocalDate.of(year, month+1 ,day).format(DateTimeFormatter.ofPattern("yyyy년MM월dd일"))
+            mYear = year ; mMonth = month ; mDay = day
             mViewModel.date.value = selectedDate
         }
     }

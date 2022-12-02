@@ -8,10 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.lee.foodi.common.EXTRA_SELECTED_FOOD
-import com.lee.foodi.common.FoodiNewApplication
-import com.lee.foodi.common.PAGE_ONE
-import com.lee.foodi.common.Utils
+import com.lee.foodi.common.*
 import com.lee.foodi.data.repository.FoodiRepository
 import com.lee.foodi.data.rest.model.FoodInfoData
 import com.lee.foodi.databinding.ActivitySearchBinding
@@ -48,6 +45,7 @@ class SearchActivity : AppCompatActivity() {
                 super.onItemClick(v, model, position)
                 with(Intent(this@SearchActivity , FoodDetailActivity::class.java)){
                     putExtra(EXTRA_SELECTED_FOOD , model)
+                    putExtra(EXTRA_SELECTED_DATE , intent.getStringExtra(EXTRA_SELECTED_DATE))
                     startActivity(this)
                 }
             }

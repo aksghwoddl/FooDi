@@ -163,6 +163,7 @@
             android:layout_height="match_parent"
             android:gravity="center_vertical"
             android:layout_weight="5"
+            android:inputType="number"
             />
 
         <Spinner
