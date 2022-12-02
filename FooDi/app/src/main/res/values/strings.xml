@@ -50,6 +50,7 @@
     <string name="no_diary_item">아직 기록한 음식이 없네요. \n 추가해보세요.</string>
     <string name="header_date">%s</string>
     <string name="summary_format">%sg</string>
+    <string name="date_format">%d년%d월%d일</string>
     <string name="search">검색하기</string>
     <string name="time">시간</string>
     <string name="food">음식</string>

@@ -1,5 +1,6 @@
 package com.lee.foodi.ui.fragments.diary
 
+import android.app.DatePickerDialog
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -7,6 +8,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.DatePicker
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -25,9 +27,11 @@ import com.lee.foodi.ui.fragments.diary.viewmodel.DiaryViewModel
 import kotlinx.coroutines.*
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import java.util.*
 import kotlin.math.roundToInt
 
 private const val TAG = "DiaryFragment"
+private const val INITIAL_VALUE = "0"
 
 class DiaryFragment : Fragment() {
     private lateinit var binding : FragmentDiaryBinding
@@ -60,10 +64,6 @@ class DiaryFragment : Fragment() {
         init()
         addListeners()
         observeDate()
-        CoroutineScope(Dispatchers.IO).launch {
-            mDiaryFoodItems = getDiaryItem()
-            mViewModel.diaryItems.postValue(mDiaryFoodItems)
-        }
     }
 
 
@@ -84,6 +84,12 @@ class DiaryFragment : Fragment() {
             // Header Date
             date.observe(viewLifecycleOwner){
                 Utils.convertValueWithErrorCheck(binding.headerDateTextView , getString(R.string.header_date), it)
+                CoroutineScope(Dispatchers.IO).launch {
+                    mDiaryFoodItems = getDiaryItem()
+                    CoroutineScope(Dispatchers.Main).launch {
+                        mViewModel.diaryItems.postValue(mDiaryFoodItems)
+                    }
+                }
             }
 
             // Diary Items
@@ -91,6 +97,7 @@ class DiaryFragment : Fragment() {
                 if(it.isEmpty()){
                     binding.noDiaryItemLayout.visibility = View.VISIBLE
                     binding.diaryListLayout.visibility = View.GONE
+                    initFoodSummary()
                 } else {
                     binding.noDiaryItemLayout.visibility = View.GONE
                     binding.diaryListLayout.visibility = View.VISIBLE
@@ -98,6 +105,9 @@ class DiaryFragment : Fragment() {
                     mDiaryFoodItemRecyclerAdapter.notifyItemRangeChanged(0 , mDiaryFoodItemRecyclerAdapter.itemCount)
                     updateFoodSummary()
                     updateCalorieProgress()
+                    CoroutineScope(Dispatchers.IO).launch {
+                        mViewModel.addDiarySummary()
+                    }
                 }
             }
 
@@ -149,8 +159,10 @@ class DiaryFragment : Fragment() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun addListeners() {
         with(binding){
+            // Food Search Listeners
             headerSearchLayout.setOnClickListener {
                 with(Intent(FoodiNewApplication.getInstance() , SearchActivity::class.java)){
                     startActivity(this)
@@ -161,6 +173,18 @@ class DiaryFragment : Fragment() {
                 with(Intent(FoodiNewApplication.getInstance() , SearchActivity::class.java)){
                     startActivity(this)
                 }
+            }
+
+            // Calendar Listener
+            calendarButton.setOnClickListener {
+                val calendar = Calendar.getInstance()
+                val year = calendar.get(Calendar.YEAR)
+                val month = calendar.get(Calendar.MONTH)
+                val day = calendar.get(Calendar.DATE)
+                val listener = DatePickerListener()
+                Log.d(TAG, "addListeners: year = $year , month = $month , day = $day")
+                val calendarDialog = DatePickerDialog(requireContext() , listener ,year , month , day)
+                calendarDialog.show()
             }
         }
     }
@@ -185,6 +209,15 @@ class DiaryFragment : Fragment() {
         }
     }
 
+    private fun initFoodSummary() {
+        with(mViewModel){
+            spendCalories.value = INITIAL_VALUE
+            amountCarbon.value = INITIAL_VALUE
+            amountProtein.value = INITIAL_VALUE
+            amountFat.value = INITIAL_VALUE
+        }
+    }
+
     private fun updateCalorieProgress() {
         Log.d(TAG, "updateCalorieProgress()")
         with(mViewModel){
@@ -193,6 +226,14 @@ class DiaryFragment : Fragment() {
                 calorieProgress.value = progress
                 Log.d(TAG, "updateCalorieProgress: progress = $progress")
             }
+        }
+    }
+
+    inner class DatePickerListener() : DatePickerDialog.OnDateSetListener {
+        @RequiresApi(Build.VERSION_CODES.O)
+        override fun onDateSet(datePicker: DatePicker?, year: Int, month: Int, day: Int) {
+            val selectedDate = LocalDate.of(year, month+1 ,day).format(DateTimeFormatter.ofPattern("yyyy년MM월dd일"))
+            mViewModel.date.value = selectedDate
         }
     }
 }

@@ -5,12 +5,12 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.lee.foodi.data.rest.model.FoodInfoData
 
-@Entity
+@Entity(tableName = "diary_tbl")
 data class DiaryEntity(
     @PrimaryKey val date : String ,
-    var totalCalorie : Int ,
-    var totalCarbon : Int ,
-    var totalProtein : Int ,
-    var totalFat : Int
+    var totalCalorie : String ,
+    var totalCarbon : String ,
+    var totalProtein : String ,
+    var totalFat : String
 )
 
