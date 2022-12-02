@@ -134,7 +134,7 @@ class UserFragment : Fragment() {
 
             // Setting Timer Switch
             settingTimerSwitch.setOnCheckedChangeListener { _ , isOn ->
-                mViewModel.isOnSettingTimer.postValue(isOn)
+                mViewModel.isOnSettingTimer.value = isOn
             }
         }
     }

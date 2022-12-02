@@ -179,9 +179,9 @@ class DiaryFragment : Fragment() {
         }
         with(mViewModel) {
             spendCalories.value = calorie.toString()
-            amountCarbon.postValue(carbondydrate.toString())
-            amountProtein.postValue(protein.toString())
-            amountFat.postValue(fat.toString())
+            amountCarbon.value = carbondydrate.toString()
+            amountProtein.value = protein.toString()
+            amountFat.value = fat.toString()
         }
     }
 
@@ -190,7 +190,7 @@ class DiaryFragment : Fragment() {
         with(mViewModel){
             if(spendCalories.value != "0" && goalCalorie.value != "0"){
                 val progress = spendCalories.value!!.toDouble()/goalCalorie.value!!.toInt() * 100
-                calorieProgress.postValue(progress)
+                calorieProgress.value = progress
                 Log.d(TAG, "updateCalorieProgress: progress = $progress")
             }
         }
