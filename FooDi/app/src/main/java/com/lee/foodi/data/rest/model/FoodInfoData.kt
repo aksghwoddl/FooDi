@@ -6,29 +6,29 @@ import java.io.Serializable
 
 data class FoodInfoData (
     @SerializedName("DESC_KOR")
-    val foodName : String ,
+    var foodName : String ,
     @SerializedName("SERVING_WT")
-    val servingWeight : String ,
+    var servingWeight : String ,
     @SerializedName("NUTR_CONT1")
-    val calorie : String ,
+    var calorie : String ,
     @SerializedName("NUTR_CONT2")
-    val carbohydrate : String ,
+    var carbohydrate : String ,
     @SerializedName("NUTR_CONT3")
-    val protein : String ,
+    var protein : String ,
     @SerializedName("NUTR_CONT4")
-    val fat : String ,
+    var fat : String ,
     @SerializedName("NUTR_CONT5")
-    val sugar : String ,
+    var sugar : String ,
     @SerializedName("NUTR_CONT6")
-    val salt : String ,
+    var salt : String ,
     @SerializedName("NUTR_CONT7")
-    val cholesterol : String ,
+    var cholesterol : String ,
     @SerializedName("NUTR_CONT8")
-    val saturatedFat : String ,
+    var saturatedFat : String ,
     @SerializedName("NUTR_CONT9")
-    val transFat : String ,
+    var transFat : String ,
     @SerializedName("BGN_YEAR")
-    val beginYear : String ,
+    var beginYear : String ,
     @SerializedName("ANIMAL_PLANT")
-    val company : String
+    var company : String
 ) : Serializable

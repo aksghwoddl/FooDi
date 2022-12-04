@@ -12,6 +12,8 @@ import android.widget.Toast
 import androidx.lifecycle.VIEW_MODEL_STORE_OWNER_KEY
 import kotlin.math.abs
 
+private const val TAG = "Utils"
+
 const val PAGE_ONE = "1"
 const val EXTRA_SELECTED_FOOD = "selectedFood"
 const val EXTRA_SELECTED_DATE = "selected_date"
@@ -20,7 +22,6 @@ const val FEMALE = "여"
 
 class Utils {
     companion object{
-        private val TAG = "Utils"
         /**
          * Function that check and convert value received from server (sometimes received minus or N/A)
          * **/
