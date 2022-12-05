@@ -21,7 +21,7 @@ import com.lee.foodi.data.rest.model.FoodInfoData
 import com.lee.foodi.data.room.db.DiaryDatabase
 import com.lee.foodi.data.room.entity.DiaryItemEntity
 import com.lee.foodi.databinding.ActivityFoodDetailBinding
-import com.lee.foodi.ui.receiver.TimerReceiver
+import com.lee.foodi.receiver.TimerReceiver
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

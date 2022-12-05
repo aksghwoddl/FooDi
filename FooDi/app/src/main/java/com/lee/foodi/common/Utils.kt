@@ -9,7 +9,6 @@ import android.view.View
 import android.view.WindowManager
 import android.widget.TextView
 import android.widget.Toast
-import androidx.lifecycle.VIEW_MODEL_STORE_OWNER_KEY
 import kotlin.math.abs
 
 private const val TAG = "Utils"

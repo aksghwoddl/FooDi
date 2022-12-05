@@ -6,16 +6,11 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.CompoundButton
-import android.widget.CompoundButton.OnCheckedChangeListener
 import android.widget.NumberPicker
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.lee.foodi.R
-import com.lee.foodi.common.FEMALE
 import com.lee.foodi.common.FoodiNewApplication
-import com.lee.foodi.common.MALE
 import com.lee.foodi.common.Utils
 import com.lee.foodi.common.manager.FooDiPreferenceManager
 import com.lee.foodi.data.repository.FoodiRepository
@@ -24,7 +19,6 @@ import com.lee.foodi.ui.factory.FoodiViewModelFactory
 import com.lee.foodi.ui.fragments.user.dialog.SettingGoalCalorieDialog
 import com.lee.foodi.ui.fragments.user.dialog.SettingTimerDialog
 import com.lee.foodi.ui.fragments.user.viewmodel.SettingUserViewModel
-import kotlin.math.roundToInt
 
 private const val TAG = "UserFragment"
 

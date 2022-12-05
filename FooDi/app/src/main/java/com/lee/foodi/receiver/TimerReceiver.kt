@@ -1,4 +1,4 @@
-package com.lee.foodi.ui.receiver
+package com.lee.foodi.receiver
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
