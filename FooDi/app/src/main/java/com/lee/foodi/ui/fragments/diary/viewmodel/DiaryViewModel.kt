@@ -34,8 +34,10 @@ class DiaryViewModel(repository: FoodiRepository) : ViewModel() {
     var amountProtein  = MutableLiveData<String>("0")
     var amountFat  = MutableLiveData<String>("0")
     var calorieProgress = MutableLiveData<Double>(0.0)
+    var isProgress = MutableLiveData<Boolean>(false)
 
     suspend fun getDiaryItems(date : String) : MutableList<DiaryItem>{
+        isProgress.postValue(true)
         val ret = CoroutineScope(Dispatchers.IO).async {
              mRepository.getAllDiaryItems(date)
         }

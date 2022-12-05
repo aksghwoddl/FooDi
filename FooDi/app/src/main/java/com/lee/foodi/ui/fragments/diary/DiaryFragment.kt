@@ -81,6 +81,7 @@ class DiaryFragment : Fragment() {
         CoroutineScope(Dispatchers.IO).launch {
             mDiaryFoodItems = getDiaryItem()
             mViewModel.diaryItems.postValue(mDiaryFoodItems)
+            mViewModel.isProgress.postValue(false)
         }
     }
 

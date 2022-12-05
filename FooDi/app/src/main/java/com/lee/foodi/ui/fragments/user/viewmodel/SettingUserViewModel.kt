@@ -23,7 +23,6 @@ class SettingUserViewModel : ViewModel() {
     /**
      * Function for update user info
      * **/
-
     fun updateAllUserInfo(preferenceManager: FooDiPreferenceManager) {
         with(preferenceManager){
             gender = genderButtonToggled.value!!
@@ -35,7 +34,6 @@ class SettingUserViewModel : ViewModel() {
     /**
      * Function for calculate maintenance calorie
      * **/
-
     fun updateMaintenanceCalorie(preferenceManager: FooDiPreferenceManager) {
         Log.d(TAG , "updateMaintenanceCalorie()")
         var calorie = 0

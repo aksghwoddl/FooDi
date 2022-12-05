@@ -1,22 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
+    android:background="@drawable/border_textview"
+    android:layout_marginTop="10dp"
+    android:layout_gravity="center|center_horizontal"
     >
 
     <TextView
         android:id="@+id/foodNameTextView"
-        android:layout_width="200dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/food_name"
         android:fontFamily="@font/swagger"
         android:textSize="15sp"
-        android:layout_marginBottom="20dp"
         android:textColor="#000"
-        android:layout_centerVertical="true"
-        android:layout_marginStart="20dp"
         android:singleLine="true"
+        android:padding="5dp"
+        android:gravity="center"
         />
 
-</RelativeLayout>
+</androidx.cardview.widget.CardView>

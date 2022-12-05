@@ -126,12 +126,14 @@ class SearchActivity : AppCompatActivity() {
            addFoodLayoutVisible.observe(this@SearchActivity){
                if(it){
                    with(binding){
-                       searchFoodRecyclerScrollView.visibility = View.GONE
+                       searchFoodRecyclerView.visibility = View.GONE
+                       buttonLayout.visibility = View.GONE
                        noSearchFoodLayout.visibility = View.VISIBLE
                    }
                } else {
                    with(binding){
-                       searchFoodRecyclerScrollView.visibility = View.VISIBLE
+                       searchFoodRecyclerView.visibility = View.VISIBLE
+                       buttonLayout.visibility = View.VISIBLE
                        noSearchFoodLayout.visibility = View.GONE
                    }
                }
