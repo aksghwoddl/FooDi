@@ -15,10 +15,7 @@ import android.widget.ArrayAdapter
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.lee.foodi.R
-import com.lee.foodi.common.EXTRA_SELECTED_DATE
-import com.lee.foodi.common.EXTRA_SELECTED_FOOD
-import com.lee.foodi.common.FoodiNewApplication
-import com.lee.foodi.common.Utils
+import com.lee.foodi.common.*
 import com.lee.foodi.common.manager.FooDiPreferenceManager
 import com.lee.foodi.data.rest.model.FoodInfoData
 import com.lee.foodi.data.room.db.DiaryDatabase
@@ -28,8 +25,6 @@ import com.lee.foodi.ui.receiver.TimerReceiver
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.text.NumberFormat
-import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -127,16 +122,19 @@ class FoodDetailActivity : AppCompatActivity() {
         val today = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy년MM월dd일"))
         if( intent.getStringExtra(EXTRA_SELECTED_DATE) == today){
             val intent = Intent(this@FoodDetailActivity , TimerReceiver::class.java)
+            intent.putExtra(EXTRA_CODE , REQUEST_CODE)
+            intent.putExtra(EXTRA_COUNT , 32)
             val pendingIntent = PendingIntent.getBroadcast(this@FoodDetailActivity
-                , 0
+                , REQUEST_CODE
                 , intent
                 , 0)
             val hour = mFooDiPreferenceManager.hour *  3600000
             val minute = mFooDiPreferenceManager.minute * 60000
             val alarmTime = SystemClock.elapsedRealtime() + hour + minute
 
+
             val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
-            alarmManager.set(AlarmManager.RTC , alarmTime , pendingIntent)
+            alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP , alarmTime , pendingIntent)
             Log.d(TAG, "updateTimer: alarmTime = $alarmTime")
         } else {
             Log.d(TAG, "updateTimer: timer is enable but selected date is not today")
@@ -165,14 +163,14 @@ class FoodDetailActivity : AppCompatActivity() {
      * **/
     private fun getValueOnEditTextChanged(value : String , inputValue : String) : String {
         var ret = ""
-        if(mFoodInfoData.servingWeight.toInt() != 0 && value != "N/A"){
+        if(mFoodInfoData.servingWeight.toInt() != 0 && value != NOT_AVAILABLE){
             if(binding.calculateEditText.text.isNotEmpty()){
                 val divideValue = value.toDouble()/mFoodInfoData.servingWeight.toInt()
                 val calculatedValue = divideValue * inputValue.toInt()
                 ret = calculatedValue.roundToInt().toString()
             }
         } else {
-            ret= "N/A"
+            ret = NOT_AVAILABLE
         }
         return ret
     }
@@ -266,7 +264,7 @@ class FoodDetailActivity : AppCompatActivity() {
      * Function for convert String that have double value to Integer
      * **/
     private fun String.convertStringToInt() : String {
-        return if(this == "N/A"){
+        return if(this == NOT_AVAILABLE){
             this
         } else {
             this.toDouble().roundToInt().toString()

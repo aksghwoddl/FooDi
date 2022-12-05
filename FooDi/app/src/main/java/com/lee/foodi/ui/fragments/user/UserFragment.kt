@@ -82,14 +82,14 @@ class UserFragment : Fragment() {
            agePicker.run {
                minValue = MIN_AGE_PICKER_VALUE
                maxValue = MAX_AGE_VALUE
-               value = mPreferenceManager.setting_age
+               value = mPreferenceManager.settingAge
                wrapSelectorWheel = false
                descendantFocusability = NumberPicker.FOCUS_BLOCK_DESCENDANTS
            }
            weightPicker.run {
                minValue = MIN_WEIGHT_PICKER_VALUE
                maxValue = MAX_WEIGHT_VALUE
-               value = mPreferenceManager.setting_weight
+               value = mPreferenceManager.settingWeight
                wrapSelectorWheel = false
                descendantFocusability = NumberPicker.FOCUS_BLOCK_DESCENDANTS
             }

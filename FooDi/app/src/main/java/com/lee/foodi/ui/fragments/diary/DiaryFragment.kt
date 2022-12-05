@@ -1,5 +1,6 @@
 package com.lee.foodi.ui.fragments.diary
 
+import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.content.Intent
 import android.os.Build
@@ -16,6 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.lee.foodi.R
 import com.lee.foodi.common.EXTRA_SELECTED_DATE
 import com.lee.foodi.common.FoodiNewApplication
+import com.lee.foodi.common.NOT_AVAILABLE
 import com.lee.foodi.common.Utils
 import com.lee.foodi.common.manager.FooDiPreferenceManager
 import com.lee.foodi.data.repository.FoodiRepository
@@ -82,6 +84,7 @@ class DiaryFragment : Fragment() {
         }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     @RequiresApi(Build.VERSION_CODES.O)
     private fun observeDate() {
         with(mViewModel){
@@ -198,10 +201,25 @@ class DiaryFragment : Fragment() {
         var protein = 0
         var fat  = 0
         mDiaryFoodItems.forEach {
-            calorie+= it.food?.calorie!!.toDouble().roundToInt()
-            carbondydrate += it.food?.carbohydrate!!.toDouble().roundToInt()
-            protein += it.food?.protein!!.toDouble().roundToInt()
-            fat += it.food?.fat!!.toDouble().roundToInt()
+            // Calorie
+            if(it.food?.calorie!! != NOT_AVAILABLE){
+                calorie+= it.food?.calorie!!.toDouble().roundToInt()
+            }
+
+            // Carbohydrate
+            if(it.food?.carbohydrate!! != NOT_AVAILABLE){
+                carbondydrate += it.food?.carbohydrate!!.toDouble().roundToInt()
+            }
+
+            // Protein
+            if(it.food?.protein!! != NOT_AVAILABLE){
+                protein += it.food?.protein!!.toDouble().roundToInt()
+            }
+
+            // Fat
+            if(it.food?.fat!! != NOT_AVAILABLE){
+                fat += it.food?.fat!!.toDouble().roundToInt()
+            }
         }
         with(mViewModel) {
             spendCalories.value = calorie.toString()

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">FOODI</string>
+    <string name="app_name">푸디</string>
     <string name="sub_title">내손안에 식단 플래너</string>
     <string name="network_dialog_header">네트워크 연결 상태를 \n확인 해주세요.</string>
     <string name="network_dialog_content">네트워크 연결 후에 확인 버튼을 눌러주세요.</string>
@@ -13,6 +13,7 @@
     <string name="common_fat">지방</string>
     <string name="zero_gram">0g</string>
     <string name="spend_calorie">소비 칼로리 : %s kcal</string>
+    <string name="notification_timer_contents">식사할 시간입니다!</string>
 
     <!-- Food Info -->
     <string name="food_name">음식이름</string>

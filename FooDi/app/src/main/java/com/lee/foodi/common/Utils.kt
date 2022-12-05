@@ -19,20 +19,25 @@ const val EXTRA_SELECTED_FOOD = "selectedFood"
 const val EXTRA_SELECTED_DATE = "selected_date"
 const val MALE = "남"
 const val FEMALE = "여"
+const val NOT_AVAILABLE = "N/A"
+
+const val REQUEST_CODE = 101
+const val EXTRA_CODE = "code"
+const val EXTRA_COUNT = "count"
 
 class Utils {
     companion object{
+
         /**
          * Function that check and convert value received from server (sometimes received minus or N/A)
          * **/
-
         fun convertValueWithErrorCheck(textView : TextView , string : String ,value : String) {
             Log.d(TAG, "convertValueWithErrorCheck: value is $value")
             if(value.contains("-")){
                 Log.d(TAG, "convertValueWithErrorCheck: value is minus")
                 val convertValue = abs(value.toDouble()).toString()
                textView.text = String.format(string, convertValue)
-            } else if(value == "N/A"){
+            } else if(value == NOT_AVAILABLE){
                 textView.text = ""
                 textView.visibility = View.GONE
             } else {
@@ -45,7 +50,6 @@ class Utils {
          * defaultDisplay is deprecated over 30
          * so I will divide function each version
          * **/
-
         fun dialogResize(context: Context, dialog: Dialog, width: Float, height: Float){
             val windowManager = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
 
@@ -76,7 +80,6 @@ class Utils {
         /**
          * Function for toast message
          * **/
-
         fun toastMessage(message : String){
             Toast.makeText(FoodiNewApplication.getInstance() , message , Toast.LENGTH_SHORT).show()
         }

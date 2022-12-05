@@ -27,8 +27,8 @@ class SettingUserViewModel : ViewModel() {
     fun updateAllUserInfo(preferenceManager: FooDiPreferenceManager) {
         with(preferenceManager){
             gender = genderButtonToggled.value!!
-            setting_age = age
-            setting_weight = weight
+            settingAge = age
+            settingWeight = weight
         }
     }
 
