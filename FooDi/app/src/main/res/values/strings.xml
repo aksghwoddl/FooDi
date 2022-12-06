@@ -7,7 +7,7 @@
     <string name="add">추가하기</string>
     <string name="search_edit_text_hint">검색할 음식을 입력해주세요.</string>
     <string name="add_food_header_title">추가할 음식 정보를 입력해주세요.</string>
-    <string name="average_calorie">평균 섭취 칼로리 : </string>
+    <string name="average_calorie">평균 섭취 칼로리 : %s kcal</string>
     <string name="common_carbohydrate">탄수화물</string>
     <string name="common_protein">단백질</string>
     <string name="common_fat">지방</string>

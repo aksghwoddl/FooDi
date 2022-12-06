@@ -11,6 +11,7 @@ import android.widget.AdapterView
 import android.widget.AdapterView.OnItemSelectedListener
 import android.widget.ArrayAdapter
 import androidx.annotation.RequiresApi
+import androidx.core.view.marginTop
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.github.mikephil.charting.components.AxisBase
@@ -22,6 +23,8 @@ import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.formatter.ValueFormatter
 import com.lee.foodi.R
 import com.lee.foodi.common.FoodiNewApplication
+import com.lee.foodi.common.MONTHLY
+import com.lee.foodi.common.Utils
 import com.lee.foodi.data.repository.FoodiRepository
 import com.lee.foodi.databinding.FragmentReportBinding
 import com.lee.foodi.ui.factory.FoodiViewModelFactory
@@ -29,6 +32,7 @@ import com.lee.foodi.ui.fragments.report.viewmodel.ReportViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlin.math.roundToInt
 
 private const val TAG = "ReportFragment"
 
@@ -59,6 +63,7 @@ class ReportFragment : Fragment() {
             mViewModel.summaryList.postValue(mViewModel.getDiarySummary(binding.reportSelection.selectedItem.toString()))
             CoroutineScope(Dispatchers.Main).launch{
                 setData()
+                mViewModel.averageCalorie.value = calculateAverageCalorie()
             }
         }
         observeDate()
@@ -78,6 +83,9 @@ class ReportFragment : Fragment() {
                 override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
                     CoroutineScope(Dispatchers.IO).launch {
                         mViewModel.summaryList.postValue(mViewModel.getDiarySummary(reportSelection.selectedItem.toString()))
+                        CoroutineScope(Dispatchers.Main).launch{
+                            mViewModel.averageCalorie.value = calculateAverageCalorie()
+                        }
                     }
                 }
 
@@ -93,6 +101,7 @@ class ReportFragment : Fragment() {
     private fun initChart() {
         binding.reportChart.apply {
             description.isEnabled = false
+            extraBottomOffset = 20f
 
             animateX(1000)
             animateY(1000)
@@ -140,17 +149,36 @@ class ReportFragment : Fragment() {
     @RequiresApi(Build.VERSION_CODES.O)
     private fun observeDate() {
         with(mViewModel){
+            // Summary List
             summaryList.observe(viewLifecycleOwner){ diary ->
                 val labelList = arrayListOf<String>()
-                diary.forEach {
-                    if(it != null){
-                        labelList.add(it.date.substring(8))
-                    }
+                val dayList = getDayList()
+                dayList.forEach {
+                    labelList.add("${it}일")
                 }
                 binding.reportChart.xAxis.valueFormatter = MyValueFormatter(labelList)
                 setData()
             }
+
+            // Average Calorie
+            averageCalorie.observe(viewLifecycleOwner){
+                Utils.convertValueWithErrorCheck(binding.averageCalorieTextView , getString(R.string.average_calorie) , it)
+            }
         }
+    }
+
+    /**
+     * Calculate Average Calorie as selected section
+     * **/
+    private fun calculateAverageCalorie() : String {
+        val diaryList = mViewModel.summaryList.value
+        var sum  = 0.0
+        diaryList?.forEach {
+            if(it != null){
+                sum += it.totalCalorie.toDouble()
+            }
+        }
+        return (sum/diaryList!!.size).roundToInt().toString()
     }
 
     /**

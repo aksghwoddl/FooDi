@@ -24,6 +24,10 @@ const val REQUEST_CODE = 101
 const val EXTRA_CODE = "code"
 const val EXTRA_COUNT = "count"
 
+const val LATELY = "최근"
+const val WEEKS = "7일"
+const val MONTHLY = "한달"
+
 class Utils {
     companion object{
 

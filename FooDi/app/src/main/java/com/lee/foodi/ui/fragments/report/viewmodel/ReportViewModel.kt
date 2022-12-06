@@ -5,6 +5,10 @@ import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.lee.foodi.common.LATELY
+import com.lee.foodi.common.MONTHLY
+import com.lee.foodi.common.Utils
+import com.lee.foodi.common.WEEKS
 import com.lee.foodi.data.repository.FoodiRepository
 import com.lee.foodi.data.room.entity.Diary
 import kotlinx.coroutines.CoroutineScope
@@ -16,15 +20,17 @@ import java.util.*
 
 private const val TAG = "ReportViewModel"
 
-private const val LATELY = "최근"
-private const val WEEKS = "7일"
-private const val MONTHLY = "한달"
-
 class ReportViewModel(private val repository: FoodiRepository) : ViewModel() {
     val summaryList = MutableLiveData<MutableList<Diary>>()
+    val averageCalorie = MutableLiveData<String>("0")
+
+    private var mDayList = mutableListOf<Int>()
 
     @RequiresApi(Build.VERSION_CODES.O)
     suspend fun getDiarySummary(selectedSection : String) : MutableList<Diary>? {
+        if(mDayList.isNotEmpty()){
+            mDayList.clear()
+        }
         val calendar = Calendar.getInstance()
         val diarySummaryList = mutableListOf<Diary>()
         val ret = CoroutineScope(Dispatchers.IO).async {
@@ -33,12 +39,14 @@ class ReportViewModel(private val repository: FoodiRepository) : ViewModel() {
                     val year = calendar.get(Calendar.YEAR)
                     val month = calendar.get(Calendar.MONTH) + 1
                     val day = calendar.get(Calendar.DATE)
-                    val dayList = mutableListOf<Int>()
                     for(i in 0 .. 2){
-                        dayList.add(day  - i)
+                        val insertDate = day - i
+                        if(insertDate != 0){
+                            mDayList.add(insertDate)
+                        }
                     }
-                    dayList.reverse()
-                    dayList.forEach {
+                    mDayList.reverse()
+                    mDayList.forEach {
                         val queryDate = LocalDate.of(year , month , it).format(DateTimeFormatter.ofPattern("yyyy년MM월dd일"))
                         diarySummaryList.add(repository.getDiarySummary(queryDate))
                     }
@@ -48,15 +56,14 @@ class ReportViewModel(private val repository: FoodiRepository) : ViewModel() {
                     val year = calendar.get(Calendar.YEAR)
                     val month = calendar.get(Calendar.MONTH) + 1
                     val day = calendar.get(Calendar.DATE)
-                    val dayList = mutableListOf<Int>()
                     for(i in 0 .. 6){
                         val insertDate = day - i
                         if(insertDate != 0){
-                            dayList.add(day - i)
+                            mDayList.add(day - i)
                         }
                     }
-                    dayList.reverse()
-                    dayList.forEach {
+                    mDayList.reverse()
+                    mDayList.forEach {
                         val queryDate = LocalDate.of(year , month , it).format(DateTimeFormatter.ofPattern("yyyy년MM월dd일"))
                         diarySummaryList.add(repository.getDiarySummary(queryDate))
                     }
@@ -66,11 +73,10 @@ class ReportViewModel(private val repository: FoodiRepository) : ViewModel() {
                     val year = calendar.get(Calendar.YEAR)
                     val month = calendar.get(Calendar.MONTH) + 1
                     val dayCounts = getDayCountInMonth(year , month)
-                    val dayList = mutableListOf<Int>()
                     for(i in 1 .. dayCounts){
-                        dayList.add(i)
+                        mDayList.add(i)
                     }
-                    dayList.forEach {
+                    mDayList.forEach {
                         val queryDate = LocalDate.of(year , month , it).format(DateTimeFormatter.ofPattern("yyyy년MM월dd일"))
                         diarySummaryList.add(repository.getDiarySummary(queryDate))
                     }
@@ -85,6 +91,11 @@ class ReportViewModel(private val repository: FoodiRepository) : ViewModel() {
         return  ret.await()
     }
 
+    fun getDayList() = mDayList
+
+    /**
+     * Function for get Day count as inputted Month
+     * **/
     private fun getDayCountInMonth(year : Int , month : Int) : Int {
         Log.d(TAG, "getDayCountInMonth: year = $year , month = $month")
         return when(month - 1){
