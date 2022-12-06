@@ -94,7 +94,6 @@
            android:weightSum="3"
            android:orientation="horizontal"
            android:layout_marginTop="20dp"
-           android:background="@drawable/border_textview"
            >
            <TextView
                android:layout_width="0dp"
@@ -104,7 +103,6 @@
                android:text="@string/common_carbohydrate"
                android:gravity="center"
                android:fontFamily="@font/swagger"
-               android:background="@drawable/border_textview"
                />
            <TextView
                android:layout_width="0dp"
@@ -113,7 +111,6 @@
                android:text="@string/common_protein"
                android:gravity="center"
                android:fontFamily="@font/swagger"
-               android:background="@drawable/border_textview"
                />
            <TextView
                android:layout_width="0dp"
@@ -122,7 +119,6 @@
                android:text="@string/common_fat"
                android:gravity="center"
                android:fontFamily="@font/swagger"
-               android:background="@drawable/border_textview"
                />
        </LinearLayout>
         <LinearLayout
@@ -130,7 +126,6 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:orientation="horizontal"
-            android:background="@drawable/border_textview"
             >
             <TextView
                 android:id="@+id/amountCarbonTextView"
@@ -138,7 +133,6 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 tools:ignore="NestedWeights"
-                android:background="@drawable/border_textview"
                 android:fontFamily="@font/swagger"
                 android:textSize="15sp"
                 android:text="@string/zero_gram"
@@ -149,7 +143,6 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:background="@drawable/border_textview"
                 android:fontFamily="@font/swagger"
                 android:textSize="15sp"
                 android:gravity="center"
@@ -160,7 +153,6 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:background="@drawable/border_textview"
                 android:fontFamily="@font/swagger"
                 android:textSize="15sp"
                 android:gravity="center"
@@ -233,6 +225,7 @@
             android:layout_height="match_parent"
             tools:listitem="@layout/diary_food_item"
             android:layout_marginTop="10dp"
+            android:paddingBottom="10dp"
             />
     </LinearLayout>
 

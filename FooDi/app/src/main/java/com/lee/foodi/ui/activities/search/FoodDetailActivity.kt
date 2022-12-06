@@ -120,7 +120,7 @@ class FoodDetailActivity : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
     private fun updateTimer() {
         val today = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy년MM월dd일"))
-        if( intent.getStringExtra(EXTRA_SELECTED_DATE) == today){
+        if( intent.getStringExtra(EXTRA_SELECTED_DATE) == today && mFooDiPreferenceManager.hour != 0 && mFooDiPreferenceManager.minute != 0){
             val intent = Intent(this@FoodDetailActivity , TimerReceiver::class.java)
             intent.putExtra(EXTRA_CODE , REQUEST_CODE)
             intent.putExtra(EXTRA_COUNT , 32)
