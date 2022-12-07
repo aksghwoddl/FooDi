@@ -102,12 +102,14 @@ class SearchActivity : AppCompatActivity() {
        with(mViewModel){
            foodList.observe(this@SearchActivity){
                it?.let {
-                   mSearchFoodRecyclerAdapter.setList(it)
-                   mSearchFoodRecyclerAdapter.notifyDataSetChanged()
-                   addFoodLayoutVisible.postValue(false)
-               }?:run {
+                   if(it.isNotEmpty()){
+                       mSearchFoodRecyclerAdapter.setList(it)
+                       mSearchFoodRecyclerAdapter.notifyDataSetChanged()
+                       addFoodLayoutVisible.postValue(false)
+                   } else {
                        addFoodLayoutVisible.postValue(true)
                        isProgressVisible.postValue(false)
+                   }
                }
            }
 

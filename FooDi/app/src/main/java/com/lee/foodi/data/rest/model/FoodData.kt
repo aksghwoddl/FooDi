@@ -17,3 +17,9 @@ data class Body(
     val numOfRows : Int ,
     val items : MutableList<FoodInfoData>
 )
+
+data class NewFoodData( // Convert New Food InfoData
+    val pageNo : Int ,
+    val totalCount : Int ,
+    val results : MutableList<FoodInfoData>
+)

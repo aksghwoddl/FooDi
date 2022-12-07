@@ -5,6 +5,7 @@ import org.jetbrains.annotations.NotNull
 import java.io.Serializable
 
 data class FoodInfoData (
+    var id : Int ,
     @SerializedName("DESC_KOR")
     var foodName : String ,
     @SerializedName("SERVING_WT")
@@ -27,8 +28,8 @@ data class FoodInfoData (
     var saturatedFat : String ,
     @SerializedName("NUTR_CONT9")
     var transFat : String ,
-    @SerializedName("BGN_YEAR")
-    var beginYear : String ,
+    /*@SerializedName("BGN_YEAR") // Convert New Food InfoData
+    var beginYear : String ,*/
     @SerializedName("ANIMAL_PLANT")
     var company : String
 ) : Serializable

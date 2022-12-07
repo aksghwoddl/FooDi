@@ -1,7 +1,9 @@
 package com.lee.foodi.data.rest
 
 import com.lee.foodi.common.FOOD_TARGET_URL
+import com.lee.foodi.common.NEW_FOOD_TARGET_URL
 import com.lee.foodi.data.rest.model.FoodData
+import com.lee.foodi.data.rest.model.NewFoodData
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -15,6 +17,12 @@ interface RestService {
         @Query("desc_kor") foodName : String
         , @Query("pageNo") page : String
         ) : Response<FoodData>
+
+    @GET(NEW_FOOD_TARGET_URL) // Convert New Food InfoData
+    suspend fun getNewSearchFood(
+        @Query("desc_kor") foodName : String
+        , @Query("pageNo") page : String
+    ) : Response<NewFoodData>
 }
 
 class RestServiceInstance{

@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import com.lee.foodi.data.rest.model.FoodData
 import com.lee.foodi.data.rest.model.FoodInfoData
 import com.lee.foodi.data.repository.FoodiRepository
+import com.lee.foodi.data.rest.model.NewFoodData
 import kotlinx.coroutines.*
 import java.net.SocketTimeoutException
 import kotlin.math.ceil
@@ -14,7 +15,7 @@ class SearchFoodViewModel(private val repository: FoodiRepository) : ViewModel()
     private val TAG = "FoodInfoViewModel"
 
     private var mJob : Job? = null
-    var foodResponse : FoodData? = null
+    var foodResponse : NewFoodData? = null
     var foodList = MutableLiveData<MutableList<FoodInfoData>>() // Food List that searched
     var errorMessage = MutableLiveData<String>() // Management about error
     var isProgressVisible = MutableLiveData<Boolean>() // Management Progressbar state
@@ -31,14 +32,14 @@ class SearchFoodViewModel(private val repository: FoodiRepository) : ViewModel()
             try {
                 isProgressVisible.postValue(true)
                 if(foodName.isNotEmpty()){
-                    val response = repository.getSearchFood(foodName , page)
+                    val response = repository.getNewSearchFood(foodName , page)
                     foodResponse = response.body()
                     withContext(Dispatchers.Main) {
                         if(response.isSuccessful){
-                            foodList.value = foodResponse?.body?.items
+                            foodList.value = foodResponse?.results
                             isProgressVisible.postValue(false)
-                            val totalCount = foodResponse?.body?.totalCount!!
-                            isNextEnable.value = totalCount >= 10 && ceil(totalCount.toDouble())/10 > page.toInt()
+                            val totalCount = foodResponse?.totalCount!!
+                            isNextEnable.value = totalCount >= 1 && foodResponse!!.totalCount > page.toInt()
                         } else {
                             Log.d(TAG, "getSearchFoodList: ${response.message()}")
                             errorMessage.postValue("서버에서 정상적으로 값을 받아오지 못했습니다!!")

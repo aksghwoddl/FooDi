@@ -4,6 +4,7 @@
     <string name="network_dialog_header">네트워크 연결 상태를 \n확인 해주세요.</string>
     <string name="network_dialog_content">네트워크 연결 후에 확인 버튼을 눌러주세요.</string>
     <string name="confirm">확인</string>
+    <string name="next">다음</string>
     <string name="add">추가하기</string>
     <string name="search_edit_text_hint">검색할 음식을 입력해주세요.</string>
     <string name="add_food_header_title">추가할 음식 정보를 입력해주세요.</string>

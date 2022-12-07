@@ -10,6 +10,7 @@ class FoodiRepository {
      * Function for search food at API
      * **/
     suspend fun getSearchFood(foodName : String , page : String) = RestServiceInstance.getInstance().getSearchFood(foodName , page)
+    suspend fun getNewSearchFood(foodName : String , page : String) = RestServiceInstance.getInstance().getNewSearchFood(foodName , page) // Convert New Food InfoData
 
     /**
      * Function for get food data in Room DB
