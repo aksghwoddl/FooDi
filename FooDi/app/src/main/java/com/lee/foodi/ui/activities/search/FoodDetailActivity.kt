@@ -120,7 +120,7 @@ class FoodDetailActivity : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
     private fun updateTimer() {
         val today = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy년MM월dd일"))
-        if( intent.getStringExtra(EXTRA_SELECTED_DATE) == today && mFooDiPreferenceManager.hour != 0 && mFooDiPreferenceManager.minute != 0){
+        if( intent.getStringExtra(EXTRA_SELECTED_DATE) == today){
             val intent = Intent(this@FoodDetailActivity , TimerReceiver::class.java)
             intent.putExtra(EXTRA_CODE , REQUEST_CODE)
             intent.putExtra(EXTRA_COUNT , 32)
@@ -130,12 +130,14 @@ class FoodDetailActivity : AppCompatActivity() {
                 , 0)
             val hour = mFooDiPreferenceManager.hour *  3600000
             val minute = mFooDiPreferenceManager.minute * 60000
-            val alarmTime = SystemClock.elapsedRealtime() + hour + minute
-
-
-            val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
-            alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP , alarmTime , pendingIntent)
-            Log.d(TAG, "updateTimer: alarmTime = $alarmTime")
+            if(hour == 0 && minute == 0){
+                Log.d(TAG, "updateTimer: timer is enable but not setting time")
+            } else {
+                val alarmTime = SystemClock.elapsedRealtime() + hour + minute
+                val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+                alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP , alarmTime , pendingIntent)
+                Log.d(TAG, "updateTimer: alarmTime = $alarmTime")
+            }
         } else {
             Log.d(TAG, "updateTimer: timer is enable but selected date is not today")
         }

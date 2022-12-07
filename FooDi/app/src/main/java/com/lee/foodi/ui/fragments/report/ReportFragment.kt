@@ -92,7 +92,6 @@ class ReportFragment : Fragment() {
                 override fun onNothingSelected(p0: AdapterView<*>?) { }
             }
         }
-
     }
 
     /**
@@ -107,10 +106,10 @@ class ReportFragment : Fragment() {
             animateY(1000)
             val xAxis = xAxis
             with(xAxis){
-                position = XAxis.XAxisPosition.BOTTOM
+                position = XAxis.XAxisPosition.BOTTOM // xAxis 위치
                 granularity = 1f
                 textColor = Color.BLACK
-                setDrawAxisLine(false)
+                setDrawAxisLine(false) // xAxis 선 draw 여부
                 setDrawGridLines(false)
                 typeface = Typeface.createFromAsset(requireContext().assets , "swagger.ttf")
             }
