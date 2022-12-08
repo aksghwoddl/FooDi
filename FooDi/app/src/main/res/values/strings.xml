@@ -7,7 +7,7 @@
     <string name="next">다음</string>
     <string name="add">추가하기</string>
     <string name="search_edit_text_hint">검색할 음식을 입력해주세요.</string>
-    <string name="add_food_header_title">추가할 음식 정보를 입력해주세요.</string>
+    <string name="add_food_header_title">필수 음식 정보를 \n입력해주세요.</string>
     <string name="average_calorie">평균 섭취 칼로리 : %s kcal</string>
     <string name="common_carbohydrate">탄수화물</string>
     <string name="common_protein">단백질</string>
@@ -36,16 +36,16 @@
     <!---->
 
     <!--Add Food -->
-    <string name="add_calories">칼로리 : </string>
-    <string name="add_carbohydrate">탄수화물 : </string>
-    <string name="add_protein">단백질 : </string>
-    <string name="add_fat">지방 : </string>
-    <string name="add_sugar">당류 : </string>
-    <string name="add_salt">나트륨 : </string>
-    <string name="add_cholesterol">콜레스테롤 : </string>
-    <string name="add_saturated_fat">포화지방 : </string>
-    <string name="add_trans_fat">트랜스지방 :</string>
-    <string name="add_begin_year">제조년월 : </string>
+    <string name="add_calories">칼로리 </string>
+    <string name="add_carbohydrate">탄수화물 </string>
+    <string name="add_protein">단백질 </string>
+    <string name="add_fat">지방 </string>
+    <string name="add_sugar">당류 </string>
+    <string name="add_salt">나트륨 </string>
+    <string name="add_cholesterol">콜레스테롤 </string>
+    <string name="add_saturated_fat">포화지방 </string>
+    <string name="add_trans_fat">트랜스지방</string>
+    <string name="add_serving_size">1회 제공량</string>
     <!---->
 
     <!-- Diary -->

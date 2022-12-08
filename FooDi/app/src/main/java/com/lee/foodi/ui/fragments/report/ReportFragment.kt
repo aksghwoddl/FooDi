@@ -59,6 +59,12 @@ class ReportFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initSpinner()
         initChart()
+        observeDate()
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    override fun onResume() {
+        super.onResume()
         CoroutineScope(Dispatchers.IO).launch {
             mViewModel.summaryList.postValue(mViewModel.getDiarySummary(binding.reportSelection.selectedItem.toString()))
             CoroutineScope(Dispatchers.Main).launch{
@@ -66,7 +72,6 @@ class ReportFragment : Fragment() {
                 mViewModel.averageCalorie.value = calculateAverageCalorie()
             }
         }
-        observeDate()
     }
 
 
