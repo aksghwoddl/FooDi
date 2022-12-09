@@ -1,0 +1,165 @@
+############################## 가장 처음 1회만 아래 내용 gogo
+
+디렉토리 : /backend
+터미널 : bash
+
+$ python -m venv venv
+
+$ source venv/Script/activate
+(venv) 나오는 지 확인
+
+$ pip install -r requirements.txt
+
+$ python manage.py makemigrations
+
+$ python manage.py migrate
+
+##############################
+
+############################## 서버 킬때마다
+
+디렉토리 : /backend
+터미널 : bash
+
+$ source venv/Script/activate
+(venv) 나오는 지 확인
+
+$ python manage.py runserver
+
+###############################
+
+############################### API 명세서
+
+BASE_URL : http://localhost:8000/v1/api/foods
+
+### 키워드로 음식 검색
+
+<요청>
+URL : BASE_URL 
+Method : GET
+Params : {
+	desc_kor : String
+	pageNo : Integer
+}
+
+<결과>
+페이지 당 10개의 음식 결과
+
+{
+    "totalCount": 2,
+    "pageNo": 1,
+    "results": [
+        {
+            "id": 8,
+            "DESC_KOR": "메밀국수,생면",
+            "SERVING_WT": "100",
+            "NUTR_CONT1": "276.00",
+            "NUTR_CONT2": "61.40",
+            "NUTR_CONT3": "7.30",
+            "NUTR_CONT4": "0.10",
+            "NUTR_CONT5": "N/A",
+            "NUTR_CONT6": "1023.00",
+            "NUTR_CONT7": "0.00",
+            "NUTR_CONT8": "N/A",
+            "NUTR_CONT9": "N/A"
+        },
+        {
+            "id": 9,
+            "DESC_KOR": "메밀국수,생면,삶은것",
+            "SERVING_WT": "100",
+            "NUTR_CONT1": "142.00",
+            "NUTR_CONT2": "28.70",
+            "NUTR_CONT3": "6.60",
+            "NUTR_CONT4": "0.10",
+            "NUTR_CONT5": "N/A",
+            "NUTR_CONT6": "183.00",
+            "NUTR_CONT7": "0.00",
+            "NUTR_CONT8": "N/A",
+            "NUTR_CONT9": "N/A"
+        },
+        {
+            "id": 10,
+            "DESC_KOR": "메밀국수,건면",
+            "SERVING_WT": "100",
+            "NUTR_CONT1": "344.00",
+            "NUTR_CONT2": "66.70",
+            "NUTR_CONT3": "14.00",
+            "NUTR_CONT4": "2.30",
+            "NUTR_CONT5": "N/A",
+            "NUTR_CONT6": "850.00",
+            "NUTR_CONT7": "N/A",
+            "NUTR_CONT8": "N/A",
+            "NUTR_CONT9": "N/A"
+        },
+	... 이하 생략
+    ]
+}
+
+### 단일 음식 상세 정보
+
+<요청>
+URL : BASE_URL/<int:food_id> 
+Method : GET
+
+*<int:food_id> : 조회하고자 하는 음식의 id값
+
+ex)
+URL : BASE_URL/12991
+
+<결과>
+id값에 해당하는 음식의 상세 정보
+
+{
+    "id": 12991,
+    "DESC_KOR": "한진생홍삼양갱(삼성식품)",
+    "SERVING_WT": "50",
+    "NUTR_CONT1": "65.00",
+    "NUTR_CONT2": "15.00",
+    "NUTR_CONT3": "1.00",
+    "NUTR_CONT4": "0.00",
+    "NUTR_CONT5": "9.00",
+    "NUTR_CONT6": "2.50",
+    "NUTR_CONT7": "0.00",
+    "NUTR_CONT8": "0.00",
+    "NUTR_CONT9": "0.00"
+}
+
+### 음식 추가
+
+<요청>
+URL : BASE_URL
+Method : POST
+Body :
+{
+    "DESC_KOR": "테스트음식",
+    "SERVING_WT": "333",
+    "NUTR_CONT1": "0.5",
+    "NUTR_CONT2": "1",
+    "NUTR_CONT3": "4",
+    "NUTR_CONT4": "2"
+}
+
+*위에 적은 값들은 NOT_NULL이므로 꼭 기입
+
+### 음식 수정
+
+<요청>
+URL : BASE_URL/<int:food_id>
+Method : PATCH
+Body :
+{
+    "DESC_KOR": "이름을바꾸자",
+    "SERVING_WT": "1111",
+    "NUTR_CONT1": "2222",
+    "NUTR_CONT2": "3333",
+    "NUTR_CONT3": "4444",
+    "NUTR_CONT4": "5555"
+}
+
+* 기존 값에서 변경하려는 값은 수정한채로 담아서 요청
+
+### 음식 삭제
+
+<요청>
+URL : BASE_URL/<int:food_id>
+Method : DELETE
