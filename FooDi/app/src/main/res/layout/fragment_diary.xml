@@ -26,11 +26,12 @@
         android:background="@color/main_color"
         >
 
-        <Button
+        <ImageButton
             android:id="@+id/calendarButton"
             android:layout_width="20dp"
             android:layout_height="20dp"
-            android:background="@drawable/ic_baseline_calendar_month_24"
+            android:src="@drawable/ic_baseline_calendar_month_24"
+            android:backgroundTint="@color/main_color"
             android:theme="@style/Theme.AppCompat"
             android:layout_centerVertical="true"
             android:layout_marginStart="5dp"
@@ -249,13 +250,14 @@
             android:textColor="#000"
             android:textSize="@dimen/no_item_text_size"
             />
-        <Button
+        <ImageButton
             android:id="@+id/addButton"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_gravity="center"
             android:layout_marginTop="20dp"
-            android:background="@drawable/ic_baseline_add_circle_24"
+            android:src="@drawable/ic_baseline_add_circle_24_new"
+            android:backgroundTint="@color/design_default_color_on_primary"
             />
     </LinearLayout>
     <RelativeLayout

@@ -96,13 +96,14 @@
             android:textColor="#000"
             />
 
-        <Button
+        <ImageButton
             android:id="@+id/addFoodButton"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_gravity="center"
             android:layout_marginTop="20dp"
-            android:background="@drawable/ic_baseline_add_circle_24"
+            android:src="@drawable/ic_baseline_add_circle_24_new"
+            android:backgroundTint="@color/design_default_color_on_primary"
             />
     </LinearLayout>
 
