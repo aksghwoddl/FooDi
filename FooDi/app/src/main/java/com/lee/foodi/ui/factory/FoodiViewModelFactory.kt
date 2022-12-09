@@ -21,12 +21,10 @@ class FoodiViewModelFactory(private val repository: FoodiRepository) : ViewModel
         } else if(modelClass.isAssignableFrom(ReportViewModel::class.java)){
             ReportViewModel(repository) as T
         } else if(modelClass.isAssignableFrom(AddFoodViewModel::class.java)){
-            AddFoodViewModel() as T
+            AddFoodViewModel(repository) as T
         } else if(modelClass.isAssignableFrom(NecessaryInfoViewModel::class.java)){
             NecessaryInfoViewModel() as T
-        } else if(modelClass.isAssignableFrom(AddFoodViewModel::class.java)){
-            AddFoodViewModel() as T
-        } else {
+        }else {
             throw java.lang.IllegalArgumentException("해당 ViewModel을 찾을수가 없습니다!")
         }
     }

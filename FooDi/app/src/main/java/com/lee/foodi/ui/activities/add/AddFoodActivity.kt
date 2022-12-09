@@ -3,12 +3,15 @@ package com.lee.foodi.ui.activities.add
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.lee.foodi.R
 import com.lee.foodi.common.FoodiNewApplication
+import com.lee.foodi.common.NOT_AVAILABLE
 import com.lee.foodi.common.Utils
 import com.lee.foodi.data.repository.FoodiRepository
+import com.lee.foodi.data.rest.model.AddFoodData
 import com.lee.foodi.data.rest.model.FoodInfoData
 import com.lee.foodi.databinding.ActivityAddFoodBinding
 import com.lee.foodi.ui.activities.add.fragments.AdditionalInfoFragment
@@ -16,6 +19,9 @@ import com.lee.foodi.ui.activities.add.fragments.NecessaryInfoFragment
 import com.lee.foodi.ui.activities.add.viewmodel.AddFoodViewModel
 import com.lee.foodi.ui.factory.FoodiViewModelFactory
 import com.lee.foodi.ui.fragments.report.viewmodel.ReportViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 private const val TAG = "AddFoodActivity"
 
@@ -55,18 +61,27 @@ class AddFoodActivity : AppCompatActivity() {
                     mViewModel.headTitle.value = resources.getString(R.string.next_add_food_header_title)
                     mViewModel.buttonText.value = resources.getString(R.string.confirm)
                 } else {
-                    Utils.toastMessage("성공적으로 저장했습니다!")
-                    val testArray = arrayListOf<String?>()
-                    with(testArray){
-                       mViewModel.run{
-                           add(foodName.value)
-                           add(servingSize.value)
-                           add(carbohydrate.value)
-                           add(protein.value)
-                           add(fat.value)
-                       }
+                    CoroutineScope(Dispatchers.IO).launch {
+                        val addFoodData : AddFoodData
+                        with(mViewModel){
+                            addFoodData = AddFoodData(
+                                foodName.value?.toString() ?: NOT_AVAILABLE ,
+                                servingSize.value?.toString() ?: NOT_AVAILABLE ,
+                                calorie.value?.toString() ?: NOT_AVAILABLE ,
+                                carbohydrate.value?.toString() ?: NOT_AVAILABLE ,
+                                protein.value?.toString() ?: NOT_AVAILABLE ,
+                                fat.value?.toString() ?: NOT_AVAILABLE ,
+                                sugar.value?.toString() ?: NOT_AVAILABLE ,
+                                salt.value?.toString() ?: NOT_AVAILABLE ,
+                                cholesterol.value?.toString() ?: NOT_AVAILABLE ,
+                                saturatedFat.value?.toString() ?: NOT_AVAILABLE ,
+                                transFat.value?.toString() ?: NOT_AVAILABLE ,
+                                companyName.value?.toString() ?: NOT_AVAILABLE ,
+                            )
+                        }
+                        Log.d(TAG, "addListeners: $addFoodData")
+                        mViewModel.postRequestAddFood(addFoodData)
                     }
-                    Log.d(TAG, "addListeners: $testArray")
                 }
             }
 
@@ -101,6 +116,18 @@ class AddFoodActivity : AppCompatActivity() {
 
             buttonText.observe(this@AddFoodActivity){
                 binding.confirmButton.text = it
+            }
+
+            errorMessage.observe(this@AddFoodActivity){
+                Utils.toastMessage(it)
+            }
+
+            isProgressShowing.observe(this@AddFoodActivity){
+                if(it){
+                    binding.progressBar.visibility = View.VISIBLE
+                } else {
+                    binding.progressBar.visibility = View.GONE
+                }
             }
         }
     }

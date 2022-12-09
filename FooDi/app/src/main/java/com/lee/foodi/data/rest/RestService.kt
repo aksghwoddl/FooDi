@@ -2,11 +2,14 @@ package com.lee.foodi.data.rest
 
 import com.lee.foodi.common.FOOD_TARGET_URL
 import com.lee.foodi.common.NEW_FOOD_TARGET_URL
+import com.lee.foodi.data.rest.model.AddFoodData
 import com.lee.foodi.data.rest.model.NewFoodData
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.POST
 import retrofit2.http.Query
 
 //private const val SERVICE_KEY = "kSh3QnPHhrIKWvXEVaiTxPZRMErAsaXXy7Xszy%2FCBI7YSBsbd4S0Vfrf5KRnoZhT9GhcQ9L9fYMbbaBEG33dXA%3D%3D"
@@ -22,6 +25,9 @@ interface RestService {
         @Query("desc_kor") foodName : String
         , @Query("pageNo") page : String
     ) : Response<NewFoodData>
+
+    @POST(NEW_FOOD_TARGET_URL)
+    suspend fun addNewFood(@Body foodData : AddFoodData) : Response<Void>
 }
 
 class RestServiceInstance{

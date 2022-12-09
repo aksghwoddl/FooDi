@@ -11,6 +11,7 @@ import android.os.SystemClock
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.view.View
 import android.widget.ArrayAdapter
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
@@ -67,7 +68,11 @@ class FoodDetailActivity : AppCompatActivity() {
         with(binding){
             foodNameTextView.text = mFoodInfoData.foodName
             foodNameTextView.isSelected = true // for marquee setting
-            companyNameTextView.text = mFoodInfoData.company
+            if(mFoodInfoData.company == "N/A"){
+                companyNameTextView.visibility = View.GONE
+            } else {
+                companyNameTextView.text = mFoodInfoData.company
+            }
         }
         mFooDiPreferenceManager = FooDiPreferenceManager.getInstance(FoodiNewApplication.getInstance())
         updateIngredientTextView(false)

@@ -54,7 +54,7 @@ class DiaryViewModel(repository: FoodiRepository) : ViewModel() {
                 , amountCarbon.value!! 
                 , amountProtein.value!! 
                 , amountFat.value!!)
-            db.diaryDao().addDiary(diary)
+            mRepository.addDiary(diary)
             Log.d(TAG, "addDiarySummary: success add diary DB!!")
         }
     }
