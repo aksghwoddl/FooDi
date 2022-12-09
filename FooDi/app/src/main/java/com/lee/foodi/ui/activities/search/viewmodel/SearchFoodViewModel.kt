@@ -3,13 +3,11 @@ package com.lee.foodi.ui.activities.search.viewmodel
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.lee.foodi.data.rest.model.FoodData
-import com.lee.foodi.data.rest.model.FoodInfoData
 import com.lee.foodi.data.repository.FoodiRepository
+import com.lee.foodi.data.rest.model.FoodInfoData
 import com.lee.foodi.data.rest.model.NewFoodData
 import kotlinx.coroutines.*
 import java.net.SocketTimeoutException
-import kotlin.math.ceil
 
 class SearchFoodViewModel(private val repository: FoodiRepository) : ViewModel() {
     private val TAG = "FoodInfoViewModel"
