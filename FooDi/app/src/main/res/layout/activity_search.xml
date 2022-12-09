@@ -35,6 +35,7 @@
             android:hint="@string/search_edit_text_hint"
             android:fontFamily="@font/swagger"
             android:background="#fff"
+            android:singleLine="true"
             />
     </com.google.android.material.textfield.TextInputLayout>
     <androidx.recyclerview.widget.RecyclerView

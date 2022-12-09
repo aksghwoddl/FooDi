@@ -7,7 +7,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.lee.foodi.R
 import com.lee.foodi.common.FoodiNewApplication
+import com.lee.foodi.common.Utils
 import com.lee.foodi.data.repository.FoodiRepository
+import com.lee.foodi.data.rest.model.FoodInfoData
 import com.lee.foodi.databinding.ActivityAddFoodBinding
 import com.lee.foodi.ui.activities.add.fragments.AdditionalInfoFragment
 import com.lee.foodi.ui.activities.add.fragments.NecessaryInfoFragment
@@ -28,7 +30,8 @@ class AddFoodActivity : AppCompatActivity() {
         binding = ActivityAddFoodBinding.inflate(layoutInflater).also {
             setContentView(it.root)
         }
-        mViewModel = ViewModelProvider(this , FoodiViewModelFactory(FoodiRepository()))[AddFoodViewModel::class.java]
+        AddFoodViewModel.newInstance(this)
+        mViewModel = AddFoodViewModel.getInstance()!!
         addListeners()
         observeData()
         savedInstanceState?:let {
@@ -37,6 +40,9 @@ class AddFoodActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Function for add listeners
+     * **/
     private fun addListeners() {
         with(binding){
             confirmButton.setOnClickListener {
@@ -49,7 +55,18 @@ class AddFoodActivity : AppCompatActivity() {
                     mViewModel.headTitle.value = resources.getString(R.string.next_add_food_header_title)
                     mViewModel.buttonText.value = resources.getString(R.string.confirm)
                 } else {
-                    Log.d(TAG, "addListeners: saved food!")
+                    Utils.toastMessage("성공적으로 저장했습니다!")
+                    val testArray = arrayListOf<String?>()
+                    with(testArray){
+                       mViewModel.run{
+                           add(foodName.value)
+                           add(servingSize.value)
+                           add(carbohydrate.value)
+                           add(protein.value)
+                           add(fat.value)
+                       }
+                    }
+                    Log.d(TAG, "addListeners: $testArray")
                 }
             }
 
@@ -69,6 +86,9 @@ class AddFoodActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Function for Observe LiveData
+     * **/
     private fun observeData() {
         with(mViewModel){
             progress.observe(this@AddFoodActivity){
