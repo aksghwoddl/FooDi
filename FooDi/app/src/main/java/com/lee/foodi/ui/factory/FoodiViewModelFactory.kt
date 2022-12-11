@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.lee.foodi.data.repository.FoodiRepository
 import com.lee.foodi.ui.activities.add.viewmodel.AddFoodViewModel
-import com.lee.foodi.ui.activities.add.viewmodel.NecessaryInfoViewModel
 import com.lee.foodi.ui.activities.search.viewmodel.SearchFoodViewModel
 import com.lee.foodi.ui.fragments.diary.viewmodel.DiaryViewModel
 import com.lee.foodi.ui.fragments.report.viewmodel.ReportViewModel
@@ -22,9 +21,7 @@ class FoodiViewModelFactory(private val repository: FoodiRepository) : ViewModel
             ReportViewModel(repository) as T
         } else if(modelClass.isAssignableFrom(AddFoodViewModel::class.java)){
             AddFoodViewModel(repository) as T
-        } else if(modelClass.isAssignableFrom(NecessaryInfoViewModel::class.java)){
-            NecessaryInfoViewModel() as T
-        }else {
+        } else {
             throw java.lang.IllegalArgumentException("해당 ViewModel을 찾을수가 없습니다!")
         }
     }

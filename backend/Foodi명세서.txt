@@ -1,4 +1,5 @@
-############################## 가장 처음 1회만 아래 내용 gogo
+############################## 가장 처음 1회만 아래 내용 gogo (venv폴더 및 db가 깔려있다면 바로 실행해도 무방)
+###################### 다만, Window와 mac의 실행환경이 다르기 때문에 venv폴더 삭제 후 아래 과정을 다시 진행하는걸 추천
 
 디렉토리 : /backend
 터미널 : bash
@@ -18,11 +19,21 @@ $ python manage.py migrate
 
 ############################## 서버 킬때마다
 
+##### 현재 서버에 배포가 완료되지 않았기에 로컬에서 서버를 돌려야 한다.
+##### 그러므로 아직까지는 시작전에 IP를 유동적으로 변경 해주어야함
+##### runserver.py , request.py에 있는 ip를 현재 접속되어 있는 네트워크의 Ip로 변경 해준다.
+
 디렉토리 : /backend
 터미널 : bash
 
+## Window
 $ source venv/Script/activate
-(venv) 나오는 지 확인
+콘솔에 (venv) 나오는 지 확인
+
+## Mac
+$ source venv/bin/acticate
+콘솔에 (venv) 나오는 지 확인
+
 
 $ python manage.py runserver
 

@@ -1,20 +1,15 @@
 package com.lee.foodi.ui.activities.add.fragments
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
-import androidx.databinding.library.baseAdapters.BR
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import com.lee.foodi.R
-import com.lee.foodi.data.repository.FoodiRepository
+import com.lee.foodi.common.Utils
 import com.lee.foodi.databinding.FragmentNecessaryInfoBinding
 import com.lee.foodi.ui.activities.add.viewmodel.AddFoodViewModel
-import com.lee.foodi.ui.activities.add.viewmodel.NecessaryInfoViewModel
-import com.lee.foodi.ui.factory.FoodiViewModelFactory
 
 
 private const val TAG = "NecessaryInfoFragment"
@@ -36,5 +31,41 @@ class NecessaryInfoFragment : Fragment(){
         binding.necesarryViewModel = mViewModel
         binding.lifecycleOwner = this
         return binding.root
+    }
+
+    fun checkIsEmptyStatus() : Boolean {
+        with(binding){
+            if(foodNameEdiText.text.isEmpty()){
+                Utils.toastMessage("음식 이름을 입력해주새요.")
+                foodNameEdiText.requestFocus()
+                return false
+            }
+            if(servingSizeEditText.text.isEmpty()){
+                Utils.toastMessage("1회 제공량을 입력해주세요.")
+                servingSizeEditText.requestFocus()
+                return false
+            }
+            if(calorieEditText.text.isEmpty()){
+                Utils.toastMessage("칼로리 정보를 입력해주세요.")
+                calorieEditText.requestFocus()
+                return false
+            }
+            if(carbohydrateEditText.text.isEmpty()){
+                Utils.toastMessage("탄후화물 정보를 입력해주세요.")
+                carbohydrateEditText.requestFocus()
+                return false
+            }
+            if(proteinEditText.text.isEmpty()){
+                Utils.toastMessage("단백질 정보를 입력해주세요.")
+                proteinEditText.requestFocus()
+                return false
+            }
+            if(fatEditText.text.isEmpty()){
+                Utils.toastMessage("지방 정보를 입력해주세요.")
+                fatEditText.requestFocus()
+                return false
+            }
+        }
+        return true
     }
 }

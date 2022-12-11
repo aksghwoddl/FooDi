@@ -52,15 +52,19 @@ class AddFoodActivity : AppCompatActivity() {
     private fun addListeners() {
         with(binding){
             confirmButton.setOnClickListener {
-                if(mViewModel.progress.value == 1){
+                if(mViewModel.progress.value == 1){ // When progress is 1
                     if(!::mAdditionalInfoFragment.isInitialized){
                         mAdditionalInfoFragment = AdditionalInfoFragment.newInstance()
                     }
-                    supportFragmentManager.beginTransaction().replace(R.id.contentsFragment , mAdditionalInfoFragment).commit()
-                    mViewModel.progress.value = 2
-                    mViewModel.headTitle.value = resources.getString(R.string.next_add_food_header_title)
-                    mViewModel.buttonText.value = resources.getString(R.string.confirm)
-                } else {
+                    if(mNecessaryInfoFragment.checkIsEmptyStatus()){
+                        supportFragmentManager.beginTransaction().replace(R.id.contentsFragment , mAdditionalInfoFragment).commit()
+                        mViewModel.progress.value = 2
+                        mViewModel.headTitle.value = resources.getString(R.string.next_add_food_header_title)
+                        mViewModel.buttonText.value = resources.getString(R.string.confirm)
+                    } else {
+                        return@setOnClickListener
+                    }
+                } else { // When progress is 2
                     CoroutineScope(Dispatchers.IO).launch {
                         val addFoodData : AddFoodData
                         with(mViewModel){
@@ -81,6 +85,9 @@ class AddFoodActivity : AppCompatActivity() {
                         }
                         Log.d(TAG, "addListeners: $addFoodData")
                         mViewModel.postRequestAddFood(addFoodData)
+                        CoroutineScope(Dispatchers.Main).launch {
+                            finish()
+                        }
                     }
                 }
             }
