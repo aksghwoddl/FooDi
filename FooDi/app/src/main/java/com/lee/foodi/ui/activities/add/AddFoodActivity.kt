@@ -1,9 +1,11 @@
 package com.lee.foodi.ui.activities.add
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import com.jakewharton.rxbinding3.view.clicks
 import com.lee.foodi.R
 import com.lee.foodi.common.NOT_AVAILABLE
 import com.lee.foodi.common.Utils
@@ -15,6 +17,7 @@ import com.lee.foodi.ui.activities.add.viewmodel.AddFoodViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.util.concurrent.TimeUnit
 
 private const val TAG = "AddFoodActivity"
 
@@ -42,7 +45,9 @@ class AddFoodActivity : AppCompatActivity() {
     /**
      * Function for add listeners
      * **/
+    @SuppressLint("CheckResult")
     private fun addListeners() {
+        // Confirm Button
         with(binding){
             confirmButton.setOnClickListener {
                 if(mViewModel.progress.value == 1){ // When progress is 1
@@ -85,6 +90,14 @@ class AddFoodActivity : AppCompatActivity() {
                 }
             }
 
+            // RxBinding Event
+            if(addProgressBar.progress >= 2){
+                confirmButton.clicks().throttleFirst(1 , TimeUnit.SECONDS).subscribe {
+                    binding.confirmButton.performClick()
+                }
+            }
+
+            // Back Button
             backButton.setOnClickListener{
                 if(addProgressBar.progress == 1){
                     finish()
