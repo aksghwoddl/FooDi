@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.lee.foodi.R
 import com.lee.foodi.common.*
 import com.lee.foodi.data.repository.FoodiRepository
 import com.lee.foodi.data.rest.model.FoodInfoData
@@ -31,7 +32,7 @@ class SearchActivity : AppCompatActivity() {
         binding = ActivitySearchBinding.inflate(layoutInflater).also {
             setContentView(it.root)
         }
-        mViewModel = ViewModelProvider(this , FoodiViewModelFactory(FoodiRepository()))[SearchFoodViewModel::class.java]
+        mViewModel = ViewModelProvider(this , FoodiViewModelFactory(FoodiRepository.getInstance()))[SearchFoodViewModel::class.java]
         initRecyclerView()
         addListeners()
         observeData()
@@ -100,6 +101,7 @@ class SearchActivity : AppCompatActivity() {
     @SuppressLint("NotifyDataSetChanged")
     private fun observeData() {
        with(mViewModel){
+           // Searched List
            foodList.observe(this@SearchActivity){
                it?.let {
                    if(it.isNotEmpty()){
@@ -113,29 +115,34 @@ class SearchActivity : AppCompatActivity() {
                }
            }
 
-           isProgressVisible.observe(this@SearchActivity){
-               if(it){
+           // Progress bar showing
+           isProgressVisible.observe(this@SearchActivity) {
+               if (it) {
                    binding.progressBar.visibility = View.VISIBLE
                } else {
                    binding.progressBar.visibility = View.GONE
                }
            }
 
+           // Error Message
            errorMessage.observe(this@SearchActivity){
                Utils.toastMessage(it)
            }
 
+           // When there are no search results
            addFoodLayoutVisible.observe(this@SearchActivity){
                if(it){
                    with(binding){
                        searchFoodRecyclerView.visibility = View.GONE
                        buttonLayout.visibility = View.GONE
+                       binding.noSearchFoodTextView.text = getString(R.string.no_search_food)
                        noSearchFoodLayout.visibility = View.VISIBLE
                    }
                } else {
                    with(binding){
                        searchFoodRecyclerView.visibility = View.VISIBLE
                        buttonLayout.visibility = View.VISIBLE
+                       binding.noSearchFoodTextView.text = getString(R.string.ask_add_food)
                        noSearchFoodLayout.visibility = View.GONE
                    }
                }

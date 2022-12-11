@@ -39,7 +39,7 @@ class AddFoodViewModel(private val repository: FoodiRepository) : ViewModel() {
         fun newInstance(owner : AddFoodActivity) {
             (!::instance.isInitialized).let {
                 instance = ViewModelProvider(owner , FoodiViewModelFactory(
-                    FoodiRepository()
+                    FoodiRepository.getInstance()
                 ))[AddFoodViewModel::class.java]
             }
         }

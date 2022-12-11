@@ -9,6 +9,16 @@ import com.lee.foodi.data.room.entity.DiaryItemEntity
 class FoodiRepository {
     private val diaryDAO = DiaryDatabase.getInstance().diaryDao()
 
+    companion object{
+        private lateinit var instance : FoodiRepository
+        fun getInstance() : FoodiRepository {
+            if(!::instance.isInitialized){
+                instance = FoodiRepository()
+            }
+            return instance
+        }
+    }
+
     /**
      * Function for search food at API
      * **/

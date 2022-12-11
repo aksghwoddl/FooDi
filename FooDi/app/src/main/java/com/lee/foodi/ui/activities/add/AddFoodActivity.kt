@@ -1,24 +1,17 @@
 package com.lee.foodi.ui.activities.add
 
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import com.lee.foodi.R
-import com.lee.foodi.common.FoodiNewApplication
 import com.lee.foodi.common.NOT_AVAILABLE
 import com.lee.foodi.common.Utils
-import com.lee.foodi.data.repository.FoodiRepository
 import com.lee.foodi.data.rest.model.AddFoodData
-import com.lee.foodi.data.rest.model.FoodInfoData
 import com.lee.foodi.databinding.ActivityAddFoodBinding
 import com.lee.foodi.ui.activities.add.fragments.AdditionalInfoFragment
 import com.lee.foodi.ui.activities.add.fragments.NecessaryInfoFragment
 import com.lee.foodi.ui.activities.add.viewmodel.AddFoodViewModel
-import com.lee.foodi.ui.factory.FoodiViewModelFactory
-import com.lee.foodi.ui.fragments.report.viewmodel.ReportViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

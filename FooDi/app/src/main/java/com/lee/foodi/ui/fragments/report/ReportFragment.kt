@@ -11,7 +11,6 @@ import android.widget.AdapterView
 import android.widget.AdapterView.OnItemSelectedListener
 import android.widget.ArrayAdapter
 import androidx.annotation.RequiresApi
-import androidx.core.view.marginTop
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.github.mikephil.charting.components.AxisBase
@@ -23,7 +22,6 @@ import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.formatter.ValueFormatter
 import com.lee.foodi.R
 import com.lee.foodi.common.FoodiNewApplication
-import com.lee.foodi.common.MONTHLY
 import com.lee.foodi.common.Utils
 import com.lee.foodi.data.repository.FoodiRepository
 import com.lee.foodi.databinding.FragmentReportBinding
@@ -50,7 +48,7 @@ class ReportFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentReportBinding.inflate(inflater , container , false)
-        mViewModel = ViewModelProvider(this , FoodiViewModelFactory(FoodiRepository()))[ReportViewModel::class.java]
+        mViewModel = ViewModelProvider(this , FoodiViewModelFactory(FoodiRepository.getInstance()))[ReportViewModel::class.java]
         return binding.root
     }
 

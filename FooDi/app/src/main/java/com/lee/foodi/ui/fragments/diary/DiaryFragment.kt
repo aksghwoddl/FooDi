@@ -58,7 +58,7 @@ class DiaryFragment : Fragment() {
     ): View {
         binding = FragmentDiaryBinding.inflate(inflater , container , false)
         mPreferenceManager = FooDiPreferenceManager.getInstance(FoodiNewApplication.getInstance())
-        mViewModel = ViewModelProvider(this , FoodiViewModelFactory(FoodiRepository()))[DiaryViewModel::class.java]
+        mViewModel = ViewModelProvider(this , FoodiViewModelFactory(FoodiRepository.getInstance()))[DiaryViewModel::class.java]
         mDiaryFoodItemRecyclerAdapter = DiaryFoodItemRecyclerAdapter()
         return binding.root
     }
