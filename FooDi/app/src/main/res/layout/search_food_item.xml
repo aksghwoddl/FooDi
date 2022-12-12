@@ -6,6 +6,9 @@
     android:background="@drawable/border_textview"
     android:layout_marginTop="10dp"
     android:layout_gravity="center|center_horizontal"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?android:attr/selectableItemBackgroundBorderless"
     >
 
     <TextView

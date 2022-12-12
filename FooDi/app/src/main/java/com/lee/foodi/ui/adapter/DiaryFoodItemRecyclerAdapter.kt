@@ -1,14 +1,31 @@
 package com.lee.foodi.ui.adapter
 
+import android.content.Context
+import android.graphics.Typeface
 import android.view.LayoutInflater
+import android.view.MenuItem
+import android.view.MenuItem.OnMenuItemClickListener
+import android.view.View.OnLongClickListener
 import android.view.ViewGroup
+import android.widget.AdapterView.OnItemClickListener
+import android.widget.AdapterView.OnItemLongClickListener
+import android.widget.PopupMenu
+import androidx.core.view.size
 import androidx.recyclerview.widget.RecyclerView
+import com.lee.foodi.R
+import com.lee.foodi.common.Utils
+import com.lee.foodi.data.repository.FoodiRepository
 import com.lee.foodi.data.room.entity.DiaryItem
-
+import com.lee.foodi.data.room.entity.DiaryItemEntity
 import com.lee.foodi.databinding.DiaryFoodItemBinding
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class DiaryFoodItemRecyclerAdapter : RecyclerView.Adapter<DiaryFoodItemRecyclerAdapter.DiaryFoodItemViewHolder>() {
     private var mDiaryList = mutableListOf<DiaryItem>()
+    private var mMenuItemClickListener : PopupMenu.OnMenuItemClickListener? = null
+    private lateinit var mSelectedDiaryItem : DiaryItem
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DiaryFoodItemViewHolder {
         val binding = DiaryFoodItemBinding.inflate(LayoutInflater.from(parent.context) , parent , false)
@@ -25,6 +42,10 @@ class DiaryFoodItemRecyclerAdapter : RecyclerView.Adapter<DiaryFoodItemRecyclerA
         mDiaryList = list
     }
 
+    fun setOnMenuItemClickListener(listener: PopupMenu.OnMenuItemClickListener){
+        mMenuItemClickListener = listener
+    }
+
     inner class DiaryFoodItemViewHolder(private val binding : DiaryFoodItemBinding) : RecyclerView.ViewHolder(binding.root){
         fun bind(data: DiaryItem){
             with(binding){
@@ -32,6 +53,32 @@ class DiaryFoodItemRecyclerAdapter : RecyclerView.Adapter<DiaryFoodItemRecyclerA
                 foodNameTextView.text = data.food?.foodName
                 servingSizeTextView.text = data.servingSize
             }
+            val position = adapterPosition
+            if(position != RecyclerView.NO_POSITION){
+                itemView.setOnLongClickListener {
+                    mSelectedDiaryItem = data
+                    val popupMenu = PopupMenu(binding.root.context , it)
+                    popupMenu.menuInflater.inflate(R.menu.diary_selected_menu , popupMenu.menu)
+                    popupMenu.setOnMenuItemClickListener(mMenuItemClickListener!!)
+                    popupMenu.show()
+                    true
+                }
+            }
+        }
+    }
+
+    /**
+     * Function for delete selected diary item when popup menu clicked
+     * **/
+    fun deleteSelectedDiaryItem(){
+        CoroutineScope(Dispatchers.IO).launch {
+            val selectedEntity : DiaryItemEntity
+            with(mSelectedDiaryItem){
+               selectedEntity = DiaryItemEntity(index, date , food , time , servingSize)
+            }
+            val repository = FoodiRepository.getInstance()
+            repository.deleteDiaryItem(selectedEntity)
+            CoroutineScope(Dispatchers.Main).launch{Utils.toastMessage("정상적으로 삭제되었습니다.")}
         }
     }
 }

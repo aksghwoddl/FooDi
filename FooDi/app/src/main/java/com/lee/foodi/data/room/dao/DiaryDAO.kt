@@ -1,6 +1,7 @@
 package com.lee.foodi.data.room.dao
 
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
@@ -26,7 +27,7 @@ interface DiaryDAO {
     /**
      * Function for search diary item
      * **/
-    @Query("SELECT * FROM DIARY_ITEM_TBL WHERE date =:queryDate")
+    @Query("SELECT * FROM diary_item_tbl WHERE date =:queryDate")
     suspend fun getDiaryItemByDate(queryDate : String) : MutableList<DiaryItem>
 
     /**
@@ -34,4 +35,7 @@ interface DiaryDAO {
      * **/
     @Query("SELECT * FROM diary_tbl WHERE date = :queryDate")
     suspend fun getDiaryByDate(queryDate : String) : Diary
+
+    @Delete
+    suspend fun deleteDiaryItem(diaryItem : DiaryItemEntity)
 }
