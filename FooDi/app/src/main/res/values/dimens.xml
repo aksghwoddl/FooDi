@@ -7,5 +7,6 @@
 
     <!--Text Size-->
     <dimen name="no_item_text_size">25sp</dimen>
+    <dimen name="food_detail_text_size">17sp</dimen>
     <dimen name="add_food_input_text_size">10sp</dimen>
 </resources>

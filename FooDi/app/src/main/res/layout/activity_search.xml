@@ -47,7 +47,7 @@
         app:layout_constraintBottom_toTopOf="@id/buttonLayout"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        android:visibility="gone"
+        android:visibility="visible"
         />
     <RelativeLayout
         android:id="@+id/buttonLayout"

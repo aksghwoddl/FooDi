@@ -46,6 +46,8 @@ class DiaryFoodItemRecyclerAdapter : RecyclerView.Adapter<DiaryFoodItemRecyclerA
         mMenuItemClickListener = listener
     }
 
+    fun getSelectedDiaryItem() = mSelectedDiaryItem
+
     inner class DiaryFoodItemViewHolder(private val binding : DiaryFoodItemBinding) : RecyclerView.ViewHolder(binding.root){
         fun bind(data: DiaryItem){
             with(binding){

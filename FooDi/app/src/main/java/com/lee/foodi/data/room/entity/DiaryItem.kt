@@ -1,6 +1,7 @@
 package com.lee.foodi.data.room.entity
 
 import com.lee.foodi.data.rest.model.FoodInfoData
+import java.io.Serializable
 
 data class DiaryItem(
     var index : Int? = 0 ,
@@ -8,4 +9,4 @@ data class DiaryItem(
     var food : FoodInfoData? ,
     var time : String = "" ,
     var servingSize : String = ""
-)
+) : Serializable

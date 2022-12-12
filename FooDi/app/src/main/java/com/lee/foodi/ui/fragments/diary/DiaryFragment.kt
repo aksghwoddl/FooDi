@@ -17,14 +17,12 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.lee.foodi.R
-import com.lee.foodi.common.EXTRA_SELECTED_DATE
-import com.lee.foodi.common.FoodiNewApplication
-import com.lee.foodi.common.NOT_AVAILABLE
-import com.lee.foodi.common.Utils
+import com.lee.foodi.common.*
 import com.lee.foodi.common.manager.FooDiPreferenceManager
 import com.lee.foodi.data.repository.FoodiRepository
 import com.lee.foodi.data.room.entity.DiaryItem
 import com.lee.foodi.databinding.FragmentDiaryBinding
+import com.lee.foodi.ui.activities.search.FoodDetailActivity
 import com.lee.foodi.ui.activities.search.SearchActivity
 import com.lee.foodi.ui.adapter.DiaryFoodItemRecyclerAdapter
 import com.lee.foodi.ui.factory.FoodiViewModelFactory
@@ -109,11 +107,16 @@ class DiaryFragment : Fragment() {
             // Diary Items
             diaryItems.observe(viewLifecycleOwner){
                 if(it.isEmpty()){
+                    Log.d(TAG, "observeDate: diaryItems is empty")
                     binding.noDiaryItemLayout.visibility = View.VISIBLE
                     binding.diaryListLayout.visibility = View.GONE
                     initFoodSummary()
                     calorieProgress.value = 0.0
+                    CoroutineScope(Dispatchers.IO).launch {
+                        mViewModel.addDiarySummary()
+                    }
                 } else {
+                    Log.d(TAG, "observeDate: diaryItems is not empty")
                     binding.noDiaryItemLayout.visibility = View.GONE
                     binding.diaryListLayout.visibility = View.VISIBLE
                     mDiaryFoodItemRecyclerAdapter.setDiaryList(it)

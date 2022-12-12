@@ -56,6 +56,7 @@ class FoodDetailActivity : AppCompatActivity() {
             setContentView(it.root)
         }
         mFoodInfoData = intent?.getSerializableExtra(EXTRA_SELECTED_FOOD) as FoodInfoData
+
         init()
     }
 
@@ -69,7 +70,7 @@ class FoodDetailActivity : AppCompatActivity() {
             foodNameTextView.text = mFoodInfoData.foodName
             foodNameTextView.isSelected = true // for marquee setting
             if(mFoodInfoData.company == "N/A"){
-                companyNameTextView.visibility = View.GONE
+                companyNameTextView.visibility = View.INVISIBLE
             } else {
                 companyNameTextView.text = mFoodInfoData.company
             }
@@ -106,6 +107,10 @@ class FoodDetailActivity : AppCompatActivity() {
                 }
             }
             calculateEditText.addTextChangedListener(CalculateTextChangedListener())
+
+            backButton.setOnClickListener {
+                finish()
+            }
         }
     }
 

@@ -1,15 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="30dp"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <RelativeLayout
+        android:id="@+id/headerLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/foodNameTextView"
+        android:background="@color/main_color"
+        >
+
+        <ImageButton
+            android:id="@+id/backButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_baseline_arrow_back_24"
+            android:backgroundTint="@color/main_color"
+            />
+    </RelativeLayout>
 
     <TextView
         android:id="@+id/foodNameTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/headerLayout"
         android:textSize="30sp"
         android:textColor="#000"
         android:fontFamily="@font/swagger"
@@ -20,6 +38,8 @@
         android:ellipsize="marquee"
         android:focusable="true"
         android:marqueeRepeatLimit="marquee_forever"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
         />
 
     <TextView
@@ -37,118 +57,116 @@
     <LinearLayout
         android:id="@+id/detailLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/companyNameTextView"
-        android:layout_marginTop="30dp"
+        android:layout_height="0dp"
         android:orientation="vertical"
+        android:paddingStart="30dp"
+        android:paddingEnd="0dp"
+        app:layout_constraintBottom_toTopOf="@id/calculateLayout"
+        app:layout_constraintTop_toBottomOf="@id/companyNameTextView"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
         >
 
         <TextView
             android:id="@+id/calorieTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
             android:fontFamily="@font/swagger"
-            android:textSize="15sp"
             android:text="@string/calories"
-            android:layout_marginTop="10dp"
-            />
+            android:textSize="@dimen/food_detail_text_size" />
 
         <TextView
             android:id="@+id/carbohydrateTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
             android:fontFamily="@font/swagger"
-            android:textSize="15sp"
             android:text="@string/carbohydrate"
-            android:layout_marginTop="10dp"
-            />
+            android:textSize="@dimen/food_detail_text_size" />
 
         <TextView
             android:id="@+id/proteinTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
             android:fontFamily="@font/swagger"
-            android:textSize="15sp"
             android:text="@string/protein"
-            android:layout_marginTop="10dp"
-            />
+            android:textSize="@dimen/food_detail_text_size" />
 
         <TextView
             android:id="@+id/fatTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
             android:fontFamily="@font/swagger"
-            android:textSize="15sp"
             android:text="@string/fat"
-            android:layout_marginTop="10dp"
-            />
+            android:textSize="@dimen/food_detail_text_size" />
 
         <TextView
             android:id="@+id/sugarTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
             android:fontFamily="@font/swagger"
-            android:textSize="15sp"
             android:text="@string/sugar"
-            android:layout_marginTop="10dp"
-            />
+            android:textSize="@dimen/food_detail_text_size" />
 
         <TextView
             android:id="@+id/saltTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
             android:fontFamily="@font/swagger"
-            android:textSize="15sp"
             android:text="@string/salt"
-            android:layout_marginTop="10dp"
-            />
+            android:textSize="@dimen/food_detail_text_size" />
 
         <TextView
             android:id="@+id/cholesterolTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
             android:fontFamily="@font/swagger"
-            android:textSize="15sp"
             android:text="@string/cholesterol"
-            android:layout_marginTop="10dp"
-            />
+            android:textSize="@dimen/food_detail_text_size" />
 
         <TextView
             android:id="@+id/saturatedFat"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
             android:fontFamily="@font/swagger"
-            android:textSize="15sp"
             android:text="@string/saturated_fat"
-            android:layout_marginTop="10dp"
-            />
+            android:textSize="@dimen/food_detail_text_size" />
 
         <TextView
             android:id="@+id/transFatTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
             android:fontFamily="@font/swagger"
-            android:textSize="15sp"
             android:text="@string/trans_fat"
-            android:layout_marginTop="10dp"
-            />
+            android:textSize="@dimen/food_detail_text_size" />
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/calculateLayout"
         android:layout_width="match_parent"
         android:layout_height="50dp"
+        app:layout_constraintBottom_toTopOf="@id/addButton"
         app:layout_constraintTop_toBottomOf="@id/detailLayout"
-        android:layout_marginTop="50dp"
+
         android:orientation="horizontal"
         android:weightSum="10"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
         >
         <TextView
             android:id="@+id/calculateTextView"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             app:layout_constraintRight_toLeftOf="@id/calculateEditText"
-            android:textSize="15sp"
+            android:textSize="@dimen/food_detail_text_size"
             android:textColor="#000"
             android:gravity="center_vertical"
             android:text="@string/serving_size"
@@ -164,6 +182,7 @@
             android:gravity="center_vertical"
             android:layout_weight="5"
             android:inputType="number"
+
             />
 
         <Spinner
@@ -176,10 +195,10 @@
 
     <Button
         android:id="@+id/addButton"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/calculateLayout"
-        android:layout_marginTop="10dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"

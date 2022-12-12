@@ -17,10 +17,10 @@
         android:layout_height="wrap_content"
         android:text="@string/food_name"
         android:fontFamily="@font/swagger"
-        android:textSize="15sp"
+        android:textSize="20sp"
         android:textColor="#000"
         android:singleLine="true"
-        android:padding="5dp"
+        android:padding="7dp"
         android:gravity="center"
         />
 

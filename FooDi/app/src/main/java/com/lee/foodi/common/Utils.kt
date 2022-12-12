@@ -13,9 +13,12 @@ import kotlin.math.abs
 
 private const val TAG = "Utils"
 
-const val PAGE_ONE = "1"
+
 const val EXTRA_SELECTED_FOOD = "selectedFood"
 const val EXTRA_SELECTED_DATE = "selected_date"
+const val EXTRA_SELECTED_DIARY_ITEM = "selected_diary_item"
+
+const val PAGE_ONE = "1"
 const val MALE = "남"
 const val FEMALE = "여"
 const val NOT_AVAILABLE = "N/A"

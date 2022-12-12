@@ -48,7 +48,6 @@ class DiaryViewModel(repository: FoodiRepository) : ViewModel() {
     suspend fun addDiarySummary() {
         Log.d(TAG, "addDiarySummary()")
         CoroutineScope(Dispatchers.IO).launch {
-            val db = DiaryDatabase.getInstance()
             val diary = DiaryEntity(date.value!! 
                 , spendCalories.value!! 
                 , amountCarbon.value!! 
