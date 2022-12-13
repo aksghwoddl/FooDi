@@ -23,6 +23,7 @@ import com.github.mikephil.charting.formatter.ValueFormatter
 import com.lee.foodi.R
 import com.lee.foodi.common.FoodiNewApplication
 import com.lee.foodi.common.Utils
+import com.lee.foodi.common.manager.FooDiPreferenceManager
 import com.lee.foodi.data.repository.FoodiRepository
 import com.lee.foodi.databinding.FragmentReportBinding
 import com.lee.foodi.ui.factory.FoodiViewModelFactory
@@ -57,16 +58,22 @@ class ReportFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initSpinner()
         initChart()
-        observeDate()
+        observeData()
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onResume() {
         super.onResume()
         CoroutineScope(Dispatchers.IO).launch {
-            mViewModel.summaryList.postValue(mViewModel.getDiarySummary(binding.reportSelection.selectedItem.toString()))
+            val bSummaryList = mViewModel.getDiarySummary(binding.reportSelection.selectedItem.toString())
             CoroutineScope(Dispatchers.Main).launch{
-                setData()
+                mViewModel.summaryList.value = bSummaryList
+                val preferenceManager = FooDiPreferenceManager.getInstance(FoodiNewApplication.getInstance())
+                if(preferenceManager.goalCalorie  != "0"){
+                    binding.reportChart.axisLeft.setAxisMaxValue(preferenceManager.goalCalorie!!.toFloat())
+                    binding.reportChart.axisRight.setAxisMaxValue(preferenceManager.goalCalorie!!.toFloat())
+                }
+                binding.reportChart.animateY(1000)
                 mViewModel.averageCalorie.value = calculateAverageCalorie()
             }
         }
@@ -104,9 +111,6 @@ class ReportFragment : Fragment() {
         binding.reportChart.apply {
             description.isEnabled = false
             extraBottomOffset = 20f
-
-            animateX(1000)
-            animateY(1000)
             val xAxis = xAxis
             with(xAxis){
                 position = XAxis.XAxisPosition.BOTTOM // xAxis 위치
@@ -122,6 +126,11 @@ class ReportFragment : Fragment() {
                 textColor = Color.BLACK
                 setDrawAxisLine(false)
                 typeface = Typeface.createFromAsset(requireContext().assets , "swagger.ttf")
+                setStartAtZero(true)
+                val preferenceManager = FooDiPreferenceManager.getInstance(FoodiNewApplication.getInstance())
+                if(preferenceManager.goalCalorie  != "0"){
+                    setAxisMaxValue(preferenceManager.goalCalorie!!.toFloat())
+                }
             }
 
             val rightAxis = axisRight
@@ -129,6 +138,11 @@ class ReportFragment : Fragment() {
                 textColor = Color.BLACK
                 setDrawAxisLine(false)
                 typeface = Typeface.createFromAsset(requireContext().assets , "swagger.ttf")
+                setStartAtZero(true)
+                val preferenceManager = FooDiPreferenceManager.getInstance(FoodiNewApplication.getInstance())
+                if(preferenceManager.goalCalorie  != "0"){
+                    setAxisMaxValue(preferenceManager.goalCalorie!!.toFloat())
+                }
             }
 
             val legend = legend
@@ -149,7 +163,7 @@ class ReportFragment : Fragment() {
      * Function for observe Live data
      * **/
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun observeDate() {
+    private fun observeData() {
         with(mViewModel){
             // Summary List
             summaryList.observe(viewLifecycleOwner){ diary ->

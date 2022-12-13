@@ -36,8 +36,9 @@
                 android:value="" />
         </activity>
 
-        <activity android:name=".ui.activities.search.FoodDetailActivity"
+        <activity android:name=".ui.activities.search.detail.FoodDetailActivity"
             android:exported="true"
+            android:windowSoftInputMode="adjustPan"
             >
         </activity>
 
@@ -47,7 +48,9 @@
         <activity android:name=".ui.activities.search.SearchActivity"
             android:windowSoftInputMode="adjustPan">
         </activity>
-        <activity android:name=".ui.fragments.diary.detail.DiaryDetailActivity">
+        <activity android:name=".ui.fragments.diary.detail.DiaryDetailActivity"
+            android:windowSoftInputMode="adjustPan"
+            >
 
         </activity>
     </application>

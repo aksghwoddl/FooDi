@@ -12,7 +12,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.DatePicker
 import android.widget.PopupMenu
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -23,7 +22,6 @@ import com.lee.foodi.common.manager.FooDiPreferenceManager
 import com.lee.foodi.data.repository.FoodiRepository
 import com.lee.foodi.data.room.entity.DiaryItem
 import com.lee.foodi.databinding.FragmentDiaryBinding
-import com.lee.foodi.ui.activities.search.FoodDetailActivity
 import com.lee.foodi.ui.activities.search.SearchActivity
 import com.lee.foodi.ui.adapter.DiaryFoodItemRecyclerAdapter
 import com.lee.foodi.ui.factory.FoodiViewModelFactory
@@ -189,6 +187,13 @@ class DiaryFragment : Fragment() {
         with(binding){
             // Food Search Listeners
             headerSearchLayout.setOnClickListener {
+                with(Intent(FoodiNewApplication.getInstance() , SearchActivity::class.java)){
+                    putExtra(EXTRA_SELECTED_DATE , mViewModel.date.value)
+                    startActivity(this)
+                }
+            }
+
+            searchButton.setOnClickListener {
                 with(Intent(FoodiNewApplication.getInstance() , SearchActivity::class.java)){
                     putExtra(EXTRA_SELECTED_DATE , mViewModel.date.value)
                     startActivity(this)

@@ -13,7 +13,6 @@
         app:layout_constraintBottom_toTopOf="@id/foodNameTextView"
         android:background="@color/main_color"
         >
-
         <TextView
             android:id="@+id/reportTimeTextView"
             android:layout_width="wrap_content"

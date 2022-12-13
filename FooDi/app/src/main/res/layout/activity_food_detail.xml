@@ -13,6 +13,16 @@
         app:layout_constraintBottom_toTopOf="@id/foodNameTextView"
         android:background="@color/main_color"
         >
+        <TextView
+            android:id="@+id/reportTimeTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="20dp"
+            android:fontFamily="@font/swagger"
+            android:text="@string/more_info"
+            android:textColor="#000"
+            android:textSize="20sp" />
 
         <ImageButton
             android:id="@+id/backButton"

@@ -3,27 +3,35 @@ package com.lee.foodi.ui.activities.search
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.view.KeyEvent
 import android.view.View
+import android.view.View.OnFocusChangeListener
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.lee.foodi.R
 import com.lee.foodi.common.*
 import com.lee.foodi.data.repository.FoodiRepository
 import com.lee.foodi.data.rest.model.FoodInfoData
 import com.lee.foodi.databinding.ActivitySearchBinding
 import com.lee.foodi.ui.activities.add.AddFoodActivity
+import com.lee.foodi.ui.activities.search.detail.FoodDetailActivity
+import com.lee.foodi.ui.activities.search.dialog.AddNewFoodDialog
 import com.lee.foodi.ui.activities.search.viewmodel.SearchFoodViewModel
 import com.lee.foodi.ui.adapter.SearchFoodRecyclerAdapter
 import com.lee.foodi.ui.factory.FoodiViewModelFactory
 
+private const val TAG = "SearchFragment"
+
 class SearchActivity : AppCompatActivity() {
-    private val TAG = "SearchFragment"
 
     private lateinit var binding : ActivitySearchBinding
     private lateinit var mViewModel : SearchFoodViewModel
     private lateinit var mSearchFoodRecyclerAdapter: SearchFoodRecyclerAdapter
+    private lateinit var mAddNewFoodDialog : AddNewFoodDialog
 
     private var mCurrentPage = 0
 
@@ -36,6 +44,10 @@ class SearchActivity : AppCompatActivity() {
         initRecyclerView()
         addListeners()
         observeData()
+        if(!::mAddNewFoodDialog.isInitialized){
+            mAddNewFoodDialog = AddNewFoodDialog(this)
+        }
+        mAddNewFoodDialog.show()
     }
 
     private fun initRecyclerView(){
@@ -66,6 +78,18 @@ class SearchActivity : AppCompatActivity() {
                 mCurrentPage = 1
             }
 
+            // Key Event Listener
+            searchInputText.setOnKeyListener { _ , keyCode, _ ->
+                when(keyCode){
+                    KeyEvent.KEYCODE_ENTER -> {
+                        val foodName = searchInputText.text.toString()
+                        mViewModel.getSearchFoodList(foodName , PAGE_ONE)
+                        mCurrentPage = 1
+                    }
+                }
+                false
+            }
+
             // Next Button Listener
             nextButton.setOnClickListener {
                 val foodName = searchInputText.text.toString()
@@ -87,9 +111,11 @@ class SearchActivity : AppCompatActivity() {
             }
 
             addFoodButton.setOnClickListener {
-                with(Intent(FoodiNewApplication.getInstance() , AddFoodActivity::class.java)){
-                    startActivity(this)
-                }
+                moveToAddNewFood()
+            }
+
+            backButton.setOnClickListener {
+                finish()
             }
         }
     }
@@ -97,7 +123,6 @@ class SearchActivity : AppCompatActivity() {
     /**
      * Function for observing ViewModel Data
      * **/
-
     @SuppressLint("NotifyDataSetChanged")
     private fun observeData() {
        with(mViewModel){
@@ -135,14 +160,12 @@ class SearchActivity : AppCompatActivity() {
                    with(binding){
                        searchFoodRecyclerView.visibility = View.GONE
                        buttonLayout.visibility = View.GONE
-                       binding.noSearchFoodTextView.text = getString(R.string.no_search_food)
                        noSearchFoodLayout.visibility = View.VISIBLE
                    }
                } else {
                    with(binding){
                        searchFoodRecyclerView.visibility = View.VISIBLE
                        buttonLayout.visibility = View.VISIBLE
-                       binding.noSearchFoodTextView.text = getString(R.string.ask_add_food)
                        noSearchFoodLayout.visibility = View.GONE
                    }
                }
@@ -156,5 +179,14 @@ class SearchActivity : AppCompatActivity() {
                binding.previousButton.isEnabled = it
            }
        }
+    }
+
+    /**
+     * Function for move to AddFoodActivity
+     * **/
+    fun moveToAddNewFood() {
+        with(Intent(this , AddFoodActivity::class.java)){
+            startActivity(this)
+        }
     }
 }

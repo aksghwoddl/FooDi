@@ -1,4 +1,4 @@
-package com.lee.foodi.ui.activities.search
+package com.lee.foodi.ui.activities.search.detail
 
 import android.annotation.SuppressLint
 import android.app.AlarmManager
