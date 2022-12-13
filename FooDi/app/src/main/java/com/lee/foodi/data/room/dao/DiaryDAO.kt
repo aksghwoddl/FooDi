@@ -5,6 +5,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Update
 import com.lee.foodi.data.room.entity.Diary
 import com.lee.foodi.data.room.entity.DiaryEntity
 import com.lee.foodi.data.room.entity.DiaryItem
@@ -36,6 +37,13 @@ interface DiaryDAO {
     @Query("SELECT * FROM diary_tbl WHERE date = :queryDate")
     suspend fun getDiaryByDate(queryDate : String) : Diary
 
+
+    /**
+     * Function for delete diary item
+     * **/
     @Delete
     suspend fun deleteDiaryItem(diaryItem : DiaryItemEntity)
+
+    @Update
+    suspend fun updateDiaryItem(diaryItem: DiaryItemEntity)
 }

@@ -12,6 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.DatePicker
 import android.widget.PopupMenu
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -26,6 +27,7 @@ import com.lee.foodi.ui.activities.search.FoodDetailActivity
 import com.lee.foodi.ui.activities.search.SearchActivity
 import com.lee.foodi.ui.adapter.DiaryFoodItemRecyclerAdapter
 import com.lee.foodi.ui.factory.FoodiViewModelFactory
+import com.lee.foodi.ui.fragments.diary.detail.DiaryDetailActivity
 import com.lee.foodi.ui.fragments.diary.viewmodel.DiaryViewModel
 import kotlinx.coroutines.*
 import java.time.LocalDate
@@ -59,8 +61,6 @@ class DiaryFragment : Fragment() {
         binding = FragmentDiaryBinding.inflate(inflater , container , false)
         mPreferenceManager = FooDiPreferenceManager.getInstance(FoodiNewApplication.getInstance())
         mViewModel = ViewModelProvider(this , FoodiViewModelFactory(FoodiRepository.getInstance()))[DiaryViewModel::class.java]
-        mDiaryFoodItemRecyclerAdapter = DiaryFoodItemRecyclerAdapter()
-        mDiaryFoodItemRecyclerAdapter.setOnMenuItemClickListener(PopupMenuItemClickListener())
         return binding.root
     }
 
@@ -70,7 +70,7 @@ class DiaryFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         init()
         addListeners()
-        observeDate()
+        observeData()
     }
 
 
@@ -91,7 +91,7 @@ class DiaryFragment : Fragment() {
      * **/
     @SuppressLint("NotifyDataSetChanged")
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun observeDate() {
+    private fun observeData() {
         with(mViewModel){
             // Header Date
             date.observe(viewLifecycleOwner){
@@ -174,6 +174,10 @@ class DiaryFragment : Fragment() {
     @RequiresApi(Build.VERSION_CODES.O)
     private fun init() {
         // Init RecyclerView
+        mDiaryFoodItemRecyclerAdapter = DiaryFoodItemRecyclerAdapter()
+        mDiaryFoodItemRecyclerAdapter.setOnMenuItemClickListener(PopupMenuItemClickListener())
+        mDiaryFoodItemRecyclerAdapter.setOnItemClickListener(OnDiaryItemClickListener())
+
         binding.diaryRecyclerView.run {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = mDiaryFoodItemRecyclerAdapter
@@ -269,6 +273,7 @@ class DiaryFragment : Fragment() {
         }
     }
 
+    /** For Date PickerDialog **/
     inner class DatePickerListener : DatePickerDialog.OnDateSetListener {
         @RequiresApi(Build.VERSION_CODES.O)
         override fun onDateSet(datePicker: DatePicker?, year: Int, month: Int, day: Int) {
@@ -278,6 +283,7 @@ class DiaryFragment : Fragment() {
         }
     }
 
+    /** For Popup Menu click **/
     inner class PopupMenuItemClickListener : PopupMenu.OnMenuItemClickListener {
         @RequiresApi(Build.VERSION_CODES.O)
         override fun onMenuItemClick(item: MenuItem?): Boolean {
@@ -293,9 +299,18 @@ class DiaryFragment : Fragment() {
                         }
                     }
                 }
-                R.id.moreInfo -> Utils.toastMessage("상세정보 클릭됨")
             }
             return true
+        }
+    }
+
+    inner class OnDiaryItemClickListener : DiaryFoodItemRecyclerAdapter.OnItemClickListener {
+        override fun onItemClick(v: View, model: DiaryItem, position: Int) {
+            super.onItemClick(v, model, position)
+            with(Intent(requireContext() , DiaryDetailActivity::class.java)){
+                putExtra(EXTRA_SELECTED_DIARY_ITEM , model)
+                startActivity(this)
+            }
         }
     }
 }

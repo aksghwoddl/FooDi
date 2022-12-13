@@ -43,6 +43,11 @@ class FoodiRepository {
      * **/
     suspend fun addDiary(diary : DiaryEntity) = diaryDAO.addDiary(diary)
 
+    /**
+     * Function for delete diary item in Room DB
+     * **/
     suspend fun deleteDiaryItem(diaryItem: DiaryItemEntity) = diaryDAO.deleteDiaryItem(diaryItem)
+
+    suspend fun updateDiaryItem(diaryItem: DiaryItemEntity) = diaryDAO.updateDiaryItem(diaryItem)
 
 }

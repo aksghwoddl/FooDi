@@ -5,6 +5,7 @@ import android.graphics.Typeface
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.MenuItem.OnMenuItemClickListener
+import android.view.View
 import android.view.View.OnLongClickListener
 import android.view.ViewGroup
 import android.widget.AdapterView.OnItemClickListener
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.lee.foodi.R
 import com.lee.foodi.common.Utils
 import com.lee.foodi.data.repository.FoodiRepository
+import com.lee.foodi.data.rest.model.FoodInfoData
 import com.lee.foodi.data.room.entity.DiaryItem
 import com.lee.foodi.data.room.entity.DiaryItemEntity
 import com.lee.foodi.databinding.DiaryFoodItemBinding
@@ -25,6 +27,7 @@ import kotlinx.coroutines.launch
 class DiaryFoodItemRecyclerAdapter : RecyclerView.Adapter<DiaryFoodItemRecyclerAdapter.DiaryFoodItemViewHolder>() {
     private var mDiaryList = mutableListOf<DiaryItem>()
     private var mMenuItemClickListener : PopupMenu.OnMenuItemClickListener? = null
+    private var mOnItemClickListener : OnItemClickListener? = null
     private lateinit var mSelectedDiaryItem : DiaryItem
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DiaryFoodItemViewHolder {
@@ -42,8 +45,18 @@ class DiaryFoodItemRecyclerAdapter : RecyclerView.Adapter<DiaryFoodItemRecyclerA
         mDiaryList = list
     }
 
+    /**Set Popup Menu Click Listener **/
     fun setOnMenuItemClickListener(listener: PopupMenu.OnMenuItemClickListener){
         mMenuItemClickListener = listener
+    }
+
+    /**Set Item Click Listener **/
+    interface OnItemClickListener{
+        fun onItemClick(v: View, model : DiaryItem, position: Int) {}
+    }
+
+    fun setOnItemClickListener(listener: OnItemClickListener) {
+        mOnItemClickListener = listener
     }
 
     fun getSelectedDiaryItem() = mSelectedDiaryItem
@@ -56,6 +69,7 @@ class DiaryFoodItemRecyclerAdapter : RecyclerView.Adapter<DiaryFoodItemRecyclerA
                 servingSizeTextView.text = data.servingSize
             }
             val position = adapterPosition
+            // Setting Listener
             if(position != RecyclerView.NO_POSITION){
                 itemView.setOnLongClickListener {
                     mSelectedDiaryItem = data
@@ -64,6 +78,10 @@ class DiaryFoodItemRecyclerAdapter : RecyclerView.Adapter<DiaryFoodItemRecyclerA
                     popupMenu.setOnMenuItemClickListener(mMenuItemClickListener!!)
                     popupMenu.show()
                     true
+                }
+
+                itemView.setOnClickListener {
+                    mOnItemClickListener?.onItemClick(it , data , position)
                 }
             }
         }

@@ -56,7 +56,6 @@ class FoodDetailActivity : AppCompatActivity() {
             setContentView(it.root)
         }
         mFoodInfoData = intent?.getSerializableExtra(EXTRA_SELECTED_FOOD) as FoodInfoData
-
         init()
     }
 
@@ -167,7 +166,6 @@ class FoodDetailActivity : AppCompatActivity() {
         }
 
         override fun afterTextChanged(p0: Editable?) { }
-
     }
 
     /**

@@ -47,6 +47,9 @@
         <activity android:name=".ui.activities.search.SearchActivity"
             android:windowSoftInputMode="adjustPan">
         </activity>
+        <activity android:name=".ui.fragments.diary.detail.DiaryDetailActivity">
+
+        </activity>
     </application>
 
     <uses-permission android:name="android.permission.INTERNET"/>
