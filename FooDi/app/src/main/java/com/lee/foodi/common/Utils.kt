@@ -2,6 +2,7 @@ package com.lee.foodi.common
 
 import android.app.Dialog
 import android.content.Context
+import android.content.res.Configuration
 import android.graphics.Point
 import android.net.ConnectivityManager
 import android.os.Build
@@ -98,6 +99,25 @@ class Utils {
             val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
             val networkInfo = connectivityManager.activeNetwork
             return networkInfo.toString()
+        }
+
+        /**
+         * Function for check night mode
+         * **/
+        fun checkNightMode(context : Context) : Boolean{
+            return when(context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK){
+                Configuration.UI_MODE_NIGHT_YES -> {
+                    Log.d(TAG, "checkNightMode: night mode")
+                    true
+                }
+                Configuration.UI_MODE_NIGHT_NO -> {
+                    Log.d(TAG, "checkNightMode: day mode")
+                    false
+                }
+                else -> {
+                    false
+                }
+            }
         }
     }
 }

@@ -9,22 +9,22 @@ import com.lee.foodi.data.rest.model.NewFoodData
 import kotlinx.coroutines.*
 import java.net.SocketTimeoutException
 
-class SearchFoodViewModel(private val repository: FoodiRepository) : ViewModel() {
-    private val TAG = "FoodInfoViewModel"
+private const val TAG = "FoodInfoViewModel"
 
+class SearchFoodViewModel(private val repository: FoodiRepository) : ViewModel() {
     private var mJob : Job? = null
-    var foodResponse : NewFoodData? = null
-    var foodList = MutableLiveData<MutableList<FoodInfoData>>() // Food List that searched
-    var errorMessage = MutableLiveData<String>() // Management about error
-    var isProgressVisible = MutableLiveData<Boolean>() // Management Progressbar state
-    var addFoodLayoutVisible = MutableLiveData<Boolean>() // Manage status that no food
-    var isNextEnable = MutableLiveData<Boolean>()
-    var isPreviousEnable = MutableLiveData<Boolean>()
+    private var foodResponse : NewFoodData? = null
+    val foodList = MutableLiveData<MutableList<FoodInfoData>>() // Food List that searched
+    val errorMessage = MutableLiveData<String>() // Management about error
+    val isProgressVisible = MutableLiveData<Boolean>() // Management Progressbar state
+    val addFoodLayoutVisible = MutableLiveData<Boolean>() // Manage status that no food
+    val isNextEnable = MutableLiveData<Boolean>() // Manage next button enable
+    val isPreviousEnable = MutableLiveData<Boolean>() // Manage previous button enable
+    val isNightMode = MutableLiveData<Boolean>(false) // check night mode
 
     /**
      * For Get FoodList that searched from repository
      * **/
-
     fun getSearchFoodList(foodName : String , page : String) {
         mJob = CoroutineScope(Dispatchers.IO).launch {
             try {

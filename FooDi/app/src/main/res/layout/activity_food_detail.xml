@@ -20,7 +20,7 @@
             android:layout_marginTop="20dp"
             android:fontFamily="@font/swagger"
             android:text="@string/more_info"
-            android:textColor="#000"
+            android:textColor="@color/text_colors"
             android:textSize="20sp" />
 
         <ImageButton
@@ -38,7 +38,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/headerLayout"
         android:textSize="30sp"
-        android:textColor="#000"
+        android:textColor="@color/text_colors"
         android:fontFamily="@font/swagger"
         android:text="@string/food_name"
         android:gravity="center"
@@ -175,7 +175,7 @@
             android:layout_height="match_parent"
             app:layout_constraintRight_toLeftOf="@id/calculateEditText"
             android:textSize="@dimen/food_detail_text_size"
-            android:textColor="#000"
+            android:textColor="@color/text_colors"
             android:gravity="center_vertical"
             android:text="@string/serving_size"
             android:layout_weight="3"

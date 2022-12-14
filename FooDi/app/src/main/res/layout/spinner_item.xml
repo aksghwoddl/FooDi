@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:textSize="15sp"
     android:gravity="end"
-    android:textColor="#000"
+    android:textColor="@color/text_colors"
     android:padding="10dp"
     android:fontFamily="@font/swagger"
     />

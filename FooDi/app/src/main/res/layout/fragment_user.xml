@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
         android:fontFamily="@font/swagger"
-        android:textColor="#000"
+        android:textColor="@color/text_colors"
         android:gravity="center"
         android:text="@string/maintenance_calorie"
         android:textSize="20sp"
@@ -31,7 +31,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/swagger"
-            android:textColor="#000"
+            android:textColor="@color/text_colors"
             android:gravity="center"
             android:text="@string/goal_calorie"
             android:textSize="15sp"
@@ -80,7 +80,7 @@
             android:layout_marginEnd="10dp"
             android:fontFamily="@font/swagger"
             android:text="@string/age"
-            android:textColor="#000"
+            android:textColor="@color/text_colors"
             android:textSize="20sp" />
 
         <NumberPicker
@@ -109,7 +109,7 @@
             android:layout_marginEnd="10dp"
             android:fontFamily="@font/swagger"
             android:text="@string/weight"
-            android:textColor="#000"
+            android:textColor="@color/text_colors"
             android:textSize="20sp" />
 
         <NumberPicker

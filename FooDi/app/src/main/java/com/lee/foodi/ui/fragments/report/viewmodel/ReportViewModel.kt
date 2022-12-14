@@ -21,8 +21,8 @@ import java.util.*
 private const val TAG = "ReportViewModel"
 
 class ReportViewModel(private val repository: FoodiRepository) : ViewModel() {
-    val summaryList = MutableLiveData<MutableList<Diary>>()
-    val averageCalorie = MutableLiveData<String>("0")
+    val summaryList = MutableLiveData<MutableList<Diary>>() // Diary Summary List
+    val averageCalorie = MutableLiveData<String>("0") // Average Calorie
 
     private var mDayList = mutableListOf<Int>()
 

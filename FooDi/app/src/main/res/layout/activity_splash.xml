@@ -15,7 +15,7 @@
         android:text="@string/app_name"
         android:textSize="50sp"
         android:gravity="center"
-        android:textColor="#000"
+        android:textColor="@color/text_colors"
         />
     <TextView
         android:id="@+id/subTitleTextView"
@@ -25,7 +25,7 @@
         android:text="@string/sub_title"
         android:fontFamily="@font/swagger"
         android:gravity="center"
-        android:textColor="#000"
+        android:textColor="@color/text_colors"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -16,6 +16,7 @@ import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
 import com.lee.foodi.R
 import com.lee.foodi.common.*
 import com.lee.foodi.common.manager.FooDiPreferenceManager
@@ -69,6 +70,7 @@ class DiaryFragment : Fragment() {
         init()
         addListeners()
         observeData()
+        mViewModel.isNightMode.value = Utils.checkNightMode(FoodiNewApplication.getInstance())
     }
 
 
@@ -153,6 +155,21 @@ class DiaryFragment : Fragment() {
 
             amountFat.observe(viewLifecycleOwner){
                 Utils.convertValueWithErrorCheck(binding.amountFatTextView , getString(R.string.summary_format) , it)
+            }
+
+            // Night Mode
+            isNightMode.observe(viewLifecycleOwner){
+                if(it){
+                    with(binding){
+                        calendarButton.setImageResource(R.drawable.ic_baseline_calendar_month_24_night)
+                        searchButton.setImageResource(R.drawable.ic_baseline_search_24_night)
+                    }
+                } else {
+                    with(binding){
+                        calendarButton.setImageResource(R.drawable.ic_baseline_calendar_month_24)
+                        searchButton.setImageResource(R.drawable.ic_baseline_search_24)
+                    }
+                }
             }
         }
     }

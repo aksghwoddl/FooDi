@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.lee.foodi.R
 import com.lee.foodi.common.*
 import com.lee.foodi.data.repository.FoodiRepository
 import com.lee.foodi.data.rest.model.FoodInfoData
@@ -42,6 +43,7 @@ class SearchActivity : AppCompatActivity() {
         initRecyclerView()
         addListeners()
         observeData()
+        mViewModel.isNightMode.value = Utils.checkNightMode(FoodiNewApplication.getInstance())
         if(!::mAddNewFoodDialog.isInitialized){
             mAddNewFoodDialog = AddNewFoodDialog(this)
         }
@@ -177,12 +179,23 @@ class SearchActivity : AppCompatActivity() {
                }
            }
 
+           // Next Button enable
            isNextEnable.observe(this@SearchActivity){
                binding.nextButton.isEnabled = it
            }
 
+           // Previous Button enable
            isPreviousEnable.observe(this@SearchActivity){
                binding.previousButton.isEnabled = it
+           }
+
+           // Night Mode
+           isNightMode.observe(this@SearchActivity){
+               if(it){
+                   binding.backButton.setImageResource(R.drawable.ic_baseline_arrow_back_24_night)
+               } else {
+                   binding.backButton.setImageResource(R.drawable.ic_baseline_arrow_back_24)
+               }
            }
        }
     }

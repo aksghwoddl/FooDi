@@ -49,6 +49,7 @@ class AddFoodViewModel(private val repository: FoodiRepository) : ViewModel() {
     val buttonText = MutableLiveData<String>()
     val errorMessage = MutableLiveData<String>()
     val isProgressShowing = MutableLiveData<Boolean>(false)
+    val isNightMode = MutableLiveData<Boolean>(false)
 
     /**
      * Ingredients for add food

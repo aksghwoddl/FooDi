@@ -14,7 +14,7 @@
         android:text="@string/network_dialog_header"
         android:textSize="20sp"
         android:gravity="center"
-        android:textColor="#000"
+        android:textColor="@color/text_colors"
         android:background="@color/main_color"
         />
 

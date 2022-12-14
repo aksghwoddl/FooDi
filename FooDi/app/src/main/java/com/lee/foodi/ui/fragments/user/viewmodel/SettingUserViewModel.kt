@@ -16,9 +16,10 @@ class SettingUserViewModel : ViewModel() {
     var age = 0
     var gender = ""
 
-    var maintenanceCalorie = MutableLiveData<String>()
-    var genderButtonToggled = MutableLiveData<Boolean>()
-    var isOnSettingTimer = MutableLiveData<Boolean>()
+    val maintenanceCalorie = MutableLiveData<String>() // Maintenance Calorie
+    val genderButtonToggled = MutableLiveData<Boolean>() // Gender
+    val isOnSettingTimer = MutableLiveData<Boolean>() // Check setting timer
+    val isNightMode = MutableLiveData<Boolean>(false) // Check Night Mdoe
 
     /**
      * Function for update user info

@@ -21,7 +21,7 @@
             android:fontFamily="@font/swagger"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
-            android:textColor="#000"
+            android:textColor="@color/text_colors"
             android:textSize="20sp"
             />
     </RelativeLayout>
@@ -47,7 +47,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/hour"
-            android:textColor="#000"
+            android:textColor="@color/text_colors"
             android:fontFamily="@font/swagger"
             android:textSize="20sp"
             android:layout_gravity="center_vertical"
@@ -76,7 +76,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/minute"
-            android:textColor="#000"
+            android:textColor="@color/text_colors"
             android:fontFamily="@font/swagger"
             android:textSize="20sp"
             android:layout_gravity="center_vertical"

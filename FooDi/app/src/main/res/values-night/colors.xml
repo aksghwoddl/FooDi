@@ -10,7 +10,7 @@
     <color name="main_color">#f1c40e</color>
     <color name="toggle_male">#00a1ff</color>
     <color name="toggle_female">#ff6600</color>
-    <color name="text_colors">#000</color>
-    <color name="image_button_background_color">#fff</color>
-    <color name="search_background_color">#fff</color>
+    <color name="text_colors">#fff</color>
+    <color name="image_button_background_color">#000</color>
+    <color name="search_background_color">#000</color>
 </resources>

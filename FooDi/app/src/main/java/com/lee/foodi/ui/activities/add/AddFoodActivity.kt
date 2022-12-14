@@ -7,6 +7,7 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.jakewharton.rxbinding3.view.clicks
 import com.lee.foodi.R
+import com.lee.foodi.common.FoodiNewApplication
 import com.lee.foodi.common.NETWORK_NOT_CONNECTED
 import com.lee.foodi.common.NOT_AVAILABLE
 import com.lee.foodi.common.Utils
@@ -37,6 +38,7 @@ class AddFoodActivity : AppCompatActivity() {
         mViewModel = AddFoodViewModel.getInstance()!!
         addListeners()
         observeData()
+        mViewModel.isNightMode.value = Utils.checkNightMode(FoodiNewApplication.getInstance())
         savedInstanceState?:let {
             mNecessaryInfoFragment = NecessaryInfoFragment.newInstance()
             supportFragmentManager.beginTransaction().add(R.id.contentsFragment ,  mNecessaryInfoFragment).commit()
@@ -143,6 +145,14 @@ class AddFoodActivity : AppCompatActivity() {
                     binding.progressBar.visibility = View.VISIBLE
                 } else {
                     binding.progressBar.visibility = View.GONE
+                }
+            }
+
+            isNightMode.observe(this@AddFoodActivity){
+                if(it){
+                    binding.backButton.setImageResource(R.drawable.ic_baseline_arrow_back_24_night)
+                } else {
+                    binding.backButton.setImageResource(R.drawable.ic_baseline_arrow_back_24)
                 }
             }
         }

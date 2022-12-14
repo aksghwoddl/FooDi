@@ -1,6 +1,7 @@
 package com.lee.foodi.ui.fragments.user
 
 import android.annotation.SuppressLint
+import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -9,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.NumberPicker
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.bumptech.glide.Glide
 import com.lee.foodi.R
 import com.lee.foodi.common.FoodiNewApplication
 import com.lee.foodi.common.Utils
@@ -67,10 +69,14 @@ class UserFragment : Fragment() {
 
         binding.goalCalorieTextView.text = String.format(getString(R.string.goal_calorie) , mPreferenceManager.goalCalorie)
         addListeners()
-        observeDate()
+        observeData()
         initNumberPicker()
+        mViewModel.isNightMode.value = Utils.checkNightMode(FoodiNewApplication.getInstance())
     }
 
+    /**
+     * Function for init Number Pickers
+     * **/
     private fun initNumberPicker() {
         with(binding) {
            agePicker.run {
@@ -133,11 +139,14 @@ class UserFragment : Fragment() {
         }
     }
 
-    private fun observeDate() {
+    private fun observeData() {
         with(mViewModel){
+            // Maintenance calorie
             maintenanceCalorie.observe(viewLifecycleOwner){
                 binding.maintenanceCalorie.text = String.format(getString(R.string.maintenance_calorie) , it)
             }
+
+            // Gender
             genderButtonToggled.observe(viewLifecycleOwner){
                 if(it){
                     with(binding.genderToggleButton){
@@ -152,11 +161,21 @@ class UserFragment : Fragment() {
                 }
                 gender = binding.genderToggleButton.text.toString()
             }
+
+            // Setting Timer
             isOnSettingTimer.observe(viewLifecycleOwner){
                 mPreferenceManager.isTimerOn = it
                 with(binding){
                     settingTimerSwitch.isChecked = it
                     settingTimerButton.isEnabled = it
+                }
+            }
+
+            isNightMode.observe(viewLifecycleOwner){
+                if(it){
+                    Glide.with(requireContext()).load(R.drawable.ic_baseline_create_24_night).into(binding.editGoalCalorieImage)
+                } else {
+                    Glide.with(requireContext()).load(R.drawable.ic_baseline_create_24).into(binding.editGoalCalorieImage)
                 }
             }
         }

@@ -119,6 +119,7 @@ class ReportFragment : Fragment() {
                 setDrawAxisLine(false) // xAxis 선 draw 여부
                 setDrawGridLines(false)
                 typeface = Typeface.createFromAsset(requireContext().assets , "swagger.ttf")
+                textColor = resources.getColor(R.color.text_colors)
             }
 
             val yAxis = axisLeft
@@ -126,6 +127,7 @@ class ReportFragment : Fragment() {
                 textColor = Color.BLACK
                 setDrawAxisLine(false)
                 typeface = Typeface.createFromAsset(requireContext().assets , "swagger.ttf")
+                textColor = resources.getColor(R.color.text_colors)
                 setStartAtZero(true)
                 val preferenceManager = FooDiPreferenceManager.getInstance(FoodiNewApplication.getInstance())
                 if(preferenceManager.goalCalorie  != "0"){
@@ -138,6 +140,7 @@ class ReportFragment : Fragment() {
                 textColor = Color.BLACK
                 setDrawAxisLine(false)
                 typeface = Typeface.createFromAsset(requireContext().assets , "swagger.ttf")
+                textColor = resources.getColor(R.color.text_colors)
                 setStartAtZero(true)
                 val preferenceManager = FooDiPreferenceManager.getInstance(FoodiNewApplication.getInstance())
                 if(preferenceManager.goalCalorie  != "0"){
@@ -149,7 +152,7 @@ class ReportFragment : Fragment() {
             with(legend){
                 form = Legend.LegendForm.LINE
                 textSize = 10f
-                textColor = Color.BLACK
+                textColor = resources.getColor(R.color.text_colors)
                 typeface = Typeface.createFromAsset(requireContext().assets , "swagger.ttf")
                 verticalAlignment = Legend.LegendVerticalAlignment.BOTTOM
                 horizontalAlignment = Legend.LegendHorizontalAlignment.CENTER

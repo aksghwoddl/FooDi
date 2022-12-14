@@ -40,7 +40,7 @@
                         android:layout_marginBottom="20dp"
                         android:fontFamily="@font/swagger"
                         android:text="@string/food_name"
-                        android:textColor="#000" />
+                        android:textColor="@color/text_colors" />
 
                     <EditText
                         android:id="@+id/foodNameEdiText"
@@ -67,7 +67,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/add_serving_size"
                         android:fontFamily="@font/swagger"
-                        android:textColor="#000"
+                        android:textColor="@color/text_colors"
                         android:layout_marginBottom="20dp"
                         />
 
@@ -97,7 +97,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/add_calories"
                         android:fontFamily="@font/swagger"
-                        android:textColor="#000"
+                        android:textColor="@color/text_colors"
                         android:layout_marginBottom="20dp"
                         />
 
@@ -127,7 +127,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/add_carbohydrate"
                         android:fontFamily="@font/swagger"
-                        android:textColor="#000"
+                        android:textColor="@color/text_colors"
                         android:layout_marginBottom="20dp"
                         />
 
@@ -157,7 +157,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/add_protein"
                         android:fontFamily="@font/swagger"
-                        android:textColor="#000"
+                        android:textColor="@color/text_colors"
                         android:layout_marginBottom="20dp"
                         />
 
@@ -187,7 +187,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/add_fat"
                         android:fontFamily="@font/swagger"
-                        android:textColor="#000"
+                        android:textColor="@color/text_colors"
                         android:layout_marginBottom="20dp"
                         />
 

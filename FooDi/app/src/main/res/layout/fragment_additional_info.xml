@@ -40,7 +40,7 @@
                         android:layout_marginBottom="20dp"
                         android:fontFamily="@font/swagger"
                         android:text="@string/add_sugar"
-                        android:textColor="#000" />
+                        android:textColor="@color/text_colors" />
 
                     <EditText
                         android:id="@+id/sugarEditText"
@@ -69,7 +69,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/add_salt"
                         android:fontFamily="@font/swagger"
-                        android:textColor="#000"
+                        android:textColor="@color/text_colors"
                         android:layout_marginBottom="20dp"
                         />
 
@@ -99,7 +99,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/add_saturated_fat"
                         android:fontFamily="@font/swagger"
-                        android:textColor="#000"
+                        android:textColor="@color/text_colors"
                         android:layout_marginBottom="20dp"
                         />
 
@@ -130,7 +130,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/add_trans_fat"
                         android:fontFamily="@font/swagger"
-                        android:textColor="#000"
+                        android:textColor="@color/text_colors"
                         android:layout_marginBottom="20dp"
                         />
 
@@ -161,7 +161,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/add_cholesterol"
                         android:fontFamily="@font/swagger"
-                        android:textColor="#000"
+                        android:textColor="@color/text_colors"
                         android:layout_marginBottom="20dp"
                         />
 
@@ -192,7 +192,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/add_company_name"
                         android:fontFamily="@font/swagger"
-                        android:textColor="#000"
+                        android:textColor="@color/text_colors"
                         android:layout_marginBottom="20dp"
                         />
 

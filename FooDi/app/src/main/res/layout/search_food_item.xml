@@ -18,7 +18,7 @@
         android:text="@string/food_name"
         android:fontFamily="@font/swagger"
         android:textSize="20sp"
-        android:textColor="#000"
+        android:textColor="@color/text_colors"
         android:singleLine="true"
         android:padding="7dp"
         android:gravity="center"

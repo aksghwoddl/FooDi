@@ -26,15 +26,16 @@ class DiaryViewModel(repository: FoodiRepository) : ViewModel() {
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    var date = MutableLiveData<String>(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy년MM월dd일")))
-    var diaryItems = MutableLiveData<MutableList<DiaryItem>>()
-    var goalCalorie = MutableLiveData<String>("0")
-    var spendCalories = MutableLiveData<String>("0")
-    var amountCarbon  = MutableLiveData<String>("0")
-    var amountProtein  = MutableLiveData<String>("0")
-    var amountFat  = MutableLiveData<String>("0")
-    var calorieProgress = MutableLiveData<Double>(0.0)
-    var isProgress = MutableLiveData<Boolean>(false)
+    val date = MutableLiveData<String>(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy년MM월dd일"))) // Selected date
+    val diaryItems = MutableLiveData<MutableList<DiaryItem>>() // Diary items in Room
+    val goalCalorie = MutableLiveData<String>("0") // Goal calorie
+    val spendCalories = MutableLiveData<String>("0") // Spend Calorie
+    val amountCarbon  = MutableLiveData<String>("0")
+    val amountProtein  = MutableLiveData<String>("0")
+    val amountFat  = MutableLiveData<String>("0")
+    val calorieProgress = MutableLiveData<Double>(0.0) // Manage calorie progress bar
+    val isProgress = MutableLiveData<Boolean>(false) // Manage progress bar
+    val isNightMode = MutableLiveData<Boolean>(false) // Check Night mode
 
     suspend fun getDiaryItems(date : String) : MutableList<DiaryItem>{
         isProgress.postValue(true)
@@ -44,6 +45,9 @@ class DiaryViewModel(repository: FoodiRepository) : ViewModel() {
         return ret.await()
     }
 
+    /**
+     * Function for add Diary Summary of the day
+     * **/
     @RequiresApi(Build.VERSION_CODES.O)
     suspend fun addDiarySummary() {
         Log.d(TAG, "addDiarySummary()")

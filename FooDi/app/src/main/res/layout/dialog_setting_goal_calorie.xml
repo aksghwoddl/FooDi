@@ -13,7 +13,7 @@
         android:textSize="15sp"
         android:gravity="center"
         android:fontFamily="@font/swagger"
-        android:textColor="#000"
+        android:textColor="@color/text_colors"
         />
 
     <LinearLayout
@@ -35,7 +35,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/unit_calorie"
-            android:textColor="#000"
+            android:textColor="@color/text_colors"
             android:fontFamily="@font/swagger"
             android:textSize="20sp"
             android:layout_gravity="center_vertical"
