@@ -91,6 +91,9 @@ class Utils {
             Toast.makeText(FoodiNewApplication.getInstance() , message , Toast.LENGTH_SHORT).show()
         }
 
+        /**
+         * Function for network check
+         * **/
         fun checkNetworkConnection(context : Context) : String {
             val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
             val networkInfo = connectivityManager.activeNetwork

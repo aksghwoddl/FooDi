@@ -1,9 +1,12 @@
 package com.lee.foodi.data.rest
 
+import com.lee.foodi.common.CONNECTION_TIME_OUT
 import com.lee.foodi.common.FOOD_TARGET_URL
 import com.lee.foodi.common.NEW_FOOD_TARGET_URL
 import com.lee.foodi.data.rest.model.AddFoodData
 import com.lee.foodi.data.rest.model.NewFoodData
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -11,6 +14,7 @@ import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Query
+import java.util.concurrent.TimeUnit
 
 //private const val SERVICE_KEY = "kSh3QnPHhrIKWvXEVaiTxPZRMErAsaXXy7Xszy%2FCBI7YSBsbd4S0Vfrf5KRnoZhT9GhcQ9L9fYMbbaBEG33dXA%3D%3D"
 interface RestService {
@@ -35,9 +39,18 @@ class RestServiceInstance{
         private lateinit var restService : RestService
 
         fun getInstance() : RestService {
+            val interceptor = HttpLoggingInterceptor()
+            interceptor.level= HttpLoggingInterceptor.Level.BODY
+
+            val okHttpClient = OkHttpClient.Builder()
+                .addInterceptor(interceptor)
+                .connectTimeout(CONNECTION_TIME_OUT , TimeUnit.MILLISECONDS)
+                .build()
+
             if(!::restService.isInitialized){
                 val retrofit = Retrofit.Builder()
                     .baseUrl(FOOD_TARGET_URL)
+                    .client(okHttpClient)
                     .addConverterFactory(GsonConverterFactory.create())
                     .build()
                 restService = retrofit.create(RestService::class.java)
