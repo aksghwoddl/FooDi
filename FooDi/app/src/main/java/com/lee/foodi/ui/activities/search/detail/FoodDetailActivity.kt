@@ -15,6 +15,7 @@ import android.view.View
 import android.widget.ArrayAdapter
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import com.jakewharton.rxbinding3.widget.textChanges
 import com.lee.foodi.R
 import com.lee.foodi.common.*
 import com.lee.foodi.common.manager.FooDiPreferenceManager
@@ -76,20 +77,14 @@ class FoodDetailActivity : AppCompatActivity() {
         }
         mFooDiPreferenceManager = FooDiPreferenceManager.getInstance(FoodiNewApplication.getInstance())
         updateIngredientTextView(false)
-        initSpinner()
         addListeners()
     }
 
-    private fun initSpinner() {
-        val unitArray = resources.getStringArray(R.array.unit_array)
-        val adapter = ArrayAdapter(this , com.google.android.material.R.layout.support_simple_spinner_dropdown_item , unitArray)
-        binding.unitSpinner.adapter = adapter
-
-    }
-
+    @SuppressLint("CheckResult")
     @RequiresApi(Build.VERSION_CODES.O)
     private fun addListeners() {
         with(binding){
+            // Add Button
             addButton.setOnClickListener {
                 CoroutineScope(Dispatchers.IO).launch {
                     updateFoodInfo()
@@ -105,8 +100,13 @@ class FoodDetailActivity : AppCompatActivity() {
                     }
                 }
             }
-            calculateEditText.addTextChangedListener(CalculateTextChangedListener())
 
+            // Calculate EditText
+            calculateEditText.textChanges().subscribe{
+                updateIngredientTextView(true)
+            }
+
+            // Back Button
             backButton.setOnClickListener {
                 finish()
             }
@@ -121,7 +121,7 @@ class FoodDetailActivity : AppCompatActivity() {
         val db = DiaryDatabase.getInstance()
         val date = intent.getStringExtra(EXTRA_SELECTED_DATE)!!
         val time = LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH : mm"))
-        val servingSize = binding.calculateEditText.text.toString() + binding.unitSpinner.selectedItem.toString()
+        val servingSize = binding.calculateEditText.text.toString() + binding.unitTextView.text
         val queryFood = DiaryItemEntity(null , date , mFoodInfoData , time , servingSize)
         db.diaryDao().addDiaryItem(queryFood)
     }
@@ -150,22 +150,6 @@ class FoodDetailActivity : AppCompatActivity() {
         } else {
             Log.d(TAG, "updateTimer: timer is enable but selected date is not today")
         }
-    }
-
-    /**
-     * Watching Serving Size EditText Listener
-     * **/
-    private inner class CalculateTextChangedListener : TextWatcher {
-        override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) { }
-
-        override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-            mFoodInfoData.servingWeight
-            if(binding.calculateTextView.text.isNotEmpty()){
-                updateIngredientTextView(true)
-            }
-        }
-
-        override fun afterTextChanged(p0: Editable?) { }
     }
 
     /**

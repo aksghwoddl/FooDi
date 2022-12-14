@@ -22,20 +22,21 @@
     <!-- Food Info -->
     <string name="food_name">음식이름</string>
     <string name="company_name">회사이름</string>
-    <string name="no_search_food">검색한 음식이 존재하지 않습니다. \n 새로 추가 하시겠습니까?</string>
-    <string name="ask_add_food">검색한 음식이 존재하지 않나요? \n 새로 추가 해보세요!</string>
+    <string name="no_search_food">검색한 음식이 존재하지 않습니다.\n 새로 추가 하시겠습니까?</string>
+    <string name="ask_add_food">검색한 음식이 존재하지 않나요?\n 새로 추가 해보세요!</string>
     <string name="serving_size">1회 제공량 : </string>
     <string name="calories">칼로리 : %s kcal</string>
     <string name="carbohydrate">탄수화물 : %s g</string>
     <string name="protein">단백질 : %s g</string>
     <string name="fat">지방 : %s g</string>
     <string name="sugar">당류 : %s g</string>
-    <string name="salt">나트륨 : %s g</string>
-    <string name="cholesterol">콜레스테롤 : %s g</string>
+    <string name="salt">나트륨 : %s mg</string>
+    <string name="cholesterol">콜레스테롤 : %s mg</string>
     <string name="saturated_fat">포화지방 : %s g</string>
     <string name="trans_fat">트랜스지방 : %s g</string>
     <string name="begin_year">제조년월 : %s</string>
     <string name="more_info">상세정보</string>
+    <string name="gram">g</string>
     <!---->
 
     <!--Add Food -->

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
@@ -165,7 +164,6 @@
         android:layout_height="50dp"
         app:layout_constraintBottom_toTopOf="@id/addButton"
         app:layout_constraintTop_toBottomOf="@id/detailLayout"
-
         android:orientation="horizontal"
         android:weightSum="10"
         android:paddingStart="20dp"
@@ -180,7 +178,7 @@
             android:textColor="#000"
             android:gravity="center_vertical"
             android:text="@string/serving_size"
-            android:layout_weight="4.5"
+            android:layout_weight="3"
             android:fontFamily="@font/swagger"
             android:layout_marginEnd="10dp"
             />
@@ -190,16 +188,17 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
-            android:layout_weight="5"
+            android:layout_weight="6"
             android:inputType="number"
-
             />
 
-        <Spinner
-            android:id="@+id/unitSpinner"
+        <TextView
+            android:id="@+id/unitTextView"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="0.5"
+            android:layout_height="wrap_content"
+            android:text="@string/gram"
+            android:fontFamily="@font/swagger"
+            android:layout_marginStart="10dp"
             />
     </LinearLayout>
 

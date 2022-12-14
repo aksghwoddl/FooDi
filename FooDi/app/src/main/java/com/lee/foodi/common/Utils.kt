@@ -3,6 +3,7 @@ package com.lee.foodi.common
 import android.app.Dialog
 import android.content.Context
 import android.graphics.Point
+import android.net.ConnectivityManager
 import android.os.Build
 import android.util.Log
 import android.view.View
@@ -88,6 +89,12 @@ class Utils {
          * **/
         fun toastMessage(message : String){
             Toast.makeText(FoodiNewApplication.getInstance() , message , Toast.LENGTH_SHORT).show()
+        }
+
+        fun checkNetworkConnection(context : Context) : String {
+            val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+            val networkInfo = connectivityManager.activeNetwork
+            return networkInfo.toString()
         }
     }
 }

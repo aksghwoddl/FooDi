@@ -3,16 +3,12 @@ package com.lee.foodi.ui.activities.search
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import android.text.Editable
 import android.view.KeyEvent
 import android.view.View
-import android.view.View.OnFocusChangeListener
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.lee.foodi.R
 import com.lee.foodi.common.*
 import com.lee.foodi.data.repository.FoodiRepository
 import com.lee.foodi.data.rest.model.FoodInfoData
@@ -23,6 +19,8 @@ import com.lee.foodi.ui.activities.search.dialog.AddNewFoodDialog
 import com.lee.foodi.ui.activities.search.viewmodel.SearchFoodViewModel
 import com.lee.foodi.ui.adapter.SearchFoodRecyclerAdapter
 import com.lee.foodi.ui.factory.FoodiViewModelFactory
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
 
 private const val TAG = "SearchFragment"
 
@@ -73,18 +71,26 @@ class SearchActivity : AppCompatActivity() {
         with(binding){
             // Search Button Listener
             searchInputTextLayout.setEndIconOnClickListener {
-                val foodName = searchInputText.text.toString()
-                mViewModel.getSearchFoodList(foodName , PAGE_ONE)
-                mCurrentPage = 1
+                if(Utils.checkNetworkConnection(this@SearchActivity) != "null"){
+                    val foodName = searchInputText.text.toString()
+                    mViewModel.getSearchFoodList(foodName , PAGE_ONE)
+                    mCurrentPage = 1
+                } else {
+                    mViewModel.errorMessage.value = NETWORK_NOT_CONNECTED
+                }
             }
 
             // Key Event Listener
             searchInputText.setOnKeyListener { _ , keyCode, _ ->
                 when(keyCode){
                     KeyEvent.KEYCODE_ENTER -> {
-                        val foodName = searchInputText.text.toString()
-                        mViewModel.getSearchFoodList(foodName , PAGE_ONE)
-                        mCurrentPage = 1
+                        if(Utils.checkNetworkConnection(this@SearchActivity) != "null"){
+                            val foodName = searchInputText.text.toString()
+                            mViewModel.getSearchFoodList(foodName , PAGE_ONE)
+                            mCurrentPage = 1
+                        } else {
+                            mViewModel.errorMessage.value = NETWORK_NOT_CONNECTED
+                        }
                     }
                 }
                 false

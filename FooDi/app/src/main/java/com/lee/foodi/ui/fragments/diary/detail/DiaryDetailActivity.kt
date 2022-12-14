@@ -10,6 +10,7 @@ import android.view.View
 import android.widget.ArrayAdapter
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import com.jakewharton.rxbinding3.widget.textChanges
 import com.lee.foodi.R
 import com.lee.foodi.common.EXTRA_SELECTED_DIARY_ITEM
 import com.lee.foodi.common.NOT_AVAILABLE
@@ -65,20 +66,14 @@ class DiaryDetailActivity : AppCompatActivity() {
             }
         }
         updateIngredientTextView(false)
-        initSpinner()
         addListeners()
     }
 
-    private fun initSpinner() {
-        val unitArray = resources.getStringArray(R.array.unit_array)
-        val adapter = ArrayAdapter(this , com.google.android.material.R.layout.support_simple_spinner_dropdown_item , unitArray)
-        binding.unitSpinner.adapter = adapter
-
-    }
-
+    @SuppressLint("CheckResult")
     @RequiresApi(Build.VERSION_CODES.O)
     private fun addListeners() {
         with(binding){
+            // Modify Button
             modifyButton.setOnClickListener {
                 CoroutineScope(Dispatchers.IO).launch {
                     updateFoodInfo()
@@ -88,8 +83,13 @@ class DiaryDetailActivity : AppCompatActivity() {
                     }
                 }
             }
-            calculateEditText.addTextChangedListener(CalculateTextChangedListener())
 
+            // Calculate EditText
+            calculateEditText.textChanges().subscribe {
+                updateIngredientTextView(true)
+            }
+
+            // Back Button
             backButton.setOnClickListener {
                 finish()
             }
@@ -102,7 +102,7 @@ class DiaryDetailActivity : AppCompatActivity() {
                 mDiaryItem.index
                 , mDiaryItem.date
                 , mDiaryItem.food
-                , mDiaryItem.time ,binding.calculateEditText.text.toString() + binding.unitSpinner.selectedItem)
+                , mDiaryItem.time ,binding.calculateEditText.text.toString() + binding.unitTextView.text)
             FoodiRepository.getInstance().updateDiaryItem(diaryItemEntity)
             Log.d(TAG, "updateDiaryItem: $diaryItemEntity")
         }
@@ -217,27 +217,11 @@ class DiaryDetailActivity : AppCompatActivity() {
     private fun String.convertStringToInt() : String {
         return if(this == NOT_AVAILABLE){
             this
-        }else if(this.contains("g")|| this.contains("oz")){
+        }else if(this.contains("g")){
             this.substring(0 , this.length -1)
         }
         else {
             this.toDouble().roundToInt().toString()
         }
-    }
-
-    /**
-     * Watching Serving Size EditText Listener
-     * **/
-    private inner class CalculateTextChangedListener : TextWatcher {
-        override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) { }
-
-        override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-            mDiaryItem.food!!.servingWeight
-            if(binding.calculateTextView.text.isNotEmpty()){
-                updateIngredientTextView(true)
-            }
-        }
-
-        override fun afterTextChanged(p0: Editable?) { }
     }
 }

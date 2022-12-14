@@ -7,6 +7,7 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.jakewharton.rxbinding3.view.clicks
 import com.lee.foodi.R
+import com.lee.foodi.common.NETWORK_NOT_CONNECTED
 import com.lee.foodi.common.NOT_AVAILABLE
 import com.lee.foodi.common.Utils
 import com.lee.foodi.data.rest.model.AddFoodData
@@ -59,10 +60,12 @@ class AddFoodActivity : AppCompatActivity() {
                         mViewModel.progress.value = 2
                         mViewModel.headTitle.value = resources.getString(R.string.next_add_food_header_title)
                         mViewModel.buttonText.value = resources.getString(R.string.confirm)
-                    } else {
-                        return@setOnClickListener
                     }
                 } else { // When progress is 2
+                    if(Utils.checkNetworkConnection(this@AddFoodActivity) == "null"){
+                        mViewModel.errorMessage.value = NETWORK_NOT_CONNECTED
+                        return@setOnClickListener
+                    }
                     CoroutineScope(Dispatchers.IO).launch {
                         val addFoodData : AddFoodData
                         with(mViewModel){
