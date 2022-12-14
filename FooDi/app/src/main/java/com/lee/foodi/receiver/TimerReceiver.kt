@@ -37,7 +37,7 @@ class TimerReceiver : BroadcastReceiver() {
                 NotificationCompat.Builder(context!!)
             }
             builder.apply {
-                setSmallIcon(R.drawable.ic_launcher_foreground)
+                setSmallIcon(R.mipmap.ic_launcher)
                 setContentTitle(context.getString(R.string.app_name))
                 setContentText(context.getString(R.string.notification_timer_contents))
                 priority = NotificationCompat.PRIORITY_DEFAULT
