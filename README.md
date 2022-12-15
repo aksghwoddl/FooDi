@@ -42,21 +42,39 @@
 ### 🛠 구현 사항
 ##### 1️⃣ 음식 검색하기
 ###### Rest 통신을 통한 서버에 저장된 음식의 정보를 가져오는 기능
+<div align="center">
+ <img width="30%" alt="app_main" src="https://user-images.githubusercontent.com/65700842/207863055-f4ee8a91-57cf-475e-a3c2-0a1325b34d5a.gif">
+</div>
 
 ##### 2️⃣ 다이어리
 ###### RoomDB를 통해 사용자가 섭취한 음식을 기록하는 기능
+<p align="center">
+ <img width="30%" alt="app_main" src="https://user-images.githubusercontent.com/65700842/207863284-a0ee937e-1514-4d3b-8ec3-149ae59e6b4d.gif">
+ <img width="30%" alt="app_main" src="https://user-images.githubusercontent.com/65700842/207863737-b8744aee-e00d-43d9-9395-364a92433a71.gif">
+</p>
 
 ##### 3️⃣ 음식 추가하기
 ###### Rest 통신을 통해 검색시에 존재하지 않는 음식을 사용자가 직접 추가하는 기능
+<div align="center">
+ <img width="30%" alt="app_main" src="https://user-images.githubusercontent.com/65700842/207865711-f172307a-a414-43be-9218-7b96d02dd02d.gif">
+</div>
+
 
 ##### 4️⃣ 리포트
 ###### RoomDB에 저장된 데이터를 MPAndroidChart 라이브러리를 활용하여 그래프로 표시
-
+<div align="center">
+ <img width="30%" alt="app_main" src="https://user-images.githubusercontent.com/65700842/207864685-62c4098b-14ea-47f6-b28d-125041b6004a.gif">
+</div>
 
 ##### 5️⃣ 설정 화면
 ###### 사용자가 설정한 옵션을 SharedPreference에 저장하여 사용하도록 구현
-
+<div align="center">
+ <img width="30%" alt="app_main" src="https://user-images.githubusercontent.com/65700842/207866066-0a459971-8da7-46ed-b65e-c5b4e2d1a085.gif">
+</div>
 
 ##### 6️⃣ 식단 타이머
 ###### BroadcastReceiver , Alaram Manager , Pending Intent를 사용하여 사용자가 식단을 기록한 시간으로 부터 설정한 시간이 지나면 Notification을 보내는 기능
+<div align="center">
+ <img width="30%" alt="app_main" src="https://user-images.githubusercontent.com/65700842/207862665-867f14ca-7a75-44f3-9f8f-29c089b4117d.gif">
+</div>
 
