@@ -12,6 +12,7 @@ import com.lee.foodi.ui.factory.FoodiViewModelFactory
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.net.ConnectException
 
 private const val TAG = "AddFoodViewModel"
 
@@ -67,19 +68,24 @@ class AddFoodViewModel(private val repository: FoodiRepository) : ViewModel() {
     val cholesterol = MutableLiveData<String>()
     val companyName = MutableLiveData<String>()
 
-    suspend fun postRequestAddFood(addFoodData: AddFoodData){ 
-        CoroutineScope(Dispatchers.IO).launch {
-            isProgressShowing.postValue(true)
-            val response = repository.addNewFood(addFoodData)
-            if(response.isSuccessful){
-                    CoroutineScope(Dispatchers.Main).launch { 
+    suspend fun postRequestAddFood(addFoodData: AddFoodData){
+        try{
+            CoroutineScope(Dispatchers.IO).launch {
+                isProgressShowing.postValue(true)
+                val response = repository.addNewFood(addFoodData)
+                if(response.isSuccessful){
+                    CoroutineScope(Dispatchers.Main).launch {
                         Utils.toastMessage("성공적으로 저장하였습니다.")
                         isProgressShowing.value = false
                     }
-            } else {
-                errorMessage.postValue("서버에 전송 실패하였습니다.")
-                isProgressShowing.postValue(false)
+                } else {
+                    errorMessage.postValue("서버에 전송 실패하였습니다.")
+                    isProgressShowing.postValue(false)
+                }
             }
+        } catch (connectException : ConnectException){
+            errorMessage.postValue("서버와의 연결을 확인해주세요.")
+            isProgressShowing.value = false
         }
     }
 }

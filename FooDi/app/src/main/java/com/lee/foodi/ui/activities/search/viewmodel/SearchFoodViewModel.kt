@@ -7,6 +7,7 @@ import com.lee.foodi.data.repository.FoodiRepository
 import com.lee.foodi.data.rest.model.FoodInfoData
 import com.lee.foodi.data.rest.model.NewFoodData
 import kotlinx.coroutines.*
+import java.net.ConnectException
 import java.net.SocketTimeoutException
 
 private const val TAG = "FoodInfoViewModel"
@@ -45,11 +46,14 @@ class SearchFoodViewModel(private val repository: FoodiRepository) : ViewModel()
                         }
                     }
                 } else {
-                    errorMessage.postValue("검색어가 입력되지 않았습니다!")
+                    errorMessage.postValue("검색어가 입력되지 않았습니다.")
                     isProgressVisible.postValue(false)
                 }
-            }catch (socketTimeOutException : SocketTimeoutException){
-                errorMessage.postValue("서버와 통신시간이 초과하였습니다!! 다시 시도해주세요.")
+            } catch (socketTimeOutException : SocketTimeoutException){
+                errorMessage.postValue("서버와 통신시간이 초과하였습니다. 다시 시도해주세요.")
+                isProgressVisible.postValue(false)
+            } catch(connectException : ConnectException){
+                errorMessage.postValue("서버와의 연결 상태를 확인해주세요.")
                 isProgressVisible.postValue(false)
             }
         }
