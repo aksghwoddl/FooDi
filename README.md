@@ -33,6 +33,7 @@
 
 #### ▪️ Server
 <p>
+<img src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=Python&logoColor=white">
 <img src="https://img.shields.io/badge/dJango-092E20?style=for-the-badge&logo=Django&logoColor=white">
 <img src="https://img.shields.io/badge/SQLite-003B57?style=for-the-badge&logo=SQLite&logoColor=white">
 </p>
@@ -57,5 +58,5 @@
 
 
 ##### 6️⃣ 식단 타이머
-###### Broadcast , Alaram Manager , Pending Intent를 사용하여 사용자가 식단을 기록한 시간으로 부터 설정한 시간이 지나면 Notification을 보내는 기능
+###### BroadcastReceiver , Alaram Manager , Pending Intent를 사용하여 사용자가 식단을 기록한 시간으로 부터 설정한 시간이 지나면 Notification을 보내는 기능
 
