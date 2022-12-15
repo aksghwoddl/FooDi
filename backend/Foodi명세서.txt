@@ -22,6 +22,7 @@ $ python manage.py migrate
 ##### 현재 서버에 배포가 완료되지 않았기에 로컬에서 서버를 돌려야 한다.
 ##### 그러므로 아직까지는 시작전에 IP를 유동적으로 변경 해주어야함
 ##### runserver.py , request.py에 있는 ip를 현재 접속되어 있는 네트워크의 Ip로 변경 해준다.
+##### FooDi Android app 폴더 내부에 존재하는 NetworkConst.kt 의 NEW_FOOD_TARGET_URL의 ip도 함께 변경해주고 app을 설치해야 한다.
 
 디렉토리 : /backend
 터미널 : bash
