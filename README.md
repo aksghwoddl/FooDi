@@ -20,15 +20,13 @@
 <p>
 <img src="https://img.shields.io/badge/Android-3DDC84?style=for-the-badge&logo=Android&logoColor=white">
 <img src="https://img.shields.io/badge/Kotlin-7F52FF?style=for-the-badge&logo=Kotlin&logoColor=white">
-</p>
-
-##### - 사용 라이브러리
-<p>
 <img src="https://img.shields.io/badge/RoomDB-003B57?style=for-the-badge&logo=SQLite&logoColor=white">
 <img src="https://img.shields.io/badge/RxBinding-B7178C?style=for-the-badge&logo=ReactiveX&logoColor=white">
-<img src="https://img.shields.io/badge/Retrofit2-faff00?style=for-the-badge&logo=&logoColor=white">
-<img src="https://img.shields.io/badge/MpAndriodChart-0F9D58?style=for-the-badge&logo=&logoColor=white">
+<img src="https://img.shields.io/badge/Retrofit2-3E4348?style=for-the-badge&logo=Square&logoColor=white">
 <img src="https://img.shields.io/badge/DataBinding-0F9D58?style=for-the-badge&logo=&logoColor=white">
+<img src="https://img.shields.io/badge/MVVM-0F9D58?style=for-the-badge&logo=&logoColor=white">
+<img src="https://img.shields.io/badge/Coroutine-0F9D58?style=for-the-badge&logo=&logoColor=white">
+<img src="https://img.shields.io/badge/MpAndriodChart-0F9D58?style=for-the-badge&logo=&logoColor=white">
 </p>
 
 #### ▪️ Server
