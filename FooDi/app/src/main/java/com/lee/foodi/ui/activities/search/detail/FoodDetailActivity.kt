@@ -9,18 +9,16 @@ import android.os.Build
 import android.os.Bundle
 import android.os.SystemClock
 import android.text.Editable
-import android.text.TextWatcher
 import android.util.Log
 import android.view.View
-import android.widget.ArrayAdapter
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.jakewharton.rxbinding3.widget.textChanges
 import com.lee.foodi.R
 import com.lee.foodi.common.*
 import com.lee.foodi.common.manager.FooDiPreferenceManager
+import com.lee.foodi.data.repository.FoodiRepository
 import com.lee.foodi.data.rest.model.FoodInfoData
-import com.lee.foodi.data.room.db.DiaryDatabase
 import com.lee.foodi.data.room.entity.DiaryItemEntity
 import com.lee.foodi.databinding.ActivityFoodDetailBinding
 import com.lee.foodi.receiver.TimerReceiver
@@ -97,6 +95,7 @@ class FoodDetailActivity : AppCompatActivity() {
                     }
                     CoroutineScope(Dispatchers.Main).launch {
                         Utils.toastMessage("정상적으로 추가 되었습니다.")
+                        finish()
                     }
                 }
             }
@@ -118,12 +117,11 @@ class FoodDetailActivity : AppCompatActivity() {
      * **/
     @RequiresApi(Build.VERSION_CODES.O)
     private suspend fun addFoodIntoDatabase() {
-        val db = DiaryDatabase.getInstance()
         val date = intent.getStringExtra(EXTRA_SELECTED_DATE)!!
         val time = LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH : mm"))
         val servingSize = binding.calculateEditText.text.toString() + binding.unitTextView.text
         val queryFood = DiaryItemEntity(null , date , mFoodInfoData , time , servingSize)
-        db.diaryDao().addDiaryItem(queryFood)
+        FoodiRepository.getInstance().addDiaryItem(queryFood)
     }
 
     @RequiresApi(Build.VERSION_CODES.O)

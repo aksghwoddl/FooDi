@@ -4,10 +4,8 @@ import android.annotation.SuppressLint
 import android.os.Build
 import android.os.Bundle
 import android.text.Editable
-import android.text.TextWatcher
 import android.util.Log
 import android.view.View
-import android.widget.ArrayAdapter
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.jakewharton.rxbinding3.widget.textChanges
@@ -75,13 +73,10 @@ class DiaryDetailActivity : AppCompatActivity() {
         with(binding){
             // Modify Button
             modifyButton.setOnClickListener {
-                CoroutineScope(Dispatchers.IO).launch {
-                    updateFoodInfo()
-                    updateDiaryItem()
-                    CoroutineScope(Dispatchers.Main).launch {
-                        Utils.toastMessage("정상적으로 수정 되었습니다.")
-                    }
-                }
+                updateFoodInfo()
+                updateDiaryItem()
+                Utils.toastMessage("정상적으로 수정 되었습니다.")
+                finish()
             }
 
             // Calculate EditText
@@ -96,7 +91,7 @@ class DiaryDetailActivity : AppCompatActivity() {
         }
     }
 
-    private suspend fun updateDiaryItem() {
+    private fun updateDiaryItem() {
         CoroutineScope(Dispatchers.IO).launch {
             val diaryItemEntity = DiaryItemEntity(
                 mDiaryItem.index

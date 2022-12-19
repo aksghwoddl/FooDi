@@ -4,6 +4,7 @@ import com.lee.foodi.data.rest.RestServiceInstance
 import com.lee.foodi.data.rest.model.AddFoodData
 import com.lee.foodi.data.room.db.DiaryDatabase
 import com.lee.foodi.data.room.entity.DiaryEntity
+import com.lee.foodi.data.room.entity.DiaryItem
 import com.lee.foodi.data.room.entity.DiaryItemEntity
 
 class FoodiRepository {
@@ -38,6 +39,8 @@ class FoodiRepository {
      * **/
     suspend fun getDiarySummary(date : String) = diaryDAO.getDiaryByDate(date)
 
+    suspend fun addDiaryItem(diaryItem: DiaryItemEntity) = diaryDAO.addDiaryItem(diaryItem)
+
     /**
      * Function for add Diary in Room DB
      * **/
@@ -48,6 +51,9 @@ class FoodiRepository {
      * **/
     suspend fun deleteDiaryItem(diaryItem: DiaryItemEntity) = diaryDAO.deleteDiaryItem(diaryItem)
 
+    /**
+     * Function for update diary item in Room DB
+     * **/
     suspend fun updateDiaryItem(diaryItem: DiaryItemEntity) = diaryDAO.updateDiaryItem(diaryItem)
 
 }

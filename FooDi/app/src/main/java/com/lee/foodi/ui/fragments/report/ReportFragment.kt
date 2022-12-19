@@ -169,7 +169,7 @@ class ReportFragment : Fragment() {
     private fun observeData() {
         with(mViewModel){
             // Summary List
-            summaryList.observe(viewLifecycleOwner){ diary ->
+            summaryList.observe(viewLifecycleOwner){
                 val labelList = arrayListOf<String>()
                 val dayList = getDayList()
                 dayList.forEach {

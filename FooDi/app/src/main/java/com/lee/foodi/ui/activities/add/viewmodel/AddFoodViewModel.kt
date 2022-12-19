@@ -11,6 +11,7 @@ import com.lee.foodi.ui.activities.add.AddFoodActivity
 import com.lee.foodi.ui.factory.FoodiViewModelFactory
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import java.net.ConnectException
 
@@ -68,7 +69,7 @@ class AddFoodViewModel(private val repository: FoodiRepository) : ViewModel() {
     val cholesterol = MutableLiveData<String>()
     val companyName = MutableLiveData<String>()
 
-    suspend fun postRequestAddFood(addFoodData: AddFoodData){
+    fun postRequestAddFood(addFoodData: AddFoodData){
         try{
             CoroutineScope(Dispatchers.IO).launch {
                 isProgressShowing.postValue(true)

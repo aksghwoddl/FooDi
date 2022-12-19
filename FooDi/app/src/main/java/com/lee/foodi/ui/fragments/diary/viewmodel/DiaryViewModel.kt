@@ -6,7 +6,6 @@ import androidx.annotation.RequiresApi
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.lee.foodi.data.repository.FoodiRepository
-import com.lee.foodi.data.room.db.DiaryDatabase
 import com.lee.foodi.data.room.entity.DiaryEntity
 import com.lee.foodi.data.room.entity.DiaryItem
 import kotlinx.coroutines.CoroutineScope
@@ -37,19 +36,26 @@ class DiaryViewModel(repository: FoodiRepository) : ViewModel() {
     val isProgress = MutableLiveData<Boolean>(false) // Manage progress bar
     val isNightMode = MutableLiveData<Boolean>(false) // Check Night mode
 
-    suspend fun getDiaryItems(date : String) : MutableList<DiaryItem>{
-        isProgress.postValue(true)
-        val ret = CoroutineScope(Dispatchers.IO).async {
-             mRepository.getAllDiaryItems(date)
+    /**
+     * Function for get diary item as selected date
+     * **/
+     @RequiresApi(Build.VERSION_CODES.O)
+     fun getDiaryItems(){
+         CoroutineScope(Dispatchers.IO).launch {
+             isProgress.postValue(true)
+             val diaryItem = mRepository.getAllDiaryItems(date.value!!)
+            CoroutineScope(Dispatchers.Main).launch {
+                diaryItems.value = diaryItem
+                isProgress.value = false
+            }
         }
-        return ret.await()
     }
 
     /**
      * Function for add Diary Summary of the day
      * **/
     @RequiresApi(Build.VERSION_CODES.O)
-    suspend fun addDiarySummary() {
+    fun addDiarySummary() {
         Log.d(TAG, "addDiarySummary()")
         CoroutineScope(Dispatchers.IO).launch {
             val diary = DiaryEntity(date.value!! 

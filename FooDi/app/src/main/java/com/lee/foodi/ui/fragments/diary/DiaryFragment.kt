@@ -16,7 +16,6 @@ import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.bumptech.glide.Glide
 import com.lee.foodi.R
 import com.lee.foodi.common.*
 import com.lee.foodi.common.manager.FooDiPreferenceManager
@@ -43,7 +42,6 @@ class DiaryFragment : Fragment() {
     private lateinit var mViewModel : DiaryViewModel
     private lateinit var mDiaryFoodItemRecyclerAdapter : DiaryFoodItemRecyclerAdapter
 
-    private var mDiaryFoodItems = mutableListOf<DiaryItem>()
     private var mYear = Calendar.getInstance().get(Calendar.YEAR)
     private var mMonth = Calendar.getInstance().get(Calendar.MONTH)
     private var mDay = Calendar.getInstance().get(Calendar.DATE)
@@ -80,9 +78,10 @@ class DiaryFragment : Fragment() {
         super.onResume()
         mViewModel.goalCalorie.postValue(mPreferenceManager.goalCalorie)
         CoroutineScope(Dispatchers.IO).launch {
-            mDiaryFoodItems = getDiaryItem()
-            mViewModel.diaryItems.postValue(mDiaryFoodItems)
-            mViewModel.isProgress.postValue(false)
+            /*mDiaryFoodItems = getDiaryItem()
+            mViewModel.diaryItems.postValue(mDiaryFoodItems)*/
+            /*mViewModel.isProgress.postValue(false)*/
+            mViewModel.getDiaryItems()
         }
     }
 
@@ -96,12 +95,7 @@ class DiaryFragment : Fragment() {
             // Header Date
             date.observe(viewLifecycleOwner){
                 Utils.convertValueWithErrorCheck(binding.headerDateTextView , getString(R.string.header_date), it)
-                CoroutineScope(Dispatchers.IO).launch {
-                    mDiaryFoodItems = getDiaryItem()
-                    CoroutineScope(Dispatchers.Main).launch {
-                        mViewModel.diaryItems.postValue(mDiaryFoodItems)
-                    }
-                }
+                mViewModel.getDiaryItems()
             }
 
             // Diary Items
@@ -112,9 +106,7 @@ class DiaryFragment : Fragment() {
                     binding.diaryListLayout.visibility = View.GONE
                     initFoodSummary()
                     calorieProgress.value = 0.0
-                    CoroutineScope(Dispatchers.IO).launch {
-                        mViewModel.addDiarySummary()
-                    }
+                    mViewModel.addDiarySummary()
                 } else {
                     Log.d(TAG, "observeDate: diaryItems is not empty")
                     binding.noDiaryItemLayout.visibility = View.GONE
@@ -123,9 +115,7 @@ class DiaryFragment : Fragment() {
                     mDiaryFoodItemRecyclerAdapter.notifyDataSetChanged()
                     updateFoodSummary()
                     updateCalorieProgress()
-                    CoroutineScope(Dispatchers.IO).launch {
-                        mViewModel.addDiarySummary()
-                    }
+                    mViewModel.addDiarySummary()
                 }
             }
 
@@ -171,18 +161,15 @@ class DiaryFragment : Fragment() {
                     }
                 }
             }
-        }
-    }
 
-    /**
-     * Function for get diary item as selected date
-     * **/
-    @RequiresApi(Build.VERSION_CODES.O)
-    suspend fun getDiaryItem() : MutableList<DiaryItem> {
-        Log.d(TAG, "getDiaryItem()")
-        return withContext(CoroutineScope(Dispatchers.IO).coroutineContext) {
-            val date = mViewModel.date.value
-            mViewModel.getDiaryItems(date!!)
+            // Progress
+            isProgress.observe(viewLifecycleOwner){
+                if(it){
+                    binding.progressBar.visibility = View.VISIBLE
+                } else {
+                    binding.progressBar.visibility = View.INVISIBLE
+                }
+            }
         }
     }
 
@@ -243,7 +230,7 @@ class DiaryFragment : Fragment() {
         var carbondydrate = 0
         var protein = 0
         var fat  = 0
-        mDiaryFoodItems.forEach {
+        mViewModel.diaryItems.value!!.forEach {
             // Calorie
             if(it.food?.calorie!! != NOT_AVAILABLE){
                 calorie+= it.food?.calorie!!.toDouble().roundToInt()
@@ -312,14 +299,7 @@ class DiaryFragment : Fragment() {
             when(item?.itemId){
                 R.id.itemDelete -> {
                     mDiaryFoodItemRecyclerAdapter.deleteSelectedDiaryItem()
-                    CoroutineScope(Dispatchers.IO).launch {
-                        mViewModel.isProgress.postValue(true)
-                        mDiaryFoodItems = getDiaryItem()
-                        CoroutineScope(Dispatchers.Main).launch {
-                            mViewModel.diaryItems.value = mDiaryFoodItems
-                            mViewModel.isProgress.value = false
-                        }
-                    }
+                    mViewModel.getDiaryItems()
                 }
             }
             return true

@@ -7,7 +7,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.lee.foodi.common.LATELY
 import com.lee.foodi.common.MONTHLY
-import com.lee.foodi.common.Utils
 import com.lee.foodi.common.WEEKS
 import com.lee.foodi.data.repository.FoodiRepository
 import com.lee.foodi.data.room.entity.Diary

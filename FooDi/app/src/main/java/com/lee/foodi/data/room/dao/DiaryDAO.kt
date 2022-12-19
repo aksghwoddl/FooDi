@@ -1,11 +1,6 @@
 package com.lee.foodi.data.room.dao
 
-import androidx.room.Dao
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
-import androidx.room.Update
+import androidx.room.*
 import com.lee.foodi.data.room.entity.Diary
 import com.lee.foodi.data.room.entity.DiaryEntity
 import com.lee.foodi.data.room.entity.DiaryItem
@@ -44,6 +39,9 @@ interface DiaryDAO {
     @Delete
     suspend fun deleteDiaryItem(diaryItem : DiaryItemEntity)
 
+    /**
+     * Function for update diary item
+     * **/
     @Update
     suspend fun updateDiaryItem(diaryItem: DiaryItemEntity)
 }
