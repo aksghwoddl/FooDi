@@ -11,8 +11,8 @@
 
 > 식단관리를 간편하게!! 내손안에 식단 플래너 푸디(FOODIary)입니다. <br><br>
 > 현재 server에 배포를 하지 않아 정상적인 기능 사용을 위해서는 dJango 설치 후 <br>
-> local에서 back-end 어플리케이션을 실행해주어야 합니다. (/backend/FooDi_명세서.txt참고)
-> 아울러 푸디 관리자 앱을 통하여 저장된 음식 정보를 update , delete 할수 있습니다. (repository Foodi_admin )
+> local에서 back-end 어플리케이션을 실행해주어야 합니다. (/backend/FooDi_명세서.txt참고)<br><br>
+> 아울러 푸디 관리자 앱을 통하여 저장된 음식 정보를 update , delete 할수 있습니다. (repository Foodi_admin 참고)
 
 <br>
 
