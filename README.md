@@ -73,6 +73,6 @@
 ##### 6️⃣ 식단 타이머
 ###### BroadcastReceiver , Alaram Manager , Pending Intent를 사용하여 사용자가 식단을 기록한 시간으로 부터 설정한 시간이 지나면 Notification을 보내는 기능
 <div align="center">
- <img width="30%" alt="app_main" src="https://user-images.githubusercontent.com/65700842/207862665-867f14ca-7a75-44f3-9f8f-29c089b4117d.gif">
+ <img width="30%" alt="app_main" src="https://user-images.githubusercontent.com/65700842/208374244-5644b4df-93e2-4a65-826b-16809fa64666.gif">
 </div>
 
