@@ -28,8 +28,6 @@ data class FoodInfoData (
     var saturatedFat : String ,
     @SerializedName("NUTR_CONT9")
     var transFat : String ,
-    /*@SerializedName("BGN_YEAR") // Convert New Food InfoData
-    var beginYear : String ,*/
     @SerializedName("ANIMAL_PLANT")
     var company : String
 ) : Serializable
