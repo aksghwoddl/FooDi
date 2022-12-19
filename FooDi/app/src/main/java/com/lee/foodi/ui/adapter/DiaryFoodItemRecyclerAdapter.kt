@@ -1,22 +1,14 @@
 package com.lee.foodi.ui.adapter
 
-import android.content.Context
-import android.graphics.Typeface
 import android.view.LayoutInflater
-import android.view.MenuItem
-import android.view.MenuItem.OnMenuItemClickListener
 import android.view.View
-import android.view.View.OnLongClickListener
 import android.view.ViewGroup
 import android.widget.AdapterView.OnItemClickListener
-import android.widget.AdapterView.OnItemLongClickListener
 import android.widget.PopupMenu
-import androidx.core.view.size
 import androidx.recyclerview.widget.RecyclerView
 import com.lee.foodi.R
 import com.lee.foodi.common.Utils
 import com.lee.foodi.data.repository.FoodiRepository
-import com.lee.foodi.data.rest.model.FoodInfoData
 import com.lee.foodi.data.room.entity.DiaryItem
 import com.lee.foodi.data.room.entity.DiaryItemEntity
 import com.lee.foodi.databinding.DiaryFoodItemBinding
