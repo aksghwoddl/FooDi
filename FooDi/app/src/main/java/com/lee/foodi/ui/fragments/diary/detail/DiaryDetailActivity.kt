@@ -17,6 +17,7 @@ import com.lee.foodi.data.repository.FoodiRepository
 import com.lee.foodi.data.room.entity.DiaryItem
 import com.lee.foodi.data.room.entity.DiaryItemEntity
 import com.lee.foodi.databinding.ActivityDiaryDetailBinding
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -28,7 +29,7 @@ private const val TAG = "DiaryDetailActivity"
 class DiaryDetailActivity : AppCompatActivity() {
     private lateinit var binding : ActivityDiaryDetailBinding
     private lateinit var mDiaryItem : DiaryItem
-    private lateinit var mTextChangeDisposable: Disposable
+    private lateinit var mCompositeDisposable: CompositeDisposable
 
     private var mCalculatedCalorie = ""
     private var mCalculatedCarbohydrate = ""
@@ -48,6 +49,13 @@ class DiaryDetailActivity : AppCompatActivity() {
         }
         mDiaryItem = intent?.extras?.getSerializable(EXTRA_SELECTED_DIARY_ITEM) as DiaryItem
         init()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        if(::mCompositeDisposable.isInitialized){ // For clear all disposables
+            mCompositeDisposable.clear()
+        }
     }
 
     /**
@@ -81,9 +89,10 @@ class DiaryDetailActivity : AppCompatActivity() {
             }
 
             // Calculate EditText
-            mTextChangeDisposable = calculateEditText.textChanges().subscribe {
+            val disposable = calculateEditText.textChanges().subscribe {
                 updateIngredientTextView(true)
             }
+            mCompositeDisposable = CompositeDisposable(disposable)
 
             // Back Button
             backButton.setOnClickListener {

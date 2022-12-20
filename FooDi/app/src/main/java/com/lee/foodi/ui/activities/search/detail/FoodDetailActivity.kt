@@ -22,6 +22,7 @@ import com.lee.foodi.data.rest.model.FoodInfoData
 import com.lee.foodi.data.room.entity.DiaryItemEntity
 import com.lee.foodi.databinding.ActivityFoodDetailBinding
 import com.lee.foodi.receiver.TimerReceiver
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -38,7 +39,7 @@ class FoodDetailActivity : AppCompatActivity() {
     private lateinit var binding : ActivityFoodDetailBinding
     private lateinit var mFoodInfoData : FoodInfoData
     private lateinit var mFooDiPreferenceManager: FooDiPreferenceManager
-    private lateinit var mTextChangeDisposable : Disposable
+    private lateinit var mCompositeDisposable: CompositeDisposable
 
     private var mCalculatedCalorie = ""
     private var mCalculatedCarbohydrate = ""
@@ -58,6 +59,13 @@ class FoodDetailActivity : AppCompatActivity() {
         }
         mFoodInfoData = intent?.getSerializableExtra(EXTRA_SELECTED_FOOD) as FoodInfoData
         init()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        if(::mCompositeDisposable.isInitialized){ // For clear all disposable
+            mCompositeDisposable.clear()
+        }
     }
 
     /**
@@ -102,9 +110,11 @@ class FoodDetailActivity : AppCompatActivity() {
             }
 
             // Calculate EditText
-            mTextChangeDisposable = calculateEditText.textChanges().subscribe{
+
+            val disposable = calculateEditText.textChanges().subscribe{
                 updateIngredientTextView(true)
             }
+            mCompositeDisposable = CompositeDisposable(disposable)
 
             // Back Button
             backButton.setOnClickListener {

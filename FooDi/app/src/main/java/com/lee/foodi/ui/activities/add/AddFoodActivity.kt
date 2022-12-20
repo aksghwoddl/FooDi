@@ -16,6 +16,7 @@ import com.lee.foodi.databinding.ActivityAddFoodBinding
 import com.lee.foodi.ui.activities.add.fragments.AdditionalInfoFragment
 import com.lee.foodi.ui.activities.add.fragments.NecessaryInfoFragment
 import com.lee.foodi.ui.activities.add.viewmodel.AddFoodViewModel
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -29,7 +30,7 @@ class AddFoodActivity : AppCompatActivity() {
     private lateinit var mNecessaryInfoFragment : NecessaryInfoFragment
     private lateinit var mAdditionalInfoFragment : AdditionalInfoFragment
     private lateinit var mViewModel : AddFoodViewModel
-    private lateinit var mClickDisposable: Disposable
+    private lateinit var mCompositeDisposable: CompositeDisposable
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,6 +45,13 @@ class AddFoodActivity : AppCompatActivity() {
         savedInstanceState?:let {
             mNecessaryInfoFragment = NecessaryInfoFragment.newInstance()
             supportFragmentManager.beginTransaction().add(R.id.contentsFragment ,  mNecessaryInfoFragment).commit()
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        if(::mCompositeDisposable.isInitialized){ // For clear disposables
+            mCompositeDisposable.clear()
         }
     }
 
@@ -98,9 +106,10 @@ class AddFoodActivity : AppCompatActivity() {
 
             // RxBinding Event
              if(addProgressBar.progress >= 2){
-                 mClickDisposable = confirmButton.clicks().throttleFirst(1 , TimeUnit.SECONDS).subscribe {
-                    binding.confirmButton.performClick()
-                }
+                 val disposable = confirmButton.clicks().throttleFirst(1 , TimeUnit.SECONDS).subscribe {
+                     binding.confirmButton.performClick()
+                 }
+                 mCompositeDisposable = CompositeDisposable(disposable)
             }
 
             // Back Button
