@@ -16,6 +16,7 @@ import com.lee.foodi.databinding.ActivityAddFoodBinding
 import com.lee.foodi.ui.activities.add.fragments.AdditionalInfoFragment
 import com.lee.foodi.ui.activities.add.fragments.NecessaryInfoFragment
 import com.lee.foodi.ui.activities.add.viewmodel.AddFoodViewModel
+import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -28,6 +29,7 @@ class AddFoodActivity : AppCompatActivity() {
     private lateinit var mNecessaryInfoFragment : NecessaryInfoFragment
     private lateinit var mAdditionalInfoFragment : AdditionalInfoFragment
     private lateinit var mViewModel : AddFoodViewModel
+    private lateinit var mClickDisposable: Disposable
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,7 +50,6 @@ class AddFoodActivity : AppCompatActivity() {
     /**
      * Function for add listeners
      * **/
-    @SuppressLint("CheckResult")
     private fun addListeners() {
         // Confirm Button
         with(binding){
@@ -96,8 +97,8 @@ class AddFoodActivity : AppCompatActivity() {
             }
 
             // RxBinding Event
-            if(addProgressBar.progress >= 2){
-                confirmButton.clicks().throttleFirst(1 , TimeUnit.SECONDS).subscribe {
+             if(addProgressBar.progress >= 2){
+                 mClickDisposable = confirmButton.clicks().throttleFirst(1 , TimeUnit.SECONDS).subscribe {
                     binding.confirmButton.performClick()
                 }
             }

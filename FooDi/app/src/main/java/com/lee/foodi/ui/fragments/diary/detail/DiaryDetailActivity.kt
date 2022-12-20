@@ -17,6 +17,7 @@ import com.lee.foodi.data.repository.FoodiRepository
 import com.lee.foodi.data.room.entity.DiaryItem
 import com.lee.foodi.data.room.entity.DiaryItemEntity
 import com.lee.foodi.databinding.ActivityDiaryDetailBinding
+import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -27,6 +28,7 @@ private const val TAG = "DiaryDetailActivity"
 class DiaryDetailActivity : AppCompatActivity() {
     private lateinit var binding : ActivityDiaryDetailBinding
     private lateinit var mDiaryItem : DiaryItem
+    private lateinit var mTextChangeDisposable: Disposable
 
     private var mCalculatedCalorie = ""
     private var mCalculatedCarbohydrate = ""
@@ -67,7 +69,6 @@ class DiaryDetailActivity : AppCompatActivity() {
         addListeners()
     }
 
-    @SuppressLint("CheckResult")
     @RequiresApi(Build.VERSION_CODES.O)
     private fun addListeners() {
         with(binding){
@@ -80,7 +81,7 @@ class DiaryDetailActivity : AppCompatActivity() {
             }
 
             // Calculate EditText
-            calculateEditText.textChanges().subscribe {
+            mTextChangeDisposable = calculateEditText.textChanges().subscribe {
                 updateIngredientTextView(true)
             }
 
