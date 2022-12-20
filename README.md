@@ -55,7 +55,7 @@
 ##### 3️⃣ 음식 추가하기
 ###### Rest 통신을 통해 검색시에 존재하지 않는 음식을 사용자가 직접 추가하는 기능
 <div align="center">
- <img width="30%" alt="app_main" src="https://user-images.githubusercontent.com/65700842/207865711-f172307a-a414-43be-9218-7b96d02dd02d.gif">
+ <img width="30%" alt="app_main" src="https://user-images.githubusercontent.com/65700842/208650624-0b2091a8-fe09-4d59-a25e-4f9ff73fc8e3.gif">
 </div>
 
 
