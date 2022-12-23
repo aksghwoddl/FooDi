@@ -42,14 +42,14 @@
 ##### 1️⃣ 음식 검색하기
 ###### Rest 통신을 통한 서버에 저장된 음식의 정보를 가져오는 기능
 <div align="center">
- <img width="30%" alt="app_main" src="https://user-images.githubusercontent.com/65700842/207863055-f4ee8a91-57cf-475e-a3c2-0a1325b34d5a.gif">
+ <img width="30%" alt="app_main" src="https://user-images.githubusercontent.com/65700842/209274826-55755f6e-fbc7-432b-ad65-64e5c147a50a.gif">
 </div>
 
 ##### 2️⃣ 다이어리
 ###### RoomDB를 통해 사용자가 섭취한 음식을 기록하는 기능
 <p align="center">
- <img width="30%" alt="app_main" src="https://user-images.githubusercontent.com/65700842/207863284-a0ee937e-1514-4d3b-8ec3-149ae59e6b4d.gif">
- <img width="30%" alt="app_main" src="https://user-images.githubusercontent.com/65700842/207863737-b8744aee-e00d-43d9-9395-364a92433a71.gif">
+ <img width="300" alt="app_main" src="https://user-images.githubusercontent.com/65700842/209274602-0c77f5c7-d212-441b-986a-d1321a89d999.gif">
+ <img width="300" alt="app_main" src="https://user-images.githubusercontent.com/65700842/207863737-b8744aee-e00d-43d9-9395-364a92433a71.gif">
 </p>
 
 ##### 3️⃣ 음식 추가하기
