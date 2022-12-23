@@ -4,8 +4,8 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.lee.foodi.data.repository.FoodiRepository
-import com.lee.foodi.data.rest.model.FoodInfoData
-import com.lee.foodi.data.rest.model.NewFoodData
+import com.lee.foodi.data.rest.model.Food
+import com.lee.foodi.data.rest.model.SearchingFoodResponse
 import kotlinx.coroutines.*
 import java.net.ConnectException
 import java.net.SocketTimeoutException
@@ -14,8 +14,8 @@ private const val TAG = "FoodInfoViewModel"
 
 class SearchFoodViewModel(private val repository: FoodiRepository) : ViewModel() {
     private var mJob : Job? = null
-    private var foodResponse : NewFoodData? = null
-    val foodList = MutableLiveData<MutableList<FoodInfoData>>() // Food List that searched
+    private var foodResponse : SearchingFoodResponse? = null
+    val foodList = MutableLiveData<MutableList<Food>>() // Food List that searched
     val errorMessage = MutableLiveData<String>() // Management about error
     val isProgressVisible = MutableLiveData<Boolean>() // Management Progressbar state
     val addFoodLayoutVisible = MutableLiveData<Boolean>() // Manage status that no food

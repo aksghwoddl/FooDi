@@ -1,17 +1,15 @@
 package com.lee.foodi.ui.activities.add.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.lee.foodi.common.Utils
 import com.lee.foodi.data.repository.FoodiRepository
-import com.lee.foodi.data.rest.model.AddFoodData
+import com.lee.foodi.data.rest.model.AddingFood
 import com.lee.foodi.ui.activities.add.AddFoodActivity
 import com.lee.foodi.ui.factory.FoodiViewModelFactory
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import java.net.ConnectException
 
@@ -69,11 +67,11 @@ class AddFoodViewModel(private val repository: FoodiRepository) : ViewModel() {
     val cholesterol = MutableLiveData<String>()
     val companyName = MutableLiveData<String>()
 
-    fun postRequestAddFood(addFoodData: AddFoodData){
+    fun postRequestAddFood(addingFood: AddingFood){
         try{
             CoroutineScope(Dispatchers.IO).launch {
                 isProgressShowing.postValue(true)
-                val response = repository.addNewFood(addFoodData)
+                val response = repository.addNewFood(addingFood)
                 if(response.isSuccessful){
                     CoroutineScope(Dispatchers.Main).launch {
                         Utils.toastMessage("성공적으로 저장하였습니다.")

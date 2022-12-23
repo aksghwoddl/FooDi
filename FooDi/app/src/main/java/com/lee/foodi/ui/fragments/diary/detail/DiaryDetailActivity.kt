@@ -5,6 +5,7 @@ import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.util.Log
+import android.view.MotionEvent
 import android.view.View
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
@@ -29,7 +30,7 @@ private const val TAG = "DiaryDetailActivity"
 class DiaryDetailActivity : AppCompatActivity() {
     private lateinit var binding : ActivityDiaryDetailBinding
     private lateinit var mDiaryItem : DiaryItem
-    private lateinit var mCompositeDisposable: CompositeDisposable
+    private lateinit var mTextChangedDisposable: Disposable
 
     private var mCalculatedCalorie = ""
     private var mCalculatedCarbohydrate = ""
@@ -53,8 +54,8 @@ class DiaryDetailActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        if(::mCompositeDisposable.isInitialized){ // For clear all disposables
-            mCompositeDisposable.clear()
+        if(::mTextChangedDisposable.isInitialized){ // Clear disposable making by RxBinding
+            mTextChangedDisposable.dispose()
         }
     }
 
@@ -77,6 +78,7 @@ class DiaryDetailActivity : AppCompatActivity() {
         addListeners()
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     @RequiresApi(Build.VERSION_CODES.O)
     private fun addListeners() {
         with(binding){
@@ -89,10 +91,18 @@ class DiaryDetailActivity : AppCompatActivity() {
             }
 
             // Calculate EditText
-            val disposable = calculateEditText.textChanges().subscribe {
-                updateIngredientTextView(true)
+            calculateEditText.setOnTouchListener { _ , actionEvent ->
+                when(actionEvent.action){
+                    MotionEvent.ACTION_DOWN -> {
+                        if(!::mTextChangedDisposable.isInitialized){
+                            mTextChangedDisposable = calculateEditText.textChanges().subscribe {
+                                updateIngredientTextView(true)
+                            }
+                        }
+                    }
+                }
+                false
             }
-            mCompositeDisposable = CompositeDisposable(disposable)
 
             // Back Button
             backButton.setOnClickListener {

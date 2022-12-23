@@ -1,10 +1,9 @@
 package com.lee.foodi.data.repository
 
 import com.lee.foodi.data.rest.RestServiceInstance
-import com.lee.foodi.data.rest.model.AddFoodData
+import com.lee.foodi.data.rest.model.AddingFood
 import com.lee.foodi.data.room.db.DiaryDatabase
 import com.lee.foodi.data.room.entity.DiaryEntity
-import com.lee.foodi.data.room.entity.DiaryItem
 import com.lee.foodi.data.room.entity.DiaryItemEntity
 
 class FoodiRepository {
@@ -26,7 +25,7 @@ class FoodiRepository {
    // suspend fun getSearchFood(foodName : String , page : String) = RestServiceInstance.getInstance().getSearchFood(foodName , page) Convert New Food InfoData
     suspend fun getNewSearchFood(foodName : String , page : String) = RestServiceInstance.getInstance().getNewSearchFood(foodName , page)
 
-    suspend fun addNewFood(addFoodData: AddFoodData) = RestServiceInstance.getInstance().addNewFood(addFoodData)
+    suspend fun addNewFood(addingFood: AddingFood) = RestServiceInstance.getInstance().addNewFood(addingFood)
 
     /**
      * Function for get food data in Room DB

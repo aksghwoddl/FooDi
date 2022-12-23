@@ -1,9 +1,8 @@
-package com.lee.foodi.ui.adapter
+package com.lee.foodi.ui.fragments.diary.adapter
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView.OnItemClickListener
 import android.widget.PopupMenu
 import androidx.recyclerview.widget.RecyclerView
 import com.lee.foodi.R

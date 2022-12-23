@@ -38,7 +38,7 @@
 
         <activity android:name=".ui.activities.search.detail.FoodDetailActivity"
             android:exported="true"
-            android:windowSoftInputMode="adjustPan"
+            android:windowSoftInputMode="adjustNothing"
             >
         </activity>
 
@@ -46,12 +46,11 @@
         </activity>
 
         <activity android:name=".ui.activities.search.SearchActivity"
-            android:windowSoftInputMode="adjustPan">
+            android:windowSoftInputMode="adjustNothing">
         </activity>
         <activity android:name=".ui.fragments.diary.detail.DiaryDetailActivity"
-            android:windowSoftInputMode="adjustPan"
+            android:windowSoftInputMode="adjustNothing"
             >
-
         </activity>
     </application>
 

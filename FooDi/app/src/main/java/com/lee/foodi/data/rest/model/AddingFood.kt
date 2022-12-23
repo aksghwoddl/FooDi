@@ -1,11 +1,8 @@
 package com.lee.foodi.data.rest.model
 
 import com.google.gson.annotations.SerializedName
-import org.jetbrains.annotations.NotNull
-import java.io.Serializable
 
-data class FoodInfoData (
-    var id : Int ,
+data class AddingFood(
     @SerializedName("DESC_KOR")
     var foodName : String ,
     @SerializedName("SERVING_WT")
@@ -30,4 +27,4 @@ data class FoodInfoData (
     var transFat : String ,
     @SerializedName("ANIMAL_PLANT")
     var company : String
-) : Serializable
+)

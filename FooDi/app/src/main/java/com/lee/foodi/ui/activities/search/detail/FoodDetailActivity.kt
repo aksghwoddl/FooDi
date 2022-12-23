@@ -18,12 +18,11 @@ import com.lee.foodi.R
 import com.lee.foodi.common.*
 import com.lee.foodi.common.manager.FooDiPreferenceManager
 import com.lee.foodi.data.repository.FoodiRepository
-import com.lee.foodi.data.rest.model.FoodInfoData
+import com.lee.foodi.data.rest.model.Food
 import com.lee.foodi.data.room.entity.DiaryItemEntity
 import com.lee.foodi.databinding.ActivityFoodDetailBinding
 import com.lee.foodi.receiver.TimerReceiver
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -37,7 +36,7 @@ private const val TAG = "FoodDetailActivity"
 
 class FoodDetailActivity : AppCompatActivity() {
     private lateinit var binding : ActivityFoodDetailBinding
-    private lateinit var mFoodInfoData : FoodInfoData
+    private lateinit var mFood : Food
     private lateinit var mFooDiPreferenceManager: FooDiPreferenceManager
     private lateinit var mCompositeDisposable: CompositeDisposable
 
@@ -57,7 +56,7 @@ class FoodDetailActivity : AppCompatActivity() {
         binding = ActivityFoodDetailBinding.inflate(layoutInflater).also {
             setContentView(it.root)
         }
-        mFoodInfoData = intent?.getSerializableExtra(EXTRA_SELECTED_FOOD) as FoodInfoData
+        mFood = intent?.getSerializableExtra(EXTRA_SELECTED_FOOD) as Food
         init()
     }
 
@@ -75,12 +74,12 @@ class FoodDetailActivity : AppCompatActivity() {
     @SuppressLint("SetTextI18n")
     private fun init() {
         with(binding){
-            foodNameTextView.text = mFoodInfoData.foodName
+            foodNameTextView.text = mFood.foodName
             foodNameTextView.isSelected = true // for marquee setting
-            if(mFoodInfoData.company == "N/A"){
+            if(mFood.company == "N/A"){
                 companyNameTextView.visibility = View.INVISIBLE
             } else {
-                companyNameTextView.text = mFoodInfoData.company
+                companyNameTextView.text = mFood.company
             }
         }
         mFooDiPreferenceManager = FooDiPreferenceManager.getInstance(FoodiNewApplication.getInstance())
@@ -131,7 +130,7 @@ class FoodDetailActivity : AppCompatActivity() {
         val date = intent.getStringExtra(EXTRA_SELECTED_DATE)!!
         val time = LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH : mm"))
         val servingSize = binding.calculateEditText.text.toString() + binding.unitTextView.text
-        val queryFood = DiaryItemEntity(null , date , mFoodInfoData , time , servingSize)
+        val queryFood = DiaryItemEntity(null , date , mFood , time , servingSize)
         FoodiRepository.getInstance().addDiaryItem(queryFood)
     }
 
@@ -166,9 +165,9 @@ class FoodDetailActivity : AppCompatActivity() {
      * **/
     private fun getValueOnEditTextChanged(value : String , inputValue : String) : String {
         var ret = ""
-        if(mFoodInfoData.servingWeight.toInt() != 0 && value != NOT_AVAILABLE){
+        if(mFood.servingWeight.toInt() != 0 && value != NOT_AVAILABLE){
             if(binding.calculateEditText.text.isNotEmpty()){
-                val divideValue = value.toDouble()/mFoodInfoData.servingWeight.toInt()
+                val divideValue = value.toDouble()/mFood.servingWeight.toInt()
                 val calculatedValue = divideValue * inputValue.toInt()
                 ret = calculatedValue.roundToInt().toString()
             }
@@ -185,63 +184,63 @@ class FoodDetailActivity : AppCompatActivity() {
         if(changedByEditText){
             with(binding){
                 // Calorie
-                mCalculatedCalorie = getValueOnEditTextChanged(mFoodInfoData.calorie , calculateEditText.text.toString())
+                mCalculatedCalorie = getValueOnEditTextChanged(mFood.calorie , calculateEditText.text.toString())
                 Utils.convertValueWithErrorCheck(calorieTextView ,resources.getString(R.string.calories), mCalculatedCalorie)
 
                 // Carbohydrate
-                mCalculatedCarbohydrate = getValueOnEditTextChanged(mFoodInfoData.carbohydrate , calculateEditText.text.toString())
+                mCalculatedCarbohydrate = getValueOnEditTextChanged(mFood.carbohydrate , calculateEditText.text.toString())
                 Utils.convertValueWithErrorCheck(carbohydrateTextView , getString(R.string.carbohydrate) , mCalculatedCarbohydrate)
 
                 // Protein
-                mCalculatedProtein = getValueOnEditTextChanged(mFoodInfoData.protein , calculateEditText.text.toString())
+                mCalculatedProtein = getValueOnEditTextChanged(mFood.protein , calculateEditText.text.toString())
                 Utils.convertValueWithErrorCheck(proteinTextView , getString(R.string.protein) , mCalculatedProtein)
 
                 // Fat
-                mCalculatedFat = getValueOnEditTextChanged(mFoodInfoData.fat , calculateEditText.text.toString())
+                mCalculatedFat = getValueOnEditTextChanged(mFood.fat , calculateEditText.text.toString())
                 Utils.convertValueWithErrorCheck(fatTextView , getString(R.string.fat) , mCalculatedFat)
 
                 // Sugar
-                mCalculatedSugar = getValueOnEditTextChanged(mFoodInfoData.sugar , calculateEditText.text.toString())
+                mCalculatedSugar = getValueOnEditTextChanged(mFood.sugar , calculateEditText.text.toString())
                 Utils.convertValueWithErrorCheck(sugarTextView , getString(R.string.sugar) , mCalculatedSugar)
 
                 // Salt
-                mCalculatedSalt = getValueOnEditTextChanged(mFoodInfoData.salt , calculateEditText.text.toString())
+                mCalculatedSalt = getValueOnEditTextChanged(mFood.salt , calculateEditText.text.toString())
                 Utils.convertValueWithErrorCheck(saltTextView , getString(R.string.salt) , mCalculatedSalt)
 
                 // Cholesterol
-                mCalculatedCholesterol = getValueOnEditTextChanged(mFoodInfoData.cholesterol , calculateEditText.text.toString())
+                mCalculatedCholesterol = getValueOnEditTextChanged(mFood.cholesterol , calculateEditText.text.toString())
                 Utils.convertValueWithErrorCheck(cholesterolTextView , getString(R.string.cholesterol) , mCalculatedCholesterol)
 
                 // Saturated Fat
-                mCalculatedSaturatedFat = getValueOnEditTextChanged(mFoodInfoData.saturatedFat , calculateEditText.text.toString())
+                mCalculatedSaturatedFat = getValueOnEditTextChanged(mFood.saturatedFat , calculateEditText.text.toString())
                 Utils.convertValueWithErrorCheck(saturatedFat , getString(R.string.saturated_fat) , mCalculatedSaturatedFat)
 
                 // Trans Fat
-                mCalculatedTransFat = getValueOnEditTextChanged(mFoodInfoData.transFat , calculateEditText.text.toString())
+                mCalculatedTransFat = getValueOnEditTextChanged(mFood.transFat , calculateEditText.text.toString())
                 Utils.convertValueWithErrorCheck(transFatTextView , getString(R.string.trans_fat) , mCalculatedTransFat)
             }
         } else {
             with(binding){
-                Utils.convertValueWithErrorCheck(calorieTextView ,resources.getString(R.string.calories) ,mFoodInfoData.calorie.convertStringToInt())
-                Utils.convertValueWithErrorCheck(carbohydrateTextView , getString(R.string.carbohydrate) ,mFoodInfoData.carbohydrate.convertStringToInt())
-                Utils.convertValueWithErrorCheck(proteinTextView , getString(R.string.protein) ,mFoodInfoData.protein.convertStringToInt())
-                Utils.convertValueWithErrorCheck(fatTextView , getString(R.string.fat) ,mFoodInfoData.fat.convertStringToInt())
-                Utils.convertValueWithErrorCheck(sugarTextView , getString(R.string.sugar) ,mFoodInfoData.sugar.convertStringToInt())
-                Utils.convertValueWithErrorCheck(saltTextView , getString(R.string.salt) ,mFoodInfoData.salt.convertStringToInt())
-                Utils.convertValueWithErrorCheck(cholesterolTextView , getString(R.string.cholesterol) ,mFoodInfoData.cholesterol.convertStringToInt())
-                Utils.convertValueWithErrorCheck(saturatedFat , getString(R.string.saturated_fat) ,mFoodInfoData.saturatedFat.convertStringToInt())
-                Utils.convertValueWithErrorCheck(transFatTextView , getString(R.string.trans_fat) ,mFoodInfoData.transFat.convertStringToInt())
-                calculateEditText.text = Editable.Factory.getInstance().newEditable(mFoodInfoData.servingWeight.convertStringToInt())
+                Utils.convertValueWithErrorCheck(calorieTextView ,resources.getString(R.string.calories) ,mFood.calorie.convertStringToInt())
+                Utils.convertValueWithErrorCheck(carbohydrateTextView , getString(R.string.carbohydrate) ,mFood.carbohydrate.convertStringToInt())
+                Utils.convertValueWithErrorCheck(proteinTextView , getString(R.string.protein) ,mFood.protein.convertStringToInt())
+                Utils.convertValueWithErrorCheck(fatTextView , getString(R.string.fat) ,mFood.fat.convertStringToInt())
+                Utils.convertValueWithErrorCheck(sugarTextView , getString(R.string.sugar) ,mFood.sugar.convertStringToInt())
+                Utils.convertValueWithErrorCheck(saltTextView , getString(R.string.salt) ,mFood.salt.convertStringToInt())
+                Utils.convertValueWithErrorCheck(cholesterolTextView , getString(R.string.cholesterol) ,mFood.cholesterol.convertStringToInt())
+                Utils.convertValueWithErrorCheck(saturatedFat , getString(R.string.saturated_fat) ,mFood.saturatedFat.convertStringToInt())
+                Utils.convertValueWithErrorCheck(transFatTextView , getString(R.string.trans_fat) ,mFood.transFat.convertStringToInt())
+                calculateEditText.text = Editable.Factory.getInstance().newEditable(mFood.servingWeight.convertStringToInt())
 
-                mCalculatedCalorie = mFoodInfoData.calorie
-                mCalculatedCarbohydrate = mFoodInfoData.carbohydrate
-                mCalculatedProtein = mFoodInfoData.protein
-                mCalculatedFat = mFoodInfoData.fat
-                mCalculatedSugar = mFoodInfoData.sugar
-                mCalculatedSalt = mFoodInfoData.salt
-                mCalculatedCholesterol = mFoodInfoData.cholesterol
-                mCalculatedSaturatedFat = mFoodInfoData.saturatedFat
-                mCalculatedTransFat = mFoodInfoData.transFat
+                mCalculatedCalorie = mFood.calorie
+                mCalculatedCarbohydrate = mFood.carbohydrate
+                mCalculatedProtein = mFood.protein
+                mCalculatedFat = mFood.fat
+                mCalculatedSugar = mFood.sugar
+                mCalculatedSalt = mFood.salt
+                mCalculatedCholesterol = mFood.cholesterol
+                mCalculatedSaturatedFat = mFood.saturatedFat
+                mCalculatedTransFat = mFood.transFat
             }
         }
     }
@@ -250,7 +249,7 @@ class FoodDetailActivity : AppCompatActivity() {
      * Function for update food info when insert Room DB
      * **/
     private fun updateFoodInfo() {
-        with(mFoodInfoData){
+        with(mFood){
             calorie = mCalculatedCalorie
             carbohydrate = mCalculatedCarbohydrate
             protein = mCalculatedProtein

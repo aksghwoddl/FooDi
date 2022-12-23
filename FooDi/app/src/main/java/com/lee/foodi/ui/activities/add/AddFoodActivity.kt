@@ -1,6 +1,5 @@
 package com.lee.foodi.ui.activities.add
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -11,13 +10,12 @@ import com.lee.foodi.common.FoodiNewApplication
 import com.lee.foodi.common.NETWORK_NOT_CONNECTED
 import com.lee.foodi.common.NOT_AVAILABLE
 import com.lee.foodi.common.Utils
-import com.lee.foodi.data.rest.model.AddFoodData
+import com.lee.foodi.data.rest.model.AddingFood
 import com.lee.foodi.databinding.ActivityAddFoodBinding
 import com.lee.foodi.ui.activities.add.fragments.AdditionalInfoFragment
 import com.lee.foodi.ui.activities.add.fragments.NecessaryInfoFragment
 import com.lee.foodi.ui.activities.add.viewmodel.AddFoodViewModel
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -78,9 +76,9 @@ class AddFoodActivity : AppCompatActivity() {
                         return@setOnClickListener
                     }
                     CoroutineScope(Dispatchers.IO).launch {
-                        val addFoodData : AddFoodData
+                        val addingFood : AddingFood
                         with(mViewModel){
-                            addFoodData = AddFoodData(
+                            addingFood = AddingFood(
                                 foodName.value?.toString() ?: NOT_AVAILABLE ,
                                 servingSize.value?.toString() ?: NOT_AVAILABLE ,
                                 calorie.value?.toString() ?: NOT_AVAILABLE ,
@@ -95,8 +93,8 @@ class AddFoodActivity : AppCompatActivity() {
                                 companyName.value?.toString() ?: NOT_AVAILABLE ,
                             )
                         }
-                        Log.d(TAG, "addListeners: $addFoodData")
-                        mViewModel.postRequestAddFood(addFoodData)
+                        Log.d(TAG, "addListeners: $addingFood")
+                        mViewModel.postRequestAddFood(addingFood)
                         CoroutineScope(Dispatchers.Main).launch {
                             finish()
                         }

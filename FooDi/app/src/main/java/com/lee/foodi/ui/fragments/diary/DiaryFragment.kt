@@ -23,8 +23,8 @@ import com.lee.foodi.data.repository.FoodiRepository
 import com.lee.foodi.data.room.entity.DiaryItem
 import com.lee.foodi.databinding.FragmentDiaryBinding
 import com.lee.foodi.ui.activities.search.SearchActivity
-import com.lee.foodi.ui.adapter.DiaryFoodItemRecyclerAdapter
 import com.lee.foodi.ui.factory.FoodiViewModelFactory
+import com.lee.foodi.ui.fragments.diary.adapter.DiaryFoodItemRecyclerAdapter
 import com.lee.foodi.ui.fragments.diary.detail.DiaryDetailActivity
 import com.lee.foodi.ui.fragments.diary.viewmodel.DiaryViewModel
 import kotlinx.coroutines.*

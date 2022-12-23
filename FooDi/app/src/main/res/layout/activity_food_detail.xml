@@ -70,10 +70,11 @@
         android:orientation="vertical"
         android:paddingStart="30dp"
         android:paddingEnd="0dp"
-        app:layout_constraintBottom_toTopOf="@id/calculateLayout"
-        app:layout_constraintTop_toBottomOf="@id/companyNameTextView"
+        app:layout_constraintBottom_toTopOf="@id/addButton"
+        app:layout_constraintTop_toBottomOf="@id/calculateLayout"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
+        android:gravity="center_vertical"
         >
 
         <TextView
@@ -162,8 +163,8 @@
         android:id="@+id/calculateLayout"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        app:layout_constraintBottom_toTopOf="@id/addButton"
-        app:layout_constraintTop_toBottomOf="@id/detailLayout"
+        app:layout_constraintBottom_toTopOf="@id/detailLayout"
+        app:layout_constraintTop_toBottomOf="@id/companyNameTextView"
         android:orientation="horizontal"
         android:weightSum="10"
         android:paddingStart="20dp"

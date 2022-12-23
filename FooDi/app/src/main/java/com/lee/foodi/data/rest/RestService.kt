@@ -1,9 +1,9 @@
 package com.lee.foodi.data.rest
 
 import com.lee.foodi.common.CONNECTION_TIME_OUT
-import com.lee.foodi.common.NEW_FOOD_TARGET_URL
-import com.lee.foodi.data.rest.model.AddFoodData
-import com.lee.foodi.data.rest.model.NewFoodData
+import com.lee.foodi.common.FOOD_TARGET_URL
+import com.lee.foodi.data.rest.model.AddingFood
+import com.lee.foodi.data.rest.model.SearchingFoodResponse
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Response
@@ -16,14 +16,14 @@ import retrofit2.http.Query
 import java.util.concurrent.TimeUnit
 
 interface RestService {
-    @GET(NEW_FOOD_TARGET_URL)
+    @GET(FOOD_TARGET_URL)
     suspend fun getNewSearchFood(
         @Query("desc_kor") foodName : String
         , @Query("pageNo") page : String
-    ) : Response<NewFoodData>
+    ) : Response<SearchingFoodResponse>
 
-    @POST(NEW_FOOD_TARGET_URL)
-    suspend fun addNewFood(@Body foodData : AddFoodData) : Response<Void>
+    @POST(FOOD_TARGET_URL)
+    suspend fun addNewFood(@Body foodData : AddingFood) : Response<Void>
 }
 
 class RestServiceInstance{
@@ -41,7 +41,7 @@ class RestServiceInstance{
 
             if(!::restService.isInitialized){
                 val retrofit = Retrofit.Builder()
-                    .baseUrl(NEW_FOOD_TARGET_URL)
+                    .baseUrl(FOOD_TARGET_URL)
                     .client(okHttpClient)
                     .addConverterFactory(GsonConverterFactory.create())
                     .build()

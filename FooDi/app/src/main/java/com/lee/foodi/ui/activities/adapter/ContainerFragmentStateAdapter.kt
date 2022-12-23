@@ -1,4 +1,4 @@
-package com.lee.foodi.ui.adapter
+package com.lee.foodi.ui.activities.adapter
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity

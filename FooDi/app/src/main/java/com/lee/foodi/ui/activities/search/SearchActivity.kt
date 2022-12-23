@@ -12,13 +12,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.lee.foodi.R
 import com.lee.foodi.common.*
 import com.lee.foodi.data.repository.FoodiRepository
-import com.lee.foodi.data.rest.model.FoodInfoData
+import com.lee.foodi.data.rest.model.Food
 import com.lee.foodi.databinding.ActivitySearchBinding
 import com.lee.foodi.ui.activities.add.AddFoodActivity
+import com.lee.foodi.ui.activities.search.adapter.SearchFoodRecyclerAdapter
 import com.lee.foodi.ui.activities.search.detail.FoodDetailActivity
 import com.lee.foodi.ui.activities.search.dialog.AddNewFoodDialog
 import com.lee.foodi.ui.activities.search.viewmodel.SearchFoodViewModel
-import com.lee.foodi.ui.adapter.SearchFoodRecyclerAdapter
 import com.lee.foodi.ui.factory.FoodiViewModelFactory
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
@@ -54,7 +54,7 @@ class SearchActivity : AppCompatActivity() {
         mSearchFoodRecyclerAdapter = SearchFoodRecyclerAdapter()
         mSearchFoodRecyclerAdapter.setOnItemClickListener(object : SearchFoodRecyclerAdapter.OnItemClickListener{
             // move to FoodDetailActivity when item selected
-            override fun onItemClick(v: View, model: FoodInfoData, position: Int) {
+            override fun onItemClick(v: View, model: Food, position: Int) {
                 super.onItemClick(v, model, position)
                 with(Intent(this@SearchActivity , FoodDetailActivity::class.java)){
                     putExtra(EXTRA_SELECTED_FOOD , model)
