@@ -78,7 +78,6 @@ class DiaryDetailActivity : AppCompatActivity() {
         addListeners()
     }
 
-    @SuppressLint("ClickableViewAccessibility")
     @RequiresApi(Build.VERSION_CODES.O)
     private fun addListeners() {
         with(binding){
@@ -91,17 +90,8 @@ class DiaryDetailActivity : AppCompatActivity() {
             }
 
             // Calculate EditText
-            calculateEditText.setOnTouchListener { _ , actionEvent ->
-                when(actionEvent.action){
-                    MotionEvent.ACTION_DOWN -> {
-                        if(!::mTextChangedDisposable.isInitialized){
-                            mTextChangedDisposable = calculateEditText.textChanges().subscribe {
-                                updateIngredientTextView(true)
-                            }
-                        }
-                    }
-                }
-                false
+            mTextChangedDisposable = calculateEditText.textChanges().subscribe {
+                updateIngredientTextView(true)
             }
 
             // Back Button

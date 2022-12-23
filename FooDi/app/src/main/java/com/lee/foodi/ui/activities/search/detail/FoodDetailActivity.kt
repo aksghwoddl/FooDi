@@ -259,6 +259,7 @@ class FoodDetailActivity : AppCompatActivity() {
             cholesterol = mCalculatedCholesterol
             saturatedFat = mCalculatedSaturatedFat
             transFat = mCalculatedTransFat
+            servingWeight = binding.calculateEditText.text.toString()
         }
     }
 
