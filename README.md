@@ -23,7 +23,8 @@
 <img src="https://img.shields.io/badge/Kotlin-7F52FF?style=for-the-badge&logo=Kotlin&logoColor=white">
 <img src="https://img.shields.io/badge/Room-003B57?style=for-the-badge&logo=SQLite&logoColor=white">
 <img src="https://img.shields.io/badge/RxBinding-B7178C?style=for-the-badge&logo=ReactiveX&logoColor=white">
-<img src="https://img.shields.io/badge/Retrofit2-3E4348?style=for-the-badge&logo=Square&logoColor=white">
+<img src="https://img.shields.io/badge/Retrofit-3E4348?style=for-the-badge&logo=Square&logoColor=white">
+<img src="https://img.shields.io/badge/OkHttp-3E4348?style=for-the-badge&logo=Square&logoColor=white">
 <img src="https://img.shields.io/badge/DataBinding-0F9D58?style=for-the-badge&logo=&logoColor=white">
 <img src="https://img.shields.io/badge/MVVM-0F9D58?style=for-the-badge&logo=&logoColor=white">
 <img src="https://img.shields.io/badge/Coroutine-0F9D58?style=for-the-badge&logo=&logoColor=white">
@@ -48,8 +49,8 @@
 ##### 2️⃣ 다이어리
 ###### RoomDB를 통해 사용자가 섭취한 음식을 기록하는 기능
 <p align="center">
- <img width="300" alt="app_main" src="https://user-images.githubusercontent.com/65700842/209274602-0c77f5c7-d212-441b-986a-d1321a89d999.gif">
- <img width="300" alt="app_main" src="https://user-images.githubusercontent.com/65700842/207863737-b8744aee-e00d-43d9-9395-364a92433a71.gif">
+ <img width="30%" alt="app_main" src="https://user-images.githubusercontent.com/65700842/209274602-0c77f5c7-d212-441b-986a-d1321a89d999.gif">
+ <img width="30%" alt="app_main" src="https://user-images.githubusercontent.com/65700842/207863737-b8744aee-e00d-43d9-9395-364a92433a71.gif">
 </p>
 
 ##### 3️⃣ 음식 추가하기
