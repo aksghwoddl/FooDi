@@ -78,3 +78,11 @@
  <img width="30%" alt="app_main" src="https://user-images.githubusercontent.com/65700842/208374244-5644b4df-93e2-4a65-826b-16809fa64666.gif">
 </div>
 
+### 😎 프로젝트 사용기술 설명
+##### 1️⃣ MVVM 디자인 기반으로 프로젝트를 진행 하였습니다.
+##### 2️⃣ Coroutine을 통한 비동기 처리를 , RxBinding을 통한 UI event 처리를 하였습니다. (throttleFirst()를 통한 이중 클릭 방지)
+##### 3️⃣ Retrofit2를 통해 Rest통신을 하였습니다.
+##### 4️⃣ Room을 활용하여 내부 저장소에 식단 정보를 저장하도록 구현 하였습니다.
+##### 5️⃣ Repository를 사용하여 Data를 관리 하였습니다.
+##### 6️⃣ MPAndroidChart 라이브러리를 통해 내부 저장소에 저장된 정보를 그래프로 시각화 하였습니다.
+##### 7️⃣ SharedPreference를 활용한 설정 정보를 저장하여 앱 내부에서 모두 공유 할 수 있도록 하였습니다.
