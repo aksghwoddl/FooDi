@@ -156,11 +156,11 @@ class DiaryViewModel(repository: FoodiRepository) : ViewModel() {
     }
 
     override fun onCleared() {
+        super.onCleared()
         if(::addDiaryJob.isInitialized){
             if(addDiaryJob.isActive){
                 addDiaryJob.cancel()
             }
         }
-        super.onCleared()
     }
 }
