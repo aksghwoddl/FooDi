@@ -1,10 +1,8 @@
 package com.lee.foodi.ui.activities.search.dialog
 
-import android.content.Intent
 import android.os.Bundle
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.lee.foodi.databinding.DialogAddNewFoodBinding
-import com.lee.foodi.ui.activities.add.AddFoodActivity
 import com.lee.foodi.ui.activities.search.SearchActivity
 
 class AddNewFoodDialog(private val owner : SearchActivity) : BottomSheetDialog(owner) {

@@ -1,6 +1,5 @@
 package com.lee.foodi.ui.activities
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat

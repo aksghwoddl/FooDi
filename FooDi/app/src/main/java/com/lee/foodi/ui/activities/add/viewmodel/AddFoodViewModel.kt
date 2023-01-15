@@ -3,6 +3,8 @@ package com.lee.foodi.ui.activities.add.viewmodel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.lee.foodi.R
+import com.lee.foodi.common.FoodiNewApplication
 import com.lee.foodi.common.Utils
 import com.lee.foodi.data.repository.FoodiRepository
 import com.lee.foodi.data.rest.model.AddingFood
@@ -10,6 +12,7 @@ import com.lee.foodi.ui.activities.add.AddFoodActivity
 import com.lee.foodi.ui.factory.FoodiViewModelFactory
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import java.net.ConnectException
 
@@ -20,6 +23,8 @@ private const val TAG = "AddFoodViewModel"
  * Because of using DataBinding at AddFoodActivity
  * **/
 class AddFoodViewModel(private val repository: FoodiRepository) : ViewModel() {
+    private lateinit var postAddFoodJob : Job
+
     companion object{
         private lateinit var instance : AddFoodViewModel
 
@@ -69,22 +74,31 @@ class AddFoodViewModel(private val repository: FoodiRepository) : ViewModel() {
 
     fun postRequestAddFood(addingFood: AddingFood){
         try{
-            CoroutineScope(Dispatchers.IO).launch {
+           postAddFoodJob = CoroutineScope(Dispatchers.IO).launch {
                 isProgressShowing.postValue(true)
                 val response = repository.addNewFood(addingFood)
                 if(response.isSuccessful){
                     CoroutineScope(Dispatchers.Main).launch {
-                        Utils.toastMessage("성공적으로 저장하였습니다.")
+                        Utils.toastMessage(FoodiNewApplication.getInstance().getString(R.string.successfully_add))
                         isProgressShowing.value = false
                     }
                 } else {
-                    errorMessage.postValue("서버에 전송 실패하였습니다.")
+                    errorMessage.postValue(FoodiNewApplication.getInstance().getString(R.string.response_fail))
                     isProgressShowing.postValue(false)
                 }
             }
         } catch (connectException : ConnectException){
-            errorMessage.postValue("서버와의 연결을 확인해주세요.")
+            errorMessage.postValue(FoodiNewApplication.getInstance().getString(R.string.check_server_connection))
             isProgressShowing.value = false
         }
+    }
+
+    override fun onCleared() {
+        if(::postAddFoodJob.isInitialized){
+            if(postAddFoodJob.isActive){
+                postAddFoodJob.cancel()
+            }
+        }
+        super.onCleared()
     }
 }

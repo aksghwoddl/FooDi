@@ -2,7 +2,6 @@ package com.lee.foodi.ui.fragments.report
 
 import android.graphics.Color
 import android.graphics.Typeface
-import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,7 +9,6 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.AdapterView.OnItemSelectedListener
 import android.widget.ArrayAdapter
-import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.github.mikephil.charting.components.AxisBase
@@ -53,7 +51,6 @@ class ReportFragment : Fragment() {
         return binding.root
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initSpinner()
@@ -61,7 +58,6 @@ class ReportFragment : Fragment() {
         observeData()
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onResume() {
         super.onResume()
         CoroutineScope(Dispatchers.IO).launch {
@@ -89,7 +85,6 @@ class ReportFragment : Fragment() {
         with(binding){
             reportSelection.adapter = adapter
             reportSelection.onItemSelectedListener = object : OnItemSelectedListener{
-                @RequiresApi(Build.VERSION_CODES.O)
                 override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
                     CoroutineScope(Dispatchers.IO).launch {
                         mViewModel.summaryList.postValue(mViewModel.getDiarySummary(reportSelection.selectedItem.toString()))
@@ -165,7 +160,6 @@ class ReportFragment : Fragment() {
     /**
      * Function for observe Live data
      * **/
-    @RequiresApi(Build.VERSION_CODES.O)
     private fun observeData() {
         with(mViewModel){
             // Summary List
@@ -192,10 +186,8 @@ class ReportFragment : Fragment() {
     private fun calculateAverageCalorie() : String {
         val diaryList = mViewModel.summaryList.value
         var sum  = 0.0
-        diaryList?.forEach {
-            if(it != null){
-                sum += it.totalCalorie.toDouble()
-            }
+        diaryList?.forEach { diary ->
+           diary?.let { sum += it.totalCalorie.toDouble() }
         }
         return (sum/diaryList!!.size).roundToInt().toString()
     }
@@ -203,16 +195,13 @@ class ReportFragment : Fragment() {
     /**
      * Function for set data at char
      * **/
-    @RequiresApi(Build.VERSION_CODES.O)
     private fun setData() {
         val valueList = ArrayList<BarEntry>()
         val title = getString(R.string.spend_calorie_title)
         CoroutineScope(Dispatchers.IO).launch {
             val summaryList = mViewModel.summaryList.value
             summaryList?.forEachIndexed{index , diary ->
-                if(diary != null){
-                    valueList.add(BarEntry(index.toFloat() , diary.totalCalorie.toFloat()))
-                }
+                diary?.let { valueList.add(BarEntry(index.toFloat() , diary.totalCalorie.toFloat())) }
             }
             val barDataSet = BarDataSet(valueList , title)
             barDataSet.color = requireContext().getColor(R.color.main_color)

@@ -5,14 +5,13 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.os.SystemClock
 import android.text.Editable
 import android.util.Log
 import android.view.View
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.jakewharton.rxbinding3.widget.textChanges
 import com.lee.foodi.R
 import com.lee.foodi.common.*
@@ -50,7 +49,6 @@ class FoodDetailActivity : AppCompatActivity() {
     private var mCalculatedSaturatedFat = ""
     private var mCalculatedTransFat = ""
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityFoodDetailBinding.inflate(layoutInflater).also {
@@ -70,7 +68,6 @@ class FoodDetailActivity : AppCompatActivity() {
     /**
      * Init Functions
      * **/
-    @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("SetTextI18n")
     private fun init() {
         with(binding){
@@ -87,12 +84,11 @@ class FoodDetailActivity : AppCompatActivity() {
         addListeners()
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     private fun addListeners() {
         with(binding){
             // Add Button
             addButton.setOnClickListener {
-                CoroutineScope(Dispatchers.IO).launch {
+                lifecycleScope.launch {
                     updateFoodInfo()
                     addFoodIntoDatabase()
                     if(mFooDiPreferenceManager.isTimerOn){
@@ -101,10 +97,8 @@ class FoodDetailActivity : AppCompatActivity() {
                     } else {
                         Log.d(TAG, "addListeners: click addButton , timer is not enable ")
                     }
-                    CoroutineScope(Dispatchers.Main).launch {
-                        Utils.toastMessage(getString(R.string.successfully_add))
-                        finish()
-                    }
+                    Utils.toastMessage(getString(R.string.successfully_add))
+                    finish()
                 }
             }
 
@@ -125,16 +119,16 @@ class FoodDetailActivity : AppCompatActivity() {
     /**
      * Function for add food into Room DB
      * **/
-    @RequiresApi(Build.VERSION_CODES.O)
-    private suspend fun addFoodIntoDatabase() {
+    private fun addFoodIntoDatabase() {
         val date = intent.getStringExtra(EXTRA_SELECTED_DATE)!!
         val time = LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH : mm"))
         val servingSize = binding.calculateEditText.text.toString() + binding.unitTextView.text
         val queryFood = DiaryItemEntity(null , date , mFood , time , servingSize)
-        FoodiRepository.getInstance().addDiaryItem(queryFood)
+        CoroutineScope(Dispatchers.IO).launch{
+            FoodiRepository.getInstance().addDiaryItem(queryFood)
+        }
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     private fun updateTimer() {
         val today = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy년MM월dd일"))
         if( intent.getStringExtra(EXTRA_SELECTED_DATE) == today){

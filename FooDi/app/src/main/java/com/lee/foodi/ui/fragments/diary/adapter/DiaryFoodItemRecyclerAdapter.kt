@@ -6,15 +6,8 @@ import android.view.ViewGroup
 import android.widget.PopupMenu
 import androidx.recyclerview.widget.RecyclerView
 import com.lee.foodi.R
-import com.lee.foodi.common.FoodiNewApplication
-import com.lee.foodi.common.Utils
-import com.lee.foodi.data.repository.FoodiRepository
 import com.lee.foodi.data.room.entity.DiaryItem
-import com.lee.foodi.data.room.entity.DiaryItemEntity
 import com.lee.foodi.databinding.DiaryFoodItemBinding
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 class DiaryFoodItemRecyclerAdapter : RecyclerView.Adapter<DiaryFoodItemRecyclerAdapter.DiaryFoodItemViewHolder>() {
     private var mDiaryList = mutableListOf<DiaryItem>()

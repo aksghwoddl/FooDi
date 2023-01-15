@@ -1,13 +1,10 @@
 package com.lee.foodi.ui.fragments.diary.detail
 
 import android.annotation.SuppressLint
-import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.util.Log
-import android.view.MotionEvent
 import android.view.View
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.jakewharton.rxbinding3.widget.textChanges
 import com.lee.foodi.R
@@ -18,7 +15,6 @@ import com.lee.foodi.data.repository.FoodiRepository
 import com.lee.foodi.data.room.entity.DiaryItem
 import com.lee.foodi.data.room.entity.DiaryItemEntity
 import com.lee.foodi.databinding.ActivityDiaryDetailBinding
-import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -42,7 +38,6 @@ class DiaryDetailActivity : AppCompatActivity() {
     private var mCalculatedSaturatedFat = ""
     private var mCalculatedTransFat = ""
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityDiaryDetailBinding.inflate(layoutInflater).also {
@@ -62,7 +57,6 @@ class DiaryDetailActivity : AppCompatActivity() {
     /**
      * Init Functions
      * **/
-    @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("SetTextI18n")
     private fun init() {
         with(binding){
@@ -78,7 +72,6 @@ class DiaryDetailActivity : AppCompatActivity() {
         addListeners()
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     private fun addListeners() {
         with(binding){
             // Modify Button

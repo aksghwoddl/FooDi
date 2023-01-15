@@ -1,7 +1,5 @@
 package com.lee.foodi.ui.fragments.user
 
-import android.annotation.SuppressLint
-import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -181,11 +179,11 @@ class UserFragment : Fragment() {
         }
     }
 
-    @SuppressLint("SetTextI18n")
     fun updateGoalCalorie() {
         if(mPreferenceManager.goalCalorie!!.isNotEmpty()){ // Update when goal calorie is not empty
+            val updateString = resources.getString(R.string.goal_calorie)
             Utils.convertValueWithErrorCheck(binding.goalCalorieTextView
-                , resources.getString(R.string.goal_calorie)
+                , updateString
                 , mPreferenceManager.goalCalorie!!)
             Utils.toastMessage(getString(R.string.successfully_modify))
         }

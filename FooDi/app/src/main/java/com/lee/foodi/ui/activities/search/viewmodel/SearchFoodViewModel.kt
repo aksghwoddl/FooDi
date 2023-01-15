@@ -3,20 +3,22 @@ package com.lee.foodi.ui.activities.search.viewmodel
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.lee.foodi.R
 import com.lee.foodi.common.FoodiNewApplication
 import com.lee.foodi.data.repository.FoodiRepository
 import com.lee.foodi.data.rest.model.Food
 import com.lee.foodi.data.rest.model.SearchingFoodResponse
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import retrofit2.Response
 import java.net.ConnectException
 import java.net.SocketTimeoutException
 
 private const val TAG = "FoodInfoViewModel"
 
 class SearchFoodViewModel(private val repository: FoodiRepository) : ViewModel() {
-    private var mJob : Job? = null
-    private var foodResponse : SearchingFoodResponse? = null
     val foodList = MutableLiveData<MutableList<Food>>() // Food List that searched
     val errorMessage = MutableLiveData<String>() // Management about error
     val isProgressVisible = MutableLiveData<Boolean>() // Management Progressbar state
@@ -29,40 +31,42 @@ class SearchFoodViewModel(private val repository: FoodiRepository) : ViewModel()
      * For Get FoodList that searched from repository
      * **/
     fun getSearchFoodList(foodName : String , page : String) {
-        mJob = CoroutineScope(Dispatchers.IO).launch {
-            try {
-                isProgressVisible.postValue(true)
-                if(foodName.isNotEmpty()){
-                    val response = repository.getNewSearchFood(foodName , page)
-                    foodResponse = response.body()
-                    withContext(Dispatchers.Main) {
-                        if(response.isSuccessful){
-                            foodList.value = foodResponse?.results
-                            isProgressVisible.postValue(false)
-                            val totalCount = foodResponse?.totalCount!!
-                            isNextEnable.value = totalCount >= 1 && foodResponse!!.totalCount > page.toInt()
-                        } else {
-                            Log.d(TAG, "getSearchFoodList: ${response.message()}")
-                            errorMessage.postValue(FoodiNewApplication.getInstance().getString(R.string.response_fail))
+        Log.d(TAG, "getSearchFoodList()")
+            if(foodName.isNotEmpty()){
+                try{
+                    var response : Response<SearchingFoodResponse>? = null
+                    viewModelScope.launch {
+                        try{
+                            response = withContext(Dispatchers.IO){
+                                isProgressVisible.postValue(true)
+                                repository.getNewSearchFood(foodName , page)
+                            }
+                        } catch(connectException : ConnectException) { // 서버가 켜져 있지 않을때
+                            errorMessage.postValue(FoodiNewApplication.getInstance().getString(R.string.check_server_connection))
                             isProgressVisible.postValue(false)
                         }
+                        response?.let { // 서버가 켜져 있고 Response를 전달 받았을때
+                            if(it.isSuccessful){
+                                it.body()?.let { searchResponse ->
+                                    foodList.value = searchResponse.results
+                                    isProgressVisible.value = false
+                                    val totalCount = it.body()?.totalCount!!
+                                    isNextEnable.value = totalCount >= 1 && searchResponse.totalCount > page.toInt()
+                                }
+                            } else {
+                                Log.d(TAG, "getSearchFoodList: ${it.code()}")
+                                errorMessage.value = FoodiNewApplication.getInstance().getString(R.string.response_fail)
+                                isProgressVisible.value = false
+                            }
+                        }
                     }
-                } else {
-                    errorMessage.postValue(FoodiNewApplication.getInstance().getString(R.string.empty_search))
+                }  catch (socketTimeOutException : SocketTimeoutException){ // 통신시간 초과
+                    errorMessage.postValue(FoodiNewApplication.getInstance().getString(R.string.check_socket_timeout))
                     isProgressVisible.postValue(false)
                 }
-            } catch (socketTimeOutException : SocketTimeoutException){
-                errorMessage.postValue(FoodiNewApplication.getInstance().getString(R.string.check_socket_timeout))
-                isProgressVisible.postValue(false)
-            } catch(connectException : ConnectException){
-                errorMessage.postValue(FoodiNewApplication.getInstance().getString(R.string.check_server_connection))
-                isProgressVisible.postValue(false)
+            } else {
+                errorMessage.postValue(FoodiNewApplication.getInstance().getString(R.string.empty_search))
+                isProgressVisible.value = false
             }
-        }
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        mJob?.cancel()
     }
 }

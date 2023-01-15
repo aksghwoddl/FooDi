@@ -7,10 +7,10 @@ import android.view.KeyEvent
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.lee.foodi.R
 import com.lee.foodi.common.*
+import com.lee.foodi.common.manager.CustomLinearLayoutManager
 import com.lee.foodi.data.repository.FoodiRepository
 import com.lee.foodi.data.rest.model.Food
 import com.lee.foodi.databinding.ActivitySearchBinding
@@ -62,7 +62,7 @@ class SearchActivity : AppCompatActivity() {
             }
         })
         with(binding.searchFoodRecyclerView){
-            layoutManager = LinearLayoutManager(context , RecyclerView.VERTICAL , false)
+            layoutManager = CustomLinearLayoutManager(context , RecyclerView.VERTICAL , false)
             adapter = mSearchFoodRecyclerAdapter
         }
     }
@@ -136,8 +136,10 @@ class SearchActivity : AppCompatActivity() {
            foodList.observe(this@SearchActivity){
                it?.let {
                    if(it.isNotEmpty()){
-                       mSearchFoodRecyclerAdapter.setList(it)
-                       mSearchFoodRecyclerAdapter.notifyDataSetChanged()
+                       mSearchFoodRecyclerAdapter.run {
+                           setList(it)
+                           notifyItemRangeChanged(0 , itemCount)
+                       }
                        addFoodLayoutVisible.postValue(false)
                    } else {
                        addFoodLayoutVisible.postValue(true)

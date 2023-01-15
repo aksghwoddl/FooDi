@@ -3,7 +3,6 @@ package com.lee.foodi.ui.fragments.user.dialog
 import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import com.lee.foodi.common.FoodiNewApplication
 import com.lee.foodi.common.Utils
 import com.lee.foodi.common.manager.FooDiPreferenceManager
@@ -48,7 +47,6 @@ class SettingTimerDialog(context : Context, private val caller : UserFragment) :
     private fun addListeners() {
         with(binding){
             settingButton.setOnClickListener {
-                Log.d(TAG, "addListeners: Timer updated")
                 mPreferenceManager.run {
                     hour = binding.hourPicker.value
                     minute = binding.minutePicker.value

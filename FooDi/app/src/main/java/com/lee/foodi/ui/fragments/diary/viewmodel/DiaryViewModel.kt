@@ -1,8 +1,6 @@
 package com.lee.foodi.ui.fragments.diary.viewmodel
 
-import android.os.Build
 import android.util.Log
-import androidx.annotation.RequiresApi
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -13,10 +11,7 @@ import com.lee.foodi.data.repository.FoodiRepository
 import com.lee.foodi.data.room.entity.DiaryEntity
 import com.lee.foodi.data.room.entity.DiaryItem
 import com.lee.foodi.data.room.entity.DiaryItemEntity
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -29,7 +24,8 @@ class DiaryViewModel(repository: FoodiRepository) : ViewModel() {
         mRepository = repository
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
+    private lateinit var addDiaryJob : Job
+
     val date = MutableLiveData<String>(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy년MM월dd일"))) // Selected date
     val diaryItems = MutableLiveData<MutableList<DiaryItem>>() // Diary items in Room
     val goalCalorie = MutableLiveData<String>("0") // Goal calorie
@@ -44,7 +40,6 @@ class DiaryViewModel(repository: FoodiRepository) : ViewModel() {
     /**
      * Function for get diary item as selected date
      * **/
-     @RequiresApi(Build.VERSION_CODES.O)
      fun getDiaryItems(){
          viewModelScope.launch {
              val diaryItem = withContext(Dispatchers.IO){
@@ -59,10 +54,9 @@ class DiaryViewModel(repository: FoodiRepository) : ViewModel() {
     /**
      * Function for add Diary Summary of the day
      * **/
-    @RequiresApi(Build.VERSION_CODES.O)
     fun addDiarySummary() {
         Log.d(TAG, "addDiarySummary()")
-        CoroutineScope(Dispatchers.IO).launch {
+        addDiaryJob = CoroutineScope(Dispatchers.IO).launch {
             val diary = DiaryEntity(date.value!! 
                 , spendCalories.value!! 
                 , amountCarbon.value!! 
@@ -76,7 +70,6 @@ class DiaryViewModel(repository: FoodiRepository) : ViewModel() {
     /**
      * Function for delete selected diary item when popup menu clicked
      * **/
-    @RequiresApi(Build.VERSION_CODES.O)
     fun deleteSelectedDiaryItem(diaryItem: DiaryItem){
         viewModelScope.launch {
             withContext(Dispatchers.IO){
@@ -90,5 +83,14 @@ class DiaryViewModel(repository: FoodiRepository) : ViewModel() {
             getDiaryItems()
             Utils.toastMessage(FoodiNewApplication.getInstance().getString(R.string.successfully_delete))
         }
+    }
+
+    override fun onCleared() {
+        if(::addDiaryJob.isInitialized){
+            if(addDiaryJob.isActive){
+                addDiaryJob.cancel()
+            }
+        }
+        super.onCleared()
     }
 }

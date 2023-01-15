@@ -61,7 +61,6 @@ class DiaryFragment : Fragment() {
         return binding.root
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         Log.d(TAG, "onViewCreated()")
         super.onViewCreated(view, savedInstanceState)
@@ -72,7 +71,6 @@ class DiaryFragment : Fragment() {
     }
 
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onResume() {
         Log.d(TAG, "onResume()")
         super.onResume()
@@ -86,7 +84,6 @@ class DiaryFragment : Fragment() {
      * Function for observe Live Datas
      * **/
     @SuppressLint("NotifyDataSetChanged")
-    @RequiresApi(Build.VERSION_CODES.O)
     private fun observeData() {
         with(mViewModel){
             // Header Date
@@ -170,7 +167,6 @@ class DiaryFragment : Fragment() {
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     private fun init() {
         // Init RecyclerView
         mDiaryFoodItemRecyclerAdapter = DiaryFoodItemRecyclerAdapter()
@@ -183,7 +179,6 @@ class DiaryFragment : Fragment() {
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     private fun addListeners() {
         with(binding){
             // Food Search Listeners
@@ -280,8 +275,7 @@ class DiaryFragment : Fragment() {
     }
 
     /** For Date PickerDialog **/
-    inner class DatePickerListener : DatePickerDialog.OnDateSetListener {
-        @RequiresApi(Build.VERSION_CODES.O)
+   private inner class DatePickerListener : DatePickerDialog.OnDateSetListener {
         override fun onDateSet(datePicker: DatePicker?, year: Int, month: Int, day: Int) {
             val selectedDate = LocalDate.of(year, month+1 ,day).format(DateTimeFormatter.ofPattern("yyyy년MM월dd일"))
             mYear = year ; mMonth = month ; mDay = day
@@ -290,8 +284,7 @@ class DiaryFragment : Fragment() {
     }
 
     /** For Popup Menu click **/
-    inner class PopupMenuItemClickListener : PopupMenu.OnMenuItemClickListener {
-        @RequiresApi(Build.VERSION_CODES.O)
+   private inner class PopupMenuItemClickListener : PopupMenu.OnMenuItemClickListener {
         override fun onMenuItemClick(item: MenuItem?): Boolean {
             when(item?.itemId){
                 R.id.itemDelete -> {
@@ -302,7 +295,7 @@ class DiaryFragment : Fragment() {
         }
     }
 
-    inner class OnDiaryItemClickListener : DiaryFoodItemRecyclerAdapter.OnItemClickListener {
+   private inner class OnDiaryItemClickListener : DiaryFoodItemRecyclerAdapter.OnItemClickListener {
         override fun onItemClick(v: View, model: DiaryItem, position: Int) {
             super.onItemClick(v, model, position)
             with(Intent(requireContext() , DiaryDetailActivity::class.java)){

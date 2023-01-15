@@ -1,18 +1,17 @@
 package com.lee.foodi.ui.fragments.report.viewmodel
 
-import android.os.Build
 import android.util.Log
-import androidx.annotation.RequiresApi
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.lee.foodi.common.LATELY
 import com.lee.foodi.common.MONTHLY
 import com.lee.foodi.common.WEEKS
 import com.lee.foodi.data.repository.FoodiRepository
 import com.lee.foodi.data.room.entity.Diary
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
+import kotlinx.coroutines.withContext
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.*
@@ -25,69 +24,70 @@ class ReportViewModel(private val repository: FoodiRepository) : ViewModel() {
 
     private var mDayList = mutableListOf<Int>()
 
-    @RequiresApi(Build.VERSION_CODES.O)
     suspend fun getDiarySummary(selectedSection : String) : MutableList<Diary>? {
         if(mDayList.isNotEmpty()){
             mDayList.clear()
         }
         val calendar = Calendar.getInstance()
         val diarySummaryList = mutableListOf<Diary>()
-        val ret = CoroutineScope(Dispatchers.IO).async {
-            when(selectedSection){
-                LATELY -> {
-                    val year = calendar.get(Calendar.YEAR)
-                    val month = calendar.get(Calendar.MONTH) + 1
-                    val day = calendar.get(Calendar.DATE)
-                    for(i in 0 .. 2){
-                        val insertDate = day - i
-                        if(insertDate != 0){
-                            mDayList.add(insertDate)
+        val ret = viewModelScope.async{
+            val list = withContext(Dispatchers.IO){
+                when(selectedSection){
+                    LATELY -> {
+                        val year = calendar.get(Calendar.YEAR)
+                        val month = calendar.get(Calendar.MONTH) + 1
+                        val day = calendar.get(Calendar.DATE)
+                        for(i in 0 .. 2){
+                            val insertDate = day - i
+                            if(insertDate != 0){
+                                mDayList.add(insertDate)
+                            }
                         }
-                    }
-                    mDayList.reverse()
-                    mDayList.forEach {
-                        val queryDate = LocalDate.of(year , month , it).format(DateTimeFormatter.ofPattern("yyyy년MM월dd일"))
-                        diarySummaryList.add(repository.getDiarySummary(queryDate))
-                    }
-                    diarySummaryList
-                }
-                WEEKS -> {
-                    val year = calendar.get(Calendar.YEAR)
-                    val month = calendar.get(Calendar.MONTH) + 1
-                    val day = calendar.get(Calendar.DATE)
-                    for(i in 0 .. 6){
-                        val insertDate = day - i
-                        if(insertDate != 0){
-                            mDayList.add(day - i)
+                        mDayList.reverse()
+                        mDayList.forEach {
+                            val queryDate = LocalDate.of(year , month , it).format(DateTimeFormatter.ofPattern("yyyy년MM월dd일"))
+                            diarySummaryList.add(repository.getDiarySummary(queryDate))
                         }
+                        diarySummaryList
                     }
-                    mDayList.reverse()
-                    mDayList.forEach {
-                        val queryDate = LocalDate.of(year , month , it).format(DateTimeFormatter.ofPattern("yyyy년MM월dd일"))
-                        diarySummaryList.add(repository.getDiarySummary(queryDate))
+                    WEEKS -> {
+                        val year = calendar.get(Calendar.YEAR)
+                        val month = calendar.get(Calendar.MONTH) + 1
+                        val day = calendar.get(Calendar.DATE)
+                        for(i in 0 .. 6){
+                            val insertDate = day - i
+                            if(insertDate != 0){
+                                mDayList.add(day - i)
+                            }
+                        }
+                        mDayList.reverse()
+                        mDayList.forEach {
+                            val queryDate = LocalDate.of(year , month , it).format(DateTimeFormatter.ofPattern("yyyy년MM월dd일"))
+                            diarySummaryList.add(repository.getDiarySummary(queryDate))
+                        }
+                        diarySummaryList
                     }
-                    diarySummaryList
-                }
-                MONTHLY -> {
-                    val year = calendar.get(Calendar.YEAR)
-                    val month = calendar.get(Calendar.MONTH) + 1
-                    val dayCounts = getDayCountInMonth(year , month)
-                    for(i in 1 .. dayCounts){
-                        mDayList.add(i)
+                    MONTHLY -> {
+                        val year = calendar.get(Calendar.YEAR)
+                        val month = calendar.get(Calendar.MONTH) + 1
+                        val dayCounts = getDayCountInMonth(year , month)
+                        for(i in 1 .. dayCounts){
+                            mDayList.add(i)
+                        }
+                        mDayList.forEach {
+                            val queryDate = LocalDate.of(year , month , it).format(DateTimeFormatter.ofPattern("yyyy년MM월dd일"))
+                            diarySummaryList.add(repository.getDiarySummary(queryDate))
+                        }
+                        diarySummaryList
                     }
-                    mDayList.forEach {
-                        val queryDate = LocalDate.of(year , month , it).format(DateTimeFormatter.ofPattern("yyyy년MM월dd일"))
-                        diarySummaryList.add(repository.getDiarySummary(queryDate))
+                    else -> {
+                        null
                     }
-                    diarySummaryList
-                }
-                else -> {
-                    null
                 }
             }
+           list
         }
-        Log.d(TAG, "getDiarySummary: ${ret.await()}")
-        return  ret.await()
+        return ret.await()
     }
 
     fun getDayList() = mDayList

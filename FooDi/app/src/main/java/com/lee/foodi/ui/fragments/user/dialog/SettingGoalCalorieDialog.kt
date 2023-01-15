@@ -3,17 +3,12 @@ package com.lee.foodi.ui.fragments.user.dialog
 import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
-import android.text.Editable
-import android.text.InputFilter
-import android.text.TextWatcher
 import android.util.Log
-import android.widget.Toast
 import com.lee.foodi.common.FoodiNewApplication
 import com.lee.foodi.common.Utils
 import com.lee.foodi.common.manager.FooDiPreferenceManager
 import com.lee.foodi.databinding.DialogSettingGoalCalorieBinding
 import com.lee.foodi.ui.fragments.user.UserFragment
-import java.util.regex.Pattern
 
 private const val TAG = "SettingGoalCalorieDialog"
 
@@ -63,7 +58,7 @@ class SettingGoalCalorieDialog(context : Context , private val caller : UserFrag
         generatePickerValues()
         binding.caloriePicker.run {
             minValue = 0
-            maxValue = (MAX_CALORIE -1000)/100
+            maxValue = (MAX_CALORIE - 1000)/100
             displayedValues = mPickerValue.toTypedArray()
             wrapSelectorWheel = false
             value = (mPreferenceManager.goalCalorie!!.toInt() - 1000 ) / 100
