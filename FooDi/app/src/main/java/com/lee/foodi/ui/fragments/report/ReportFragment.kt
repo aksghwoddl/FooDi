@@ -30,6 +30,7 @@ import com.lee.foodi.ui.fragments.report.viewmodel.ReportViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import kotlin.math.roundToInt
 
 private const val TAG = "ReportFragment"
@@ -61,18 +62,20 @@ class ReportFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        CoroutineScope(Dispatchers.IO).launch {
-            val bSummaryList = mViewModel.getDiarySummary(binding.reportSelection.selectedItem.toString())
-            CoroutineScope(Dispatchers.Main).launch{
-                mViewModel.summaryList.value = bSummaryList
-                val preferenceManager = FooDiPreferenceManager.getInstance(FoodiNewApplication.getInstance())
-                if(preferenceManager.goalCalorie  != "0"){
-                    binding.reportChart.axisLeft.setAxisMaxValue(preferenceManager.goalCalorie!!.toFloat())
-                    binding.reportChart.axisRight.setAxisMaxValue(preferenceManager.goalCalorie!!.toFloat())
-                }
-                binding.reportChart.animateY(1000)
-                mViewModel.averageCalorie.value = calculateAverageCalorie()
+        lifecycleScope.launch {
+            val bSummaryList = withContext(Dispatchers.IO){
+                mViewModel.getDiarySummary(binding.reportSelection.selectedItem.toString())
             }
+            bSummaryList?.let {
+                mViewModel.setSummaryList(it)
+            }
+            val preferenceManager = FooDiPreferenceManager.getInstance(FoodiNewApplication.getInstance())
+            if(preferenceManager.goalCalorie  != "0"){
+                binding.reportChart.axisLeft.setAxisMaxValue(preferenceManager.goalCalorie!!.toFloat())
+                binding.reportChart.axisRight.setAxisMaxValue(preferenceManager.goalCalorie!!.toFloat())
+            }
+            binding.reportChart.animateY(1000)
+            mViewModel.setAverageCalorie(calculateAverageCalorie())
         }
     }
 
@@ -87,10 +90,15 @@ class ReportFragment : Fragment() {
             reportSelection.adapter = adapter
             reportSelection.onItemSelectedListener = object : OnItemSelectedListener{
                 override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-                    CoroutineScope(Dispatchers.IO).launch {
-                        mViewModel.summaryList.postValue(mViewModel.getDiarySummary(reportSelection.selectedItem.toString()))
-                        CoroutineScope(Dispatchers.Main).launch{
-                            mViewModel.averageCalorie.value = calculateAverageCalorie()
+                    lifecycleScope.launch {
+                        with(mViewModel){
+                            val bSummaryList = withContext(Dispatchers.IO){
+                                getDiarySummary(reportSelection.selectedItem.toString())
+                            }
+                            bSummaryList?.let {
+                                setSummaryList(it)
+                            }
+                           setAverageCalorie(calculateAverageCalorie())
                         }
                     }
                 }
@@ -166,7 +174,7 @@ class ReportFragment : Fragment() {
             // Summary List
             summaryList.observe(viewLifecycleOwner){
                 val labelList = arrayListOf<String>()
-                val dayList = getDayList()
+                val dayList = getDays()
                 dayList.forEach {
                     labelList.add("${it}일")
                 }

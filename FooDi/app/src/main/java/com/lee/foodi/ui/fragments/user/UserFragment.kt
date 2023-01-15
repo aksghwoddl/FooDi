@@ -60,16 +60,16 @@ class UserFragment : Fragment() {
         isToggled = mPreferenceManager.gender
 
         with(mViewModel){
-            maintenanceCalorie.postValue(mPreferenceManager.maintenanceCalorie) // Set maintenance calorie that in the SharedPreference
-            genderButtonToggled.postValue(isToggled) // Set Gender Button value that in the SharedPreference
-            isOnSettingTimer.postValue(mPreferenceManager.isTimerOn)
+            setMaintenanceCalorie(mPreferenceManager.maintenanceCalorie.toString()) // Set maintenance calorie that in the SharedPreference
+            setGenderButtonToggle(isToggled) // Set Gender Button value that in the SharedPreference
+            setTimerOn(mPreferenceManager.isTimerOn)
         }
 
         binding.goalCalorieTextView.text = String.format(getString(R.string.goal_calorie) , mPreferenceManager.goalCalorie)
         addListeners()
         observeData()
         initNumberPicker()
-        mViewModel.isNightMode.value = Utils.checkNightMode(FoodiNewApplication.getInstance())
+        mViewModel.setIsNightMode(Utils.checkNightMode(FoodiNewApplication.getInstance()))
     }
 
     /**
@@ -105,7 +105,7 @@ class UserFragment : Fragment() {
             // Gender Button
             genderToggleButton.setOnClickListener {
                 isToggled = !isToggled
-                mViewModel.genderButtonToggled.postValue(isToggled)
+                mViewModel.setGenderButtonToggle(isToggled)
             }
 
             // Age NumberPicker
@@ -132,7 +132,7 @@ class UserFragment : Fragment() {
 
             // Setting Timer Switch
             settingTimerSwitch.setOnCheckedChangeListener { _ , isOn ->
-                mViewModel.isOnSettingTimer.value = isOn
+                mViewModel.setTimerOn(isOn)
             }
         }
     }

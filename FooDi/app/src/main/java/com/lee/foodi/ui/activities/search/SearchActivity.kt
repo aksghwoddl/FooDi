@@ -39,7 +39,7 @@ class SearchActivity : AppCompatActivity() {
         initRecyclerView()
         addListeners()
         observeData()
-        mViewModel.isNightMode.value = Utils.checkNightMode(FoodiNewApplication.getInstance())
+        mViewModel.setIsNightMode(Utils.checkNightMode(FoodiNewApplication.getInstance()))
         if(!::mAddNewFoodDialog.isInitialized){
             mAddNewFoodDialog = AddNewFoodDialog(this)
         }
@@ -75,7 +75,7 @@ class SearchActivity : AppCompatActivity() {
                     mViewModel.getSearchFoodList(foodName , PAGE_ONE)
                     mCurrentPage = 1
                 } else {
-                    mViewModel.errorMessage.value = NETWORK_NOT_CONNECTED
+                    mViewModel.setErrorMessage(NETWORK_NOT_CONNECTED)
                 }
             }
 
@@ -88,7 +88,7 @@ class SearchActivity : AppCompatActivity() {
                             mViewModel.getSearchFoodList(foodName , PAGE_ONE)
                             mCurrentPage = 1
                         } else {
-                            mViewModel.errorMessage.value = NETWORK_NOT_CONNECTED
+                            mViewModel.setErrorMessage(NETWORK_NOT_CONNECTED)
                         }
                     }
                 }
@@ -99,7 +99,7 @@ class SearchActivity : AppCompatActivity() {
             nextButton.setOnClickListener {
                 val foodName = searchInputText.text.toString()
                 mViewModel.getSearchFoodList(foodName , (++mCurrentPage).toString())
-                mViewModel.isPreviousEnable.postValue(true)
+                mViewModel.setPreviousEnable(true)
                 binding.searchFoodRecyclerView.smoothScrollToPosition(0)
             }
 
@@ -109,7 +109,7 @@ class SearchActivity : AppCompatActivity() {
                     val foodName = searchInputText.text.toString()
                     mViewModel.getSearchFoodList(foodName , (--mCurrentPage).toString())
                     if(mCurrentPage == 1){
-                        mViewModel.isPreviousEnable.postValue(false)
+                        mViewModel.setPreviousEnable(false)
                     }
                     binding.searchFoodRecyclerView.smoothScrollToPosition(0)
                 }
@@ -138,10 +138,10 @@ class SearchActivity : AppCompatActivity() {
                            setList(it)
                            notifyItemRangeChanged(0 , itemCount)
                        }
-                       addFoodLayoutVisible.postValue(false)
+                       setAddFoodLayoutVisible(false)
                    } else {
-                       addFoodLayoutVisible.postValue(true)
-                       isProgressVisible.postValue(false)
+                       setAddFoodLayoutVisible(true)
+                       setProgressVisible(false)
                    }
                }
            }

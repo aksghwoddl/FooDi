@@ -1,6 +1,7 @@
 package com.lee.foodi.ui.fragments.user.viewmodel
 
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.lee.foodi.R
@@ -18,10 +19,37 @@ class SettingUserViewModel : ViewModel() {
     var age = 0
     var gender = ""
 
-    val maintenanceCalorie = MutableLiveData<String>() // Maintenance Calorie
-    val genderButtonToggled = MutableLiveData<Boolean>() // Gender
-    val isOnSettingTimer = MutableLiveData<Boolean>() // Check setting timer
-    val isNightMode = MutableLiveData<Boolean>(false) // Check Night Mode
+    private val _maintenanceCalorie = MutableLiveData<String>() // Maintenance Calorie
+    val maintenanceCalorie : LiveData<String>
+    get() = _maintenanceCalorie
+
+    private val _genderButtonToggled = MutableLiveData<Boolean>() // Gender
+    val genderButtonToggled : LiveData<Boolean>
+    get() =  _genderButtonToggled
+
+    private val _isOnSettingTimer = MutableLiveData<Boolean>() // Check setting timer
+    val isOnSettingTimer : LiveData<Boolean>
+    get() = _isOnSettingTimer
+
+    private val _isNightMode = MutableLiveData<Boolean>(false) // Check Night Mode
+    val isNightMode : LiveData<Boolean>
+    get() = _isNightMode
+
+    fun setMaintenanceCalorie(calorie : String){
+        _maintenanceCalorie.value = calorie
+    }
+
+    fun setGenderButtonToggle(toggle : Boolean) {
+        _genderButtonToggled.value = toggle
+    }
+
+    fun setTimerOn(on : Boolean){
+        _isOnSettingTimer.value = on
+    }
+
+    fun setIsNightMode(isNight : Boolean) {
+        _isNightMode.value =  isNight
+    }
 
     /**
      * Function for update user info
@@ -45,15 +73,15 @@ class SettingUserViewModel : ViewModel() {
                 when{
                     age in 18..29  ->{
                         calorie = (15.1* weight + 692).roundToInt()
-                        maintenanceCalorie.postValue(calorie.toString())
+                        _maintenanceCalorie.value = calorie.toString()
                     }
                     age in 30 .. 59 ->{
                         calorie = (11.5* weight + 873).roundToInt()
-                        maintenanceCalorie.postValue(calorie.toString())
+                        _maintenanceCalorie.value = calorie.toString()
                     }
                     age > 60 -> {
                         calorie = (11.7* weight + 588).roundToInt()
-                        maintenanceCalorie.postValue(calorie.toString())
+                        _maintenanceCalorie.value = calorie.toString()
                     }
                 }
             }
@@ -61,15 +89,15 @@ class SettingUserViewModel : ViewModel() {
                 when{
                     age in 18..29  ->{
                         calorie = (14.8* weight + 487).roundToInt()
-                        maintenanceCalorie.postValue(calorie.toString())
+                        _maintenanceCalorie.value = calorie.toString()
                     }
                     age in 30 .. 59 ->{
                         calorie = (8.1* weight + 846).roundToInt()
-                        maintenanceCalorie.postValue(calorie.toString())
+                        _maintenanceCalorie.value = calorie.toString()
                     }
                     age > 60 -> {
                         calorie = (9.1* weight + 659).roundToInt()
-                        maintenanceCalorie.postValue(calorie.toString())
+                        _maintenanceCalorie.value = calorie.toString()
                     }
                 }
             }

@@ -64,7 +64,7 @@ class DiaryFragment : Fragment() {
         init()
         addListeners()
         observeData()
-        mViewModel.isNightMode.value = Utils.checkNightMode(FoodiNewApplication.getInstance())
+        mViewModel.setIsNightMode(Utils.checkNightMode(FoodiNewApplication.getInstance()))
     }
 
 
@@ -72,7 +72,9 @@ class DiaryFragment : Fragment() {
         Log.d(TAG, "onResume()")
         super.onResume()
         mViewModel.run {
-            goalCalorie.value = mPreferenceManager.goalCalorie
+            mPreferenceManager.goalCalorie?.let {
+                setGoalCalorie(it)
+            }
             getDiaryItems()
         }
     }
@@ -95,7 +97,7 @@ class DiaryFragment : Fragment() {
                     binding.noDiaryItemLayout.visibility = View.VISIBLE
                     binding.diaryListLayout.visibility = View.GONE
                     initFoodSummary()
-                    calorieProgress.value = 0.0
+                    setCalorieProgress(0.0)
                     mViewModel.addDiarySummary()
                 } else {
                     Log.d(TAG, "observeDate: diaryItems is not empty")
@@ -243,19 +245,19 @@ class DiaryFragment : Fragment() {
             }
         }
         with(mViewModel) {
-            spendCalories.value = calorie.toString()
-            amountCarbon.value = carbondydrate.toString()
-            amountProtein.value = protein.toString()
-            amountFat.value = fat.toString()
+            setSpendCalorie(calorie.toString())
+            setAmountCarbon(carbondydrate.toString())
+            setAmountProtein(protein.toString())
+            setAmountFat(fat.toString())
         }
     }
 
     private fun initFoodSummary() {
         with(mViewModel){
-            spendCalories.value = INITIAL_VALUE
-            amountCarbon.value = INITIAL_VALUE
-            amountProtein.value = INITIAL_VALUE
-            amountFat.value = INITIAL_VALUE
+            setSpendCalorie(INITIAL_VALUE)
+            setAmountCarbon(INITIAL_VALUE)
+            setAmountProtein(INITIAL_VALUE)
+            setAmountFat(INITIAL_VALUE)
         }
     }
 
@@ -267,8 +269,7 @@ class DiaryFragment : Fragment() {
         with(mViewModel){
             if(spendCalories.value != "0" && goalCalorie.value != "0"){
                 val progress = spendCalories.value!!.toDouble()/goalCalorie.value!!.toInt() * 100
-                calorieProgress.value = progress
-                Log.d(TAG, "updateCalorieProgress: progress = $progress")
+                setCalorieProgress(progress)
             }
         }
     }
@@ -278,7 +279,7 @@ class DiaryFragment : Fragment() {
         override fun onDateSet(datePicker: DatePicker?, year: Int, month: Int, day: Int) {
             val selectedDate = LocalDate.of(year, month+1 ,day).format(DateTimeFormatter.ofPattern("yyyy년MM월dd일"))
             mYear = year ; mMonth = month ; mDay = day
-            mViewModel.date.value = selectedDate
+            mViewModel.setDate(selectedDate)
         }
     }
 

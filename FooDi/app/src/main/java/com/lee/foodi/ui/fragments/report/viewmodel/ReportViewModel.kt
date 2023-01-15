@@ -1,6 +1,7 @@
 package com.lee.foodi.ui.fragments.report.viewmodel
 
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -19,14 +20,28 @@ import java.util.*
 private const val TAG = "ReportViewModel"
 
 class ReportViewModel(private val repository: FoodiRepository) : ViewModel() {
-    val summaryList = MutableLiveData<MutableList<Diary>>() // Diary Summary List
-    val averageCalorie = MutableLiveData<String>("0") // Average Calorie
 
-    private var mDayList = mutableListOf<Int>()
+    private val _summaryList = MutableLiveData<MutableList<Diary>>() // Diary Summary List
+    val summaryList : LiveData<MutableList<Diary>>
+    get() = _summaryList
+
+    private val _averageCalorie = MutableLiveData<String>("0") // Average Calorie
+    val averageCalorie : LiveData<String>
+    get() = _averageCalorie
+
+    fun setSummaryList(list : MutableList<Diary>){
+        _summaryList.value = list
+    }
+
+    fun setAverageCalorie(calorie : String){
+        _averageCalorie.value = calorie
+    }
+
+    private var days = mutableListOf<Int>()
 
     suspend fun getDiarySummary(selectedSection : String) : MutableList<Diary>? {
-        if(mDayList.isNotEmpty()){
-            mDayList.clear()
+        if(days.isNotEmpty()){
+            days.clear()
         }
         val calendar = Calendar.getInstance()
         val diarySummaryList = mutableListOf<Diary>()
@@ -40,11 +55,11 @@ class ReportViewModel(private val repository: FoodiRepository) : ViewModel() {
                         for(i in 0 .. 2){
                             val insertDate = day - i
                             if(insertDate != 0){
-                                mDayList.add(insertDate)
+                                days.add(insertDate)
                             }
                         }
-                        mDayList.reverse()
-                        mDayList.forEach {
+                        days.reverse()
+                        days.forEach {
                             val queryDate = LocalDate.of(year , month , it).format(DateTimeFormatter.ofPattern("yyyy년MM월dd일"))
                             diarySummaryList.add(repository.getDiarySummary(queryDate))
                         }
@@ -57,11 +72,11 @@ class ReportViewModel(private val repository: FoodiRepository) : ViewModel() {
                         for(i in 0 .. 6){
                             val insertDate = day - i
                             if(insertDate != 0){
-                                mDayList.add(day - i)
+                                days.add(day - i)
                             }
                         }
-                        mDayList.reverse()
-                        mDayList.forEach {
+                        days.reverse()
+                        days.forEach {
                             val queryDate = LocalDate.of(year , month , it).format(DateTimeFormatter.ofPattern("yyyy년MM월dd일"))
                             diarySummaryList.add(repository.getDiarySummary(queryDate))
                         }
@@ -72,9 +87,9 @@ class ReportViewModel(private val repository: FoodiRepository) : ViewModel() {
                         val month = calendar.get(Calendar.MONTH) + 1
                         val dayCounts = getDayCountInMonth(year , month)
                         for(i in 1 .. dayCounts){
-                            mDayList.add(i)
+                            days.add(i)
                         }
-                        mDayList.forEach {
+                        days.forEach {
                             val queryDate = LocalDate.of(year , month , it).format(DateTimeFormatter.ofPattern("yyyy년MM월dd일"))
                             diarySummaryList.add(repository.getDiarySummary(queryDate))
                         }
@@ -90,7 +105,7 @@ class ReportViewModel(private val repository: FoodiRepository) : ViewModel() {
         return ret.await()
     }
 
-    fun getDayList() = mDayList
+    fun getDays() = days
 
     /**
      * Function for get Day count as inputted Month

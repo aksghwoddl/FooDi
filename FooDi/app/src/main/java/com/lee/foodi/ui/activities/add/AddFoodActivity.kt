@@ -40,7 +40,7 @@ class AddFoodActivity : AppCompatActivity() {
         mViewModel = AddFoodViewModel.getInstance()!!
         addListeners()
         observeData()
-        mViewModel.isNightMode.value = Utils.checkNightMode(FoodiNewApplication.getInstance())
+        mViewModel.setIsNightMode(Utils.checkNightMode(FoodiNewApplication.getInstance()))
         savedInstanceState?:let {
             mNecessaryInfoFragment = NecessaryInfoFragment.newInstance()
             supportFragmentManager.beginTransaction().add(R.id.contentsFragment ,  mNecessaryInfoFragment).commit()
@@ -67,13 +67,15 @@ class AddFoodActivity : AppCompatActivity() {
                     }
                     if(mNecessaryInfoFragment.checkIsEmptyStatus()){
                         supportFragmentManager.beginTransaction().replace(R.id.contentsFragment , mAdditionalInfoFragment).commit()
-                        mViewModel.progress.value = 2
-                        mViewModel.headTitle.value = resources.getString(R.string.next_add_food_header_title)
-                        mViewModel.buttonText.value = resources.getString(R.string.confirm)
+                        with(mViewModel){
+                            setProgress(2)
+                            setHeaderTitle(resources.getString(R.string.next_add_food_header_title))
+                            setButtonText(resources.getString(R.string.confirm))
+                        }
                     }
                 } else { // When progress is 2
                     if(!Utils.checkNetworkConnection(this@AddFoodActivity)){
-                        mViewModel.errorMessage.value = NETWORK_NOT_CONNECTED
+                        mViewModel.setErrorMessage(NETWORK_NOT_CONNECTED)
                         return@setOnClickListener
                     }
                     CoroutineScope(Dispatchers.IO).launch {
@@ -120,9 +122,11 @@ class AddFoodActivity : AppCompatActivity() {
                         mNecessaryInfoFragment = NecessaryInfoFragment.newInstance()
                     }
                     supportFragmentManager.beginTransaction().replace(R.id.contentsFragment , mNecessaryInfoFragment).commit()
-                    mViewModel.progress.value = 1
-                    mViewModel.headTitle.value = resources.getString(R.string.add_food_header_title)
-                    mViewModel.buttonText.value = resources.getString(R.string.next)
+                    with(mViewModel){
+                        setProgress(1)
+                        setHeaderTitle(resources.getString(R.string.add_food_header_title))
+                        setButtonText(resources.getString(R.string.next))
+                    }
                 }
             }
         }
@@ -137,7 +141,7 @@ class AddFoodActivity : AppCompatActivity() {
                 binding.addProgressBar.progress = it
             }
 
-            headTitle.observe(this@AddFoodActivity){
+            headerTitle.observe(this@AddFoodActivity){
                 binding.headerTitle.text = it
             }
 

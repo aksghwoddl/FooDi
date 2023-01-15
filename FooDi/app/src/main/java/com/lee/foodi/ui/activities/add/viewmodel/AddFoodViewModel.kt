@@ -1,5 +1,6 @@
 package com.lee.foodi.ui.activities.add.viewmodel
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -12,8 +13,6 @@ import com.lee.foodi.ui.activities.add.AddFoodActivity
 import com.lee.foodi.ui.factory.FoodiViewModelFactory
 import kotlinx.coroutines.*
 import java.net.ConnectException
-
-private const val TAG = "AddFoodViewModel"
 
 /**
  * Singleton Pattern
@@ -46,16 +45,58 @@ class AddFoodViewModel(private val repository: FoodiRepository) : ViewModel() {
             }
         }
     }
-    val headTitle = MutableLiveData<String>()
-    val progress = MutableLiveData<Int>(1)
-    val buttonText = MutableLiveData<String>()
-    val errorMessage = MutableLiveData<String>()
-    val isProgressShowing = MutableLiveData<Boolean>(false)
-    val isNightMode = MutableLiveData<Boolean>(false)
+    private val _headerTitle = MutableLiveData<String>()
+    val headerTitle : LiveData<String>
+    get() = _headerTitle
+
+    fun setHeaderTitle(title : String) {
+        _headerTitle.value = title
+    }
+
+    private val _progress = MutableLiveData<Int>(1)
+    val progress : LiveData<Int>
+    get() = _progress
+
+    fun setProgress(progress : Int){
+        _progress.value = progress
+    }
+
+    private val _buttonText = MutableLiveData<String>()
+    val buttonText : LiveData<String>
+    get() =  _buttonText
+
+    fun setButtonText(text : String){
+        _buttonText.value = text
+    }
+
+    private val _errorMessage = MutableLiveData<String>()
+    val errorMessage : LiveData<String>
+    get() = _errorMessage
+
+    fun setErrorMessage(message : String){
+        _errorMessage.value = message
+    }
+
+    private val _isProgressShowing = MutableLiveData<Boolean>(false)
+    val isProgressShowing : LiveData<Boolean>
+    get() = _isProgressShowing
+
+    fun setIsProgress(isProgress : Boolean){
+        _isProgressShowing.value = isProgress
+    }
+
+    private val _isNightMode = MutableLiveData<Boolean>(false)
+    val isNightMode : LiveData<Boolean>
+    get() = _isNightMode
+
+    fun setIsNightMode(isNightMode : Boolean) {
+        _isNightMode.value = isNightMode
+    }
 
     /**
      * Ingredients for add food
      * **/
+
     val foodName = MutableLiveData<String>()
     val servingSize = MutableLiveData<String>()
     val calorie = MutableLiveData<String>()
@@ -72,30 +113,30 @@ class AddFoodViewModel(private val repository: FoodiRepository) : ViewModel() {
     fun postRequestAddFood(addingFood: AddingFood){
         try{
            postAddFoodJob = CoroutineScope(Dispatchers.IO).launch {
-                isProgressShowing.postValue(true)
+                _isProgressShowing.postValue(true)
                 val response = repository.addNewFood(addingFood)
                 if(response.isSuccessful){
                     withContext(Dispatchers.Main) {
                         Utils.toastMessage(FoodiNewApplication.getInstance().getString(R.string.successfully_add))
-                        isProgressShowing.value = false
+                        _isProgressShowing.value = false
                     }
                 } else {
-                    errorMessage.postValue(FoodiNewApplication.getInstance().getString(R.string.response_fail))
-                    isProgressShowing.postValue(false)
+                    _errorMessage.postValue(FoodiNewApplication.getInstance().getString(R.string.response_fail))
+                    _isProgressShowing.postValue(false)
                 }
             }
         } catch (connectException : ConnectException){
-            errorMessage.postValue(FoodiNewApplication.getInstance().getString(R.string.check_server_connection))
-            isProgressShowing.value = false
+            _errorMessage.postValue(FoodiNewApplication.getInstance().getString(R.string.check_server_connection))
+            _isProgressShowing.value = false
         }
     }
 
     override fun onCleared() {
+        super.onCleared()
         if(::postAddFoodJob.isInitialized){
             if(postAddFoodJob.isActive){
                 postAddFoodJob.cancel()
             }
         }
-        super.onCleared()
     }
 }
