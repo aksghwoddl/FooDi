@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.widget.PopupMenu
 import androidx.recyclerview.widget.RecyclerView
 import com.lee.foodi.R
+import com.lee.foodi.common.FoodiNewApplication
 import com.lee.foodi.common.Utils
 import com.lee.foodi.data.repository.FoodiRepository
 import com.lee.foodi.data.room.entity.DiaryItem
@@ -31,6 +32,8 @@ class DiaryFoodItemRecyclerAdapter : RecyclerView.Adapter<DiaryFoodItemRecyclerA
     }
 
     override fun getItemCount() = mDiaryList.size
+
+    fun getSelectedItem() = mSelectedDiaryItem
 
     fun setDiaryList(list : MutableList<DiaryItem>){
         mDiaryList = list
@@ -73,21 +76,6 @@ class DiaryFoodItemRecyclerAdapter : RecyclerView.Adapter<DiaryFoodItemRecyclerA
                     mOnItemClickListener?.onItemClick(it , data , position)
                 }
             }
-        }
-    }
-
-    /**
-     * Function for delete selected diary item when popup menu clicked
-     * **/
-    fun deleteSelectedDiaryItem(){
-        CoroutineScope(Dispatchers.IO).launch {
-            val selectedEntity : DiaryItemEntity
-            with(mSelectedDiaryItem){
-               selectedEntity = DiaryItemEntity(index, date , food , time , servingSize)
-            }
-            val repository = FoodiRepository.getInstance()
-            repository.deleteDiaryItem(selectedEntity)
-            CoroutineScope(Dispatchers.Main).launch{Utils.toastMessage("정상적으로 삭제되었습니다.")}
         }
     }
 }

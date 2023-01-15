@@ -295,8 +295,7 @@ class DiaryFragment : Fragment() {
         override fun onMenuItemClick(item: MenuItem?): Boolean {
             when(item?.itemId){
                 R.id.itemDelete -> {
-                    mDiaryFoodItemRecyclerAdapter.deleteSelectedDiaryItem()
-                    mViewModel.getDiaryItems()
+                    mViewModel.deleteSelectedDiaryItem(mDiaryFoodItemRecyclerAdapter.getSelectedItem())
                 }
             }
             return true

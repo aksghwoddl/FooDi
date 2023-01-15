@@ -5,13 +5,18 @@ import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.lee.foodi.R
+import com.lee.foodi.common.FoodiNewApplication
+import com.lee.foodi.common.Utils
 import com.lee.foodi.data.repository.FoodiRepository
 import com.lee.foodi.data.room.entity.DiaryEntity
 import com.lee.foodi.data.room.entity.DiaryItem
+import com.lee.foodi.data.room.entity.DiaryItemEntity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -41,13 +46,13 @@ class DiaryViewModel(repository: FoodiRepository) : ViewModel() {
      * **/
      @RequiresApi(Build.VERSION_CODES.O)
      fun getDiaryItems(){
-         CoroutineScope(Dispatchers.IO).launch {
-             isProgress.postValue(true)
-             val diaryItem = mRepository.getAllDiaryItems(date.value!!)
-            CoroutineScope(Dispatchers.Main).launch {
-                diaryItems.value = diaryItem
-                isProgress.value = false
-            }
+         viewModelScope.launch {
+             val diaryItem = withContext(Dispatchers.IO){
+                 isProgress.postValue(true)
+                 mRepository.getAllDiaryItems(date.value!!)
+             }
+            diaryItems.value = diaryItem
+            isProgress.value = false
         }
     }
 
@@ -65,6 +70,25 @@ class DiaryViewModel(repository: FoodiRepository) : ViewModel() {
                 , amountFat.value!!)
             mRepository.addDiary(diary)
             Log.d(TAG, "addDiarySummary: success add diary DB!!")
+        }
+    }
+
+    /**
+     * Function for delete selected diary item when popup menu clicked
+     * **/
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun deleteSelectedDiaryItem(diaryItem: DiaryItem){
+        viewModelScope.launch {
+            withContext(Dispatchers.IO){
+                val selectedEntity : DiaryItemEntity
+                with(diaryItem){
+                    selectedEntity = DiaryItemEntity(index, date , food , time , servingSize)
+                }
+                val repository = FoodiRepository.getInstance()
+                repository.deleteDiaryItem(selectedEntity)
+            }
+            getDiaryItems()
+            Utils.toastMessage(FoodiNewApplication.getInstance().getString(R.string.successfully_delete))
         }
     }
 }
