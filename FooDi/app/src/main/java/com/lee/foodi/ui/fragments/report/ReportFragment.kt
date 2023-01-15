@@ -206,7 +206,7 @@ class ReportFragment : Fragment() {
     @RequiresApi(Build.VERSION_CODES.O)
     private fun setData() {
         val valueList = ArrayList<BarEntry>()
-        val title = "칼로리 소모량"
+        val title = getString(R.string.spend_calorie_title)
         CoroutineScope(Dispatchers.IO).launch {
             val summaryList = mViewModel.summaryList.value
             summaryList?.forEachIndexed{index , diary ->

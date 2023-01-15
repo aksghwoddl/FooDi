@@ -78,9 +78,6 @@ class DiaryFragment : Fragment() {
         super.onResume()
         mViewModel.goalCalorie.postValue(mPreferenceManager.goalCalorie)
         CoroutineScope(Dispatchers.IO).launch {
-            /*mDiaryFoodItems = getDiaryItem()
-            mViewModel.diaryItems.postValue(mDiaryFoodItems)*/
-            /*mViewModel.isProgress.postValue(false)*/
             mViewModel.getDiaryItems()
         }
     }

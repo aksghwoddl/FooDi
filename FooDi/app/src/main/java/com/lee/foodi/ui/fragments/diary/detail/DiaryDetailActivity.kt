@@ -68,7 +68,7 @@ class DiaryDetailActivity : AppCompatActivity() {
         with(binding){
             foodNameTextView.text = mDiaryItem.food!!.foodName
             foodNameTextView.isSelected = true // for marquee setting
-            if(mDiaryItem.food!!.company == "N/A"){
+            if(mDiaryItem.food!!.company == NOT_AVAILABLE){
                 companyNameTextView.visibility = View.INVISIBLE
             } else {
                 companyNameTextView.text = mDiaryItem.food!!.company
@@ -85,7 +85,7 @@ class DiaryDetailActivity : AppCompatActivity() {
             modifyButton.setOnClickListener {
                 updateFoodInfo()
                 updateDiaryItem()
-                Utils.toastMessage("정상적으로 수정 되었습니다.")
+                Utils.toastMessage(getString(R.string.successfully_modify))
                 finish()
             }
 

@@ -11,9 +11,6 @@ import com.lee.foodi.common.Utils
 import com.lee.foodi.databinding.FragmentNecessaryInfoBinding
 import com.lee.foodi.ui.activities.add.viewmodel.AddFoodViewModel
 
-
-private const val TAG = "NecessaryInfoFragment"
-
 class NecessaryInfoFragment : Fragment(){
     private lateinit var binding : FragmentNecessaryInfoBinding
     private lateinit var mViewModel : AddFoodViewModel
@@ -36,32 +33,32 @@ class NecessaryInfoFragment : Fragment(){
     fun checkIsEmptyStatus() : Boolean {
         with(binding){
             if(foodNameEdiText.text.isEmpty()){
-                Utils.toastMessage("음식 이름을 입력해주새요.")
+                Utils.toastMessage(getString(R.string.input_food_name))
                 foodNameEdiText.requestFocus()
                 return false
             }
             if(servingSizeEditText.text.isEmpty()){
-                Utils.toastMessage("1회 제공량을 입력해주세요.")
+                Utils.toastMessage(getString(R.string.input_serving_size))
                 servingSizeEditText.requestFocus()
                 return false
             }
             if(calorieEditText.text.isEmpty()){
-                Utils.toastMessage("칼로리 정보를 입력해주세요.")
+                Utils.toastMessage(getString(R.string.input_calorie))
                 calorieEditText.requestFocus()
                 return false
             }
             if(carbohydrateEditText.text.isEmpty()){
-                Utils.toastMessage("탄후화물 정보를 입력해주세요.")
+                Utils.toastMessage(getString(R.string.input_carbon))
                 carbohydrateEditText.requestFocus()
                 return false
             }
             if(proteinEditText.text.isEmpty()){
-                Utils.toastMessage("단백질 정보를 입력해주세요.")
+                Utils.toastMessage(getString(R.string.input_protein))
                 proteinEditText.requestFocus()
                 return false
             }
             if(fatEditText.text.isEmpty()){
-                Utils.toastMessage("지방 정보를 입력해주세요.")
+                Utils.toastMessage(getString(R.string.input_fat))
                 fatEditText.requestFocus()
                 return false
             }

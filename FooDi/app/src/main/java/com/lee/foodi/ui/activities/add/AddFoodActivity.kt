@@ -71,7 +71,7 @@ class AddFoodActivity : AppCompatActivity() {
                         mViewModel.buttonText.value = resources.getString(R.string.confirm)
                     }
                 } else { // When progress is 2
-                    if(Utils.checkNetworkConnection(this@AddFoodActivity) == "null"){
+                    if(!Utils.checkNetworkConnection(this@AddFoodActivity)){
                         mViewModel.errorMessage.value = NETWORK_NOT_CONNECTED
                         return@setOnClickListener
                     }

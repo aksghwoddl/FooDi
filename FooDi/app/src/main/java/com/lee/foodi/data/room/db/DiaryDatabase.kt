@@ -4,6 +4,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import com.lee.foodi.common.DB_NAME
 import com.lee.foodi.common.FoodiNewApplication
 import com.lee.foodi.data.room.TypeConverter
 import com.lee.foodi.data.room.dao.DiaryDAO
@@ -24,7 +25,7 @@ abstract class DiaryDatabase : RoomDatabase() {
                     instance = Room.databaseBuilder(
                         FoodiNewApplication.getInstance(),
                         DiaryDatabase::class.java ,
-                        "diary.db" ,
+                        DB_NAME ,
                     ).build()
                 }
             }

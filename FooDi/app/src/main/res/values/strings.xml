@@ -18,6 +18,14 @@
     <string name="zero_gram">0g</string>
     <string name="spend_calorie">소비 칼로리 : %s kcal</string>
     <string name="notification_timer_contents">식사할 시간입니다!</string>
+    <string name="successfully_add">정상적으로 추가되었습니다.</string>
+    <string name="successfully_modify">정상적으로 수정 되었습니다.</string>
+    <string name="check_server_connection">서버와의 연결 상태를 확인해주세요.</string>
+    <string name="check_socket_timeout">서버와 통신시간이 초과하였습니다. 다시 시도해주세요.</string>
+    <string name="empty_search">검색어가 입력되지 않았습니다.</string>
+    <string name="response_fail">서버에서 정상적으로 값을 받아오지 못했습니다.</string>
+    <string name="add_permission">권한을 허용해야 앱 이용이 가능합니다.</string>
+    <string name="set_push_permission">푸시 알림 권한을 허용 해주세요.</string>
 
     <!-- Food Info -->
     <string name="food_name">음식이름</string>
@@ -39,7 +47,7 @@
     <string name="gram">g</string>
     <!---->
 
-    <!--Add Food -->
+    <!-- Add Food -->
     <string name="add_food_name">음식이름</string>
     <string name="add_calories">칼로리 </string>
     <string name="add_carbohydrate">탄수화물 </string>
@@ -52,6 +60,12 @@
     <string name="add_trans_fat">트랜스지방</string>
     <string name="add_serving_size">1회 제공량</string>
     <string name="add_company_name">회사이름</string>
+    <string name="input_food_name">음식 이름을 입력해주새요.</string>
+    <string name="input_serving_size">1회 제공량을 입력해주세요.</string>
+    <string name="input_calorie">칼로리 정보를 입력해주세요.</string>
+    <string name="input_carbon">탄수화물 정보를 입력해주세요.</string>
+    <string name="input_protein">단백질 정보를 입력해주세요.</string>
+    <string name="input_fat">지방 정보를 입력해주세요.</string>
     <!---->
 
     <!-- Diary -->
@@ -65,7 +79,7 @@
     <string name="serving">먹은양</string>
     <!---->
 
-    <!--User -->
+    <!-- User -->
     <string name="maintenance_calorie">유지 칼로리 : %s kcal</string>
     <string name="goal_calorie">목표 칼로리 : %s kcal</string>
     <string name="user_setting_help">나이,몸무게,성별을 입력하시면\n유지 칼로리를 알 수 있습니다.</string>
@@ -81,6 +95,10 @@
     <string name="setting_timer_header">몇시간 마다 식사 하시나요?</string>
     <string name="hour">시간</string>
     <string name="minute">분</string>
+    <string name="update_timer">알람시간이 설정 되었습니다!</string>
     <!---->
+
+    <!-- Report -->
+    <string name="spend_calorie_title">칼로리 소모량</string>
 
 </resources>

@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.gun0912.tedpermission.normal.TedPermission
+import com.lee.foodi.R
 import com.lee.foodi.common.Utils
 import com.lee.foodi.databinding.ActivitySplashBinding
 import com.lee.foodi.ui.activities.ContainerActivity
@@ -38,7 +39,7 @@ class SplashActivity : AppCompatActivity() {
             val tedPermission = TedPermission.create()
             with(tedPermission){
                 setPermissionListener(PermissionListener())
-                setDeniedMessage("푸시 알림 권한을 허용 해주세요.")
+                setDeniedMessage(getString(R.string.set_push_permission))
                 setPermissions(POST_NOTIFICATIONS)
             }
             tedPermission.check()
@@ -48,7 +49,7 @@ class SplashActivity : AppCompatActivity() {
     }
 
     private fun checkNetworkState() {
-        if(Utils.checkNetworkConnection(this) != "null"){
+        if(Utils.checkNetworkConnection(this)){
             CoroutineScope(Dispatchers.Main).launch {
                 delay(1500)
                 with(Intent(this@SplashActivity , ContainerActivity::class.java)){
@@ -76,7 +77,7 @@ class SplashActivity : AppCompatActivity() {
         }
 
         override fun onPermissionDenied(deniedPermissions: MutableList<String>?) {
-            Utils.toastMessage("권한을 허용해야 앱 이용이 가능합니다.")
+            Utils.toastMessage(getString(R.string.add_permission))
         }
 
     }

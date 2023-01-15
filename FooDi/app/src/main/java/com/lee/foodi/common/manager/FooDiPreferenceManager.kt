@@ -29,13 +29,6 @@ class FooDiPreferenceManager {
             return instance
         }
     }
-    var isPermission : Boolean
-        get() = sharedPreference.getBoolean(NETWORK_PERMISSION , false)
-        set(isChecked: Boolean) {
-            with(sharedPreferenceEditor) {
-            putBoolean(NETWORK_PERMISSION , isChecked).apply()
-            }
-        }
 
     var goalCalorie : String?
         get() = sharedPreference.getString(GOAL_CALORIE , "0")

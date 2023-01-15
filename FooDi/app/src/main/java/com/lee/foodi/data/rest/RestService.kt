@@ -1,7 +1,9 @@
 package com.lee.foodi.data.rest
 
 import com.lee.foodi.common.CONNECTION_TIME_OUT
+import com.lee.foodi.common.DESCRIPTION_KOREAN
 import com.lee.foodi.common.FOOD_TARGET_URL
+import com.lee.foodi.common.PAGE_NUMBER
 import com.lee.foodi.data.rest.model.AddingFood
 import com.lee.foodi.data.rest.model.SearchingFoodResponse
 import okhttp3.OkHttpClient
@@ -18,8 +20,8 @@ import java.util.concurrent.TimeUnit
 interface RestService {
     @GET(FOOD_TARGET_URL)
     suspend fun getNewSearchFood(
-        @Query("desc_kor") foodName : String
-        , @Query("pageNo") page : String
+        @Query(DESCRIPTION_KOREAN) foodName : String
+        , @Query(PAGE_NUMBER) page : String
     ) : Response<SearchingFoodResponse>
 
     @POST(FOOD_TARGET_URL)

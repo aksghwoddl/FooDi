@@ -76,7 +76,7 @@ class FoodDetailActivity : AppCompatActivity() {
         with(binding){
             foodNameTextView.text = mFood.foodName
             foodNameTextView.isSelected = true // for marquee setting
-            if(mFood.company == "N/A"){
+            if(mFood.company == NOT_AVAILABLE){
                 companyNameTextView.visibility = View.INVISIBLE
             } else {
                 companyNameTextView.text = mFood.company
@@ -102,7 +102,7 @@ class FoodDetailActivity : AppCompatActivity() {
                         Log.d(TAG, "addListeners: click addButton , timer is not enable ")
                     }
                     CoroutineScope(Dispatchers.Main).launch {
-                        Utils.toastMessage("정상적으로 추가 되었습니다.")
+                        Utils.toastMessage(getString(R.string.successfully_add))
                         finish()
                     }
                 }

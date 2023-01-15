@@ -33,6 +33,13 @@ const val LATELY = "최근"
 const val WEEKS = "7일"
 const val MONTHLY = "한달"
 
+const val DESCRIPTION_KOREAN = "desc_kor"
+const val PAGE_NUMBER = "pageNo"
+
+const val DB_NAME = "diary.db"
+const val DIARY_TABLE = "diary_tbl"
+const val DIARY_ITEM_TABLE = "diary_item_tbl"
+
 class Utils {
     companion object{
 
@@ -95,10 +102,10 @@ class Utils {
         /**
          * Function for network check
          * **/
-        fun checkNetworkConnection(context : Context) : String {
+        fun checkNetworkConnection(context : Context) : Boolean {
             val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
             val networkInfo = connectivityManager.activeNetwork
-            return networkInfo.toString()
+            return networkInfo.toString() != "null"
         }
 
         /**

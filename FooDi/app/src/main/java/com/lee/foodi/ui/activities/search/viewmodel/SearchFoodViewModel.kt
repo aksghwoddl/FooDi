@@ -3,6 +3,8 @@ package com.lee.foodi.ui.activities.search.viewmodel
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.lee.foodi.R
+import com.lee.foodi.common.FoodiNewApplication
 import com.lee.foodi.data.repository.FoodiRepository
 import com.lee.foodi.data.rest.model.Food
 import com.lee.foodi.data.rest.model.SearchingFoodResponse
@@ -41,19 +43,19 @@ class SearchFoodViewModel(private val repository: FoodiRepository) : ViewModel()
                             isNextEnable.value = totalCount >= 1 && foodResponse!!.totalCount > page.toInt()
                         } else {
                             Log.d(TAG, "getSearchFoodList: ${response.message()}")
-                            errorMessage.postValue("서버에서 정상적으로 값을 받아오지 못했습니다!!")
+                            errorMessage.postValue(FoodiNewApplication.getInstance().getString(R.string.response_fail))
                             isProgressVisible.postValue(false)
                         }
                     }
                 } else {
-                    errorMessage.postValue("검색어가 입력되지 않았습니다.")
+                    errorMessage.postValue(FoodiNewApplication.getInstance().getString(R.string.empty_search))
                     isProgressVisible.postValue(false)
                 }
             } catch (socketTimeOutException : SocketTimeoutException){
-                errorMessage.postValue("서버와 통신시간이 초과하였습니다. 다시 시도해주세요.")
+                errorMessage.postValue(FoodiNewApplication.getInstance().getString(R.string.check_socket_timeout))
                 isProgressVisible.postValue(false)
             } catch(connectException : ConnectException){
-                errorMessage.postValue("서버와의 연결 상태를 확인해주세요.")
+                errorMessage.postValue(FoodiNewApplication.getInstance().getString(R.string.check_server_connection))
                 isProgressVisible.postValue(false)
             }
         }

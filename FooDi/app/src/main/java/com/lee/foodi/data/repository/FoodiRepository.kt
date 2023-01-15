@@ -22,7 +22,6 @@ class FoodiRepository {
     /**
      * Function for search food at API
      * **/
-   // suspend fun getSearchFood(foodName : String , page : String) = RestServiceInstance.getInstance().getSearchFood(foodName , page) Convert New Food InfoData
     suspend fun getNewSearchFood(foodName : String , page : String) = RestServiceInstance.getInstance().getNewSearchFood(foodName , page)
 
     suspend fun addNewFood(addingFood: AddingFood) = RestServiceInstance.getInstance().addNewFood(addingFood)

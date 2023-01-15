@@ -187,11 +187,11 @@ class UserFragment : Fragment() {
             Utils.convertValueWithErrorCheck(binding.goalCalorieTextView
                 , resources.getString(R.string.goal_calorie)
                 , mPreferenceManager.goalCalorie!!)
-            Utils.toastMessage("정상적으로 업데이트 되었습니다.")
+            Utils.toastMessage(getString(R.string.successfully_modify))
         }
     }
 
     fun updateSettingTimer() {
-        Utils.toastMessage("알람시간이 설정 되었습니다!")
+        Utils.toastMessage(getString(R.string.update_timer))
     }
 }

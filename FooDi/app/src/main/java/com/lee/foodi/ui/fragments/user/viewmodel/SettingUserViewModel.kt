@@ -3,7 +3,9 @@ package com.lee.foodi.ui.fragments.user.viewmodel
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.lee.foodi.R
 import com.lee.foodi.common.FEMALE
+import com.lee.foodi.common.FoodiNewApplication
 import com.lee.foodi.common.MALE
 import com.lee.foodi.common.Utils
 import com.lee.foodi.common.manager.FooDiPreferenceManager
@@ -73,6 +75,6 @@ class SettingUserViewModel : ViewModel() {
             }
         }
         preferenceManager.maintenanceCalorie = calorie.toString()
-        Utils.toastMessage("정보를 성공적으로 업데이트 했습니다.")
+        Utils.toastMessage(FoodiNewApplication.getInstance().getString(R.string.successfully_modify))
     }
 }

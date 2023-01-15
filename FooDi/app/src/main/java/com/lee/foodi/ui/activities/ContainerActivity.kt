@@ -3,6 +3,7 @@ package com.lee.foodi.ui.activities
 import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.res.ResourcesCompat
 import com.google.android.material.tabs.TabLayoutMediator
 import com.lee.foodi.R
 import com.lee.foodi.databinding.ActivityContainerBinding
@@ -32,12 +33,11 @@ class ContainerActivity : AppCompatActivity() {
     /**
      * Function for init FragmentStateAdapter
      * **/
-    @SuppressLint("UseCompatLoadingForDrawables")
     private fun initFragmentAdapter() {
         val tabImageArray = arrayOf(
-            resources.getDrawable(R.drawable.graph_icon  , null),
-            resources.getDrawable(R.drawable.note , null),
-            resources.getDrawable(R.drawable.ic_baseline_settings_24 , null)
+            ResourcesCompat.getDrawable(resources , R.drawable.graph_icon , null),
+            ResourcesCompat.getDrawable(resources , R.drawable.note , null),
+            ResourcesCompat.getDrawable(resources , R.drawable.ic_baseline_settings_24 , null)
         )
 
         mReportFragment = ReportFragment.newInstance()

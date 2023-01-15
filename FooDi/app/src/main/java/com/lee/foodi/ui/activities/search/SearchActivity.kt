@@ -23,8 +23,6 @@ import com.lee.foodi.ui.factory.FoodiViewModelFactory
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 
-private const val TAG = "SearchFragment"
-
 class SearchActivity : AppCompatActivity() {
 
     private lateinit var binding : ActivitySearchBinding
@@ -73,7 +71,7 @@ class SearchActivity : AppCompatActivity() {
         with(binding){
             // Search Button Listener
             searchInputTextLayout.setEndIconOnClickListener {
-                if(Utils.checkNetworkConnection(this@SearchActivity) != "null"){
+                if(Utils.checkNetworkConnection(this@SearchActivity)){
                     val foodName = searchInputText.text.toString()
                     mViewModel.getSearchFoodList(foodName , PAGE_ONE)
                     mCurrentPage = 1
@@ -86,7 +84,7 @@ class SearchActivity : AppCompatActivity() {
             searchInputText.setOnKeyListener { _ , keyCode, _ ->
                 when(keyCode){
                     KeyEvent.KEYCODE_ENTER -> {
-                        if(Utils.checkNetworkConnection(this@SearchActivity) != "null"){
+                        if(Utils.checkNetworkConnection(this@SearchActivity)){
                             val foodName = searchInputText.text.toString()
                             mViewModel.getSearchFoodList(foodName , PAGE_ONE)
                             mCurrentPage = 1
