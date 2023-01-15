@@ -1,9 +1,7 @@
 package com.lee.foodi.ui.fragments.diary
 
-import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -12,12 +10,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.DatePicker
 import android.widget.PopupMenu
-import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.SimpleItemAnimator
 import com.lee.foodi.R
 import com.lee.foodi.common.*
+import com.lee.foodi.common.manager.CustomLinearLayoutManager
 import com.lee.foodi.common.manager.FooDiPreferenceManager
 import com.lee.foodi.data.repository.FoodiRepository
 import com.lee.foodi.data.room.entity.DiaryItem
@@ -27,7 +25,6 @@ import com.lee.foodi.ui.factory.FoodiViewModelFactory
 import com.lee.foodi.ui.fragments.diary.adapter.DiaryFoodItemRecyclerAdapter
 import com.lee.foodi.ui.fragments.diary.detail.DiaryDetailActivity
 import com.lee.foodi.ui.fragments.diary.viewmodel.DiaryViewModel
-import kotlinx.coroutines.*
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.*
@@ -74,16 +71,15 @@ class DiaryFragment : Fragment() {
     override fun onResume() {
         Log.d(TAG, "onResume()")
         super.onResume()
-        mViewModel.goalCalorie.postValue(mPreferenceManager.goalCalorie)
-        CoroutineScope(Dispatchers.IO).launch {
-            mViewModel.getDiaryItems()
+        mViewModel.run {
+            goalCalorie.value = mPreferenceManager.goalCalorie
+            getDiaryItems()
         }
     }
 
     /**
      * Function for observe Live Datas
      * **/
-    @SuppressLint("NotifyDataSetChanged")
     private fun observeData() {
         with(mViewModel){
             // Header Date
@@ -105,8 +101,10 @@ class DiaryFragment : Fragment() {
                     Log.d(TAG, "observeDate: diaryItems is not empty")
                     binding.noDiaryItemLayout.visibility = View.GONE
                     binding.diaryListLayout.visibility = View.VISIBLE
-                    mDiaryFoodItemRecyclerAdapter.setDiaryList(it)
-                    mDiaryFoodItemRecyclerAdapter.notifyDataSetChanged()
+                    mDiaryFoodItemRecyclerAdapter.run {
+                        setDiaryList(it)
+                        notifyItemRangeChanged(0 , itemCount)
+                    }
                     updateFoodSummary()
                     updateCalorieProgress()
                     mViewModel.addDiarySummary()
@@ -174,8 +172,9 @@ class DiaryFragment : Fragment() {
         mDiaryFoodItemRecyclerAdapter.setOnItemClickListener(OnDiaryItemClickListener())
 
         binding.diaryRecyclerView.run {
-            layoutManager = LinearLayoutManager(requireContext())
+            layoutManager = CustomLinearLayoutManager(requireContext())
             adapter = mDiaryFoodItemRecyclerAdapter
+            (itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false // RecyclerView 깜빡임 현상 없애기
         }
     }
 

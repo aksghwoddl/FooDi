@@ -10,10 +10,7 @@ import com.lee.foodi.data.repository.FoodiRepository
 import com.lee.foodi.data.rest.model.AddingFood
 import com.lee.foodi.ui.activities.add.AddFoodActivity
 import com.lee.foodi.ui.factory.FoodiViewModelFactory
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import java.net.ConnectException
 
 private const val TAG = "AddFoodViewModel"
@@ -78,7 +75,7 @@ class AddFoodViewModel(private val repository: FoodiRepository) : ViewModel() {
                 isProgressShowing.postValue(true)
                 val response = repository.addNewFood(addingFood)
                 if(response.isSuccessful){
-                    CoroutineScope(Dispatchers.Main).launch {
+                    withContext(Dispatchers.Main) {
                         Utils.toastMessage(FoodiNewApplication.getInstance().getString(R.string.successfully_add))
                         isProgressShowing.value = false
                     }

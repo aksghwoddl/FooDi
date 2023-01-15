@@ -1,6 +1,5 @@
 package com.lee.foodi.ui.activities.search
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.view.KeyEvent
@@ -8,6 +7,7 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.SimpleItemAnimator
 import com.lee.foodi.R
 import com.lee.foodi.common.*
 import com.lee.foodi.common.manager.CustomLinearLayoutManager
@@ -20,8 +20,6 @@ import com.lee.foodi.ui.activities.search.detail.FoodDetailActivity
 import com.lee.foodi.ui.activities.search.dialog.AddNewFoodDialog
 import com.lee.foodi.ui.activities.search.viewmodel.SearchFoodViewModel
 import com.lee.foodi.ui.factory.FoodiViewModelFactory
-import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.*
 
 class SearchActivity : AppCompatActivity() {
 
@@ -64,6 +62,7 @@ class SearchActivity : AppCompatActivity() {
         with(binding.searchFoodRecyclerView){
             layoutManager = CustomLinearLayoutManager(context , RecyclerView.VERTICAL , false)
             adapter = mSearchFoodRecyclerAdapter
+            (itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false // RecyclerView 깜빡임 현상 없애기
         }
     }
 
@@ -129,7 +128,6 @@ class SearchActivity : AppCompatActivity() {
     /**
      * Function for observing ViewModel Data
      * **/
-    @SuppressLint("NotifyDataSetChanged")
     private fun observeData() {
        with(mViewModel){
            // Searched List

@@ -7,14 +7,13 @@ import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.gun0912.tedpermission.normal.TedPermission
 import com.lee.foodi.R
 import com.lee.foodi.common.Utils
 import com.lee.foodi.databinding.ActivitySplashBinding
 import com.lee.foodi.ui.activities.ContainerActivity
 import com.lee.foodi.ui.activities.splash.dialog.NetworkDialog
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -50,7 +49,7 @@ class SplashActivity : AppCompatActivity() {
 
     private fun checkNetworkState() {
         if(Utils.checkNetworkConnection(this)){
-            CoroutineScope(Dispatchers.Main).launch {
+            lifecycleScope.launch {
                 delay(1500)
                 with(Intent(this@SplashActivity , ContainerActivity::class.java)){
                     startActivity(this)
@@ -58,7 +57,7 @@ class SplashActivity : AppCompatActivity() {
                 }
             }
         } else {
-            CoroutineScope(Dispatchers.Main).launch {
+            lifecycleScope.launch {
                 delay(1500)
                 mDialog = NetworkDialog(this@SplashActivity)
                 mDialog.show()

@@ -11,6 +11,7 @@ import android.widget.AdapterView.OnItemSelectedListener
 import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.github.mikephil.charting.components.AxisBase
 import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.components.XAxis
@@ -198,23 +199,19 @@ class ReportFragment : Fragment() {
     private fun setData() {
         val valueList = ArrayList<BarEntry>()
         val title = getString(R.string.spend_calorie_title)
-        CoroutineScope(Dispatchers.IO).launch {
-            val summaryList = mViewModel.summaryList.value
-            summaryList?.forEachIndexed{index , diary ->
-                diary?.let { valueList.add(BarEntry(index.toFloat() , diary.totalCalorie.toFloat())) }
-            }
-            val barDataSet = BarDataSet(valueList , title)
-            barDataSet.color = requireContext().getColor(R.color.main_color)
-            val barData = BarData(barDataSet)
-            val tf = Typeface.createFromAsset(requireContext().assets , "swagger.ttf")
-            barData.setValueTypeface(tf)
-            CoroutineScope(Dispatchers.Main).launch{
-                binding.reportChart.apply {
-                    setScaleEnabled(false)
-                    data = barData
-                    invalidate()
-                }
-            }
+        val summaryList = mViewModel.summaryList.value
+        summaryList?.forEachIndexed{index , diary ->
+            diary?.let { valueList.add(BarEntry(index.toFloat() , diary.totalCalorie.toFloat())) }
+        }
+        val barDataSet = BarDataSet(valueList , title)
+        barDataSet.color = requireContext().getColor(R.color.main_color)
+        val barData = BarData(barDataSet)
+        val tf = Typeface.createFromAsset(requireContext().assets , "swagger.ttf")
+        barData.setValueTypeface(tf)
+        binding.reportChart.apply {
+            setScaleEnabled(false)
+            data = barData
+            invalidate()
         }
     }
 
