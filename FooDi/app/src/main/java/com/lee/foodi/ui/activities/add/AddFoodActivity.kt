@@ -96,7 +96,6 @@ class AddFoodActivity : AppCompatActivity() {
                                 companyName.value?.toString() ?: NOT_AVAILABLE ,
                             )
                         }
-                        Log.d(TAG, "addListeners: $addingFood")
                         mViewModel.postRequestAddFood(addingFood)
                         withContext(Dispatchers.Main){
                             finish()

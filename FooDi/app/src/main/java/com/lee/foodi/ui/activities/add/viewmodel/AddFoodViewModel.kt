@@ -19,7 +19,6 @@ import java.net.ConnectException
  * Because of using DataBinding at AddFoodActivity
  * **/
 class AddFoodViewModel(private val repository: FoodiRepository) : ViewModel() {
-    private lateinit var postAddFoodJob : Job
 
     companion object{
         private lateinit var instance : AddFoodViewModel
@@ -110,33 +109,22 @@ class AddFoodViewModel(private val repository: FoodiRepository) : ViewModel() {
     val cholesterol = MutableLiveData<String>()
     val companyName = MutableLiveData<String>()
 
-    fun postRequestAddFood(addingFood: AddingFood){
+    suspend fun postRequestAddFood(addingFood: AddingFood){
         try{
-           postAddFoodJob = CoroutineScope(Dispatchers.IO).launch {
-                _isProgressShowing.postValue(true)
-                val response = repository.addNewFood(addingFood)
-                if(response.isSuccessful){
-                    withContext(Dispatchers.Main) {
-                        Utils.toastMessage(FoodiNewApplication.getInstance().getString(R.string.successfully_add))
-                        _isProgressShowing.value = false
-                    }
-                } else {
-                    _errorMessage.postValue(FoodiNewApplication.getInstance().getString(R.string.response_fail))
-                    _isProgressShowing.postValue(false)
+            _isProgressShowing.postValue(true)
+            val response = repository.addNewFood(addingFood)
+            if(response.isSuccessful){
+                withContext(Dispatchers.Main) {
+                    Utils.toastMessage(FoodiNewApplication.getInstance().getString(R.string.successfully_add))
+                    _isProgressShowing.value = false
                 }
+            } else {
+                _errorMessage.postValue(FoodiNewApplication.getInstance().getString(R.string.response_fail))
+                _isProgressShowing.postValue(false)
             }
         } catch (connectException : ConnectException){
             _errorMessage.postValue(FoodiNewApplication.getInstance().getString(R.string.check_server_connection))
             _isProgressShowing.value = false
-        }
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        if(::postAddFoodJob.isInitialized){
-            if(postAddFoodJob.isActive){
-                postAddFoodJob.cancel()
-            }
         }
     }
 }
