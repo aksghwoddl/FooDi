@@ -8,6 +8,7 @@ import com.lee.foodi.common.Utils
 import com.lee.foodi.common.manager.FooDiPreferenceManager
 import com.lee.foodi.databinding.DialogSettingTimerBinding
 import com.lee.foodi.ui.fragments.user.UserFragment
+import dagger.hilt.android.qualifiers.ApplicationContext
 
 private const val TAG = "SettingTimerDialog"
 private const val MIN_VALUE = 0
@@ -15,7 +16,7 @@ private const val MAX_HOUR = 12
 private const val MAX_MINUTE = 59
 
 
-class SettingTimerDialog(context : Context, private val caller : UserFragment) : Dialog(context) {
+class SettingTimerDialog(context : Context , private val caller : UserFragment) : Dialog(context) {
     private lateinit var binding : DialogSettingTimerBinding
     private lateinit var mPreferenceManager: FooDiPreferenceManager
 
@@ -24,7 +25,7 @@ class SettingTimerDialog(context : Context, private val caller : UserFragment) :
         binding = DialogSettingTimerBinding.inflate(layoutInflater).also {
             setContentView(it.root)
         }
-        mPreferenceManager = FooDiPreferenceManager.getInstance(FoodiNewApplication.getInstance())
+        mPreferenceManager = caller.getPreferenceManager()
 
         Utils.dialogResize(context , this , 0.9f , 0.5f)
         initNumberPicker()

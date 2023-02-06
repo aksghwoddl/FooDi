@@ -5,16 +5,20 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.lee.foodi.R
-import com.lee.foodi.common.FEMALE
-import com.lee.foodi.common.FoodiNewApplication
-import com.lee.foodi.common.MALE
-import com.lee.foodi.common.Utils
+import com.lee.foodi.common.*
 import com.lee.foodi.common.manager.FooDiPreferenceManager
+import com.lee.foodi.domain.FoodiRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlin.math.roundToInt
 
 private const val TAG = "SettingUserViewModel"
 
-class SettingUserViewModel : ViewModel() {
+@HiltViewModel
+class SettingUserViewModel @Inject constructor(
+    private val repository: FoodiRepository ,
+    private val resourceProvider: ResourceProvider
+) : ViewModel() {
     var weight = 0
     var age = 0
     var gender = ""
@@ -22,37 +26,40 @@ class SettingUserViewModel : ViewModel() {
     private val _maintenanceCalorie = MutableLiveData<String>() // Maintenance Calorie
     val maintenanceCalorie : LiveData<String>
     get() = _maintenanceCalorie
-
-    private val _genderButtonToggled = MutableLiveData<Boolean>() // Gender
-    val genderButtonToggled : LiveData<Boolean>
-    get() =  _genderButtonToggled
-
-    private val _isOnSettingTimer = MutableLiveData<Boolean>() // Check setting timer
-    val isOnSettingTimer : LiveData<Boolean>
-    get() = _isOnSettingTimer
-
-    private val _isNightMode = MutableLiveData<Boolean>(false) // Check Night Mode
-    val isNightMode : LiveData<Boolean>
-    get() = _isNightMode
-
     fun setMaintenanceCalorie(calorie : String){
         _maintenanceCalorie.value = calorie
     }
 
+    private val _genderButtonToggled = MutableLiveData<Boolean>() // Gender
+    val genderButtonToggled : LiveData<Boolean>
+    get() =  _genderButtonToggled
     fun setGenderButtonToggle(toggle : Boolean) {
         _genderButtonToggled.value = toggle
     }
 
+    private val _isOnSettingTimer = MutableLiveData<Boolean>() // Check setting timer
+    val isOnSettingTimer : LiveData<Boolean>
+    get() = _isOnSettingTimer
     fun setTimerOn(on : Boolean){
         _isOnSettingTimer.value = on
     }
 
-    fun setIsNightMode(isNight : Boolean) {
-        _isNightMode.value =  isNight
+    private val _toastMessage = MutableLiveData<String>()
+    val toastMessage : LiveData<String>
+        get() = _toastMessage
+    fun setToastMessage(message : String){
+        _toastMessage.value = message
+    }
+
+    private val _isNightMode = MutableLiveData<Boolean>(false)
+    val isNightMode : LiveData<Boolean>
+        get() = _isNightMode
+    fun setIsNightMode(isNightMode : Boolean) {
+        _isNightMode.value = isNightMode
     }
 
     /**
-     * Function for update user info
+     * 사용자의 정보를 업데이트 하는 함수
      * **/
     fun updateAllUserInfo(preferenceManager: FooDiPreferenceManager) {
         with(preferenceManager){
@@ -63,7 +70,7 @@ class SettingUserViewModel : ViewModel() {
     }
 
     /**
-     * Function for calculate maintenance calorie
+     * 유지 칼로리를 계산 하고 업데이트 하는 함수
      * **/
     fun updateMaintenanceCalorie(preferenceManager: FooDiPreferenceManager) {
         Log.d(TAG , "updateMaintenanceCalorie()")
@@ -103,6 +110,6 @@ class SettingUserViewModel : ViewModel() {
             }
         }
         preferenceManager.maintenanceCalorie = calorie.toString()
-        Utils.toastMessage(FoodiNewApplication.getInstance().getString(R.string.successfully_modify))
+        setToastMessage(resourceProvider.getString(R.string.successfully_modify))
     }
 }

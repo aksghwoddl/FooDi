@@ -4,16 +4,17 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import com.lee.foodi.R
 import com.lee.foodi.common.Utils
 import com.lee.foodi.databinding.FragmentNecessaryInfoBinding
 import com.lee.foodi.ui.activities.add.viewmodel.AddFoodViewModel
-import com.lee.foodi.ui.fragments.BaseFragment
+import com.lee.foodi.ui.base.BaseFragment
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class NecessaryInfoFragment : BaseFragment<FragmentNecessaryInfoBinding>(R.layout.fragment_necessary_info){
-    private lateinit var mViewModel : AddFoodViewModel
+    private val mViewModel : AddFoodViewModel by activityViewModels()
     companion object{
       fun newInstance() = NecessaryInfoFragment()
     }
@@ -24,41 +25,39 @@ class NecessaryInfoFragment : BaseFragment<FragmentNecessaryInfoBinding>(R.layou
         savedInstanceState: Bundle?
     ): View {
         val view = super.onCreateView(inflater, container, savedInstanceState)
-        mViewModel = AddFoodViewModel.getInstance()!!
         binding.necesarryViewModel = mViewModel
-        binding.lifecycleOwner = this
         return view
     }
 
     fun checkIsEmptyStatus() : Boolean {
         with(binding){
             if(foodNameEdiText.text.isEmpty()){
-                Utils.toastMessage(getString(R.string.input_food_name))
+                Utils.toastMessage(requireContext() , getString(R.string.input_food_name))
                 foodNameEdiText.requestFocus()
                 return false
             }
             if(servingSizeEditText.text.isEmpty()){
-                Utils.toastMessage(getString(R.string.input_serving_size))
+                Utils.toastMessage(requireContext() , getString(R.string.input_serving_size))
                 servingSizeEditText.requestFocus()
                 return false
             }
             if(calorieEditText.text.isEmpty()){
-                Utils.toastMessage(getString(R.string.input_calorie))
+                Utils.toastMessage(requireContext() , getString(R.string.input_calorie))
                 calorieEditText.requestFocus()
                 return false
             }
             if(carbohydrateEditText.text.isEmpty()){
-                Utils.toastMessage(getString(R.string.input_carbon))
+                Utils.toastMessage(requireContext() , getString(R.string.input_carbon))
                 carbohydrateEditText.requestFocus()
                 return false
             }
             if(proteinEditText.text.isEmpty()){
-                Utils.toastMessage(getString(R.string.input_protein))
+                Utils.toastMessage(requireContext() , getString(R.string.input_protein))
                 proteinEditText.requestFocus()
                 return false
             }
             if(fatEditText.text.isEmpty()){
-                Utils.toastMessage(getString(R.string.input_fat))
+                Utils.toastMessage(requireContext() , getString(R.string.input_fat))
                 fatEditText.requestFocus()
                 return false
             }

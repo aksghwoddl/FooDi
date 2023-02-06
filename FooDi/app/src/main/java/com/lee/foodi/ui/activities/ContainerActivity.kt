@@ -10,7 +10,9 @@ import com.lee.foodi.ui.activities.adapter.ContainerFragmentStateAdapter
 import com.lee.foodi.ui.fragments.diary.DiaryFragment
 import com.lee.foodi.ui.fragments.report.ReportFragment
 import com.lee.foodi.ui.fragments.user.UserFragment
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class ContainerActivity : AppCompatActivity() {
     private lateinit var binding : ActivityContainerBinding
     private lateinit var mFragmentStateAdapter : ContainerFragmentStateAdapter
@@ -32,7 +34,7 @@ class ContainerActivity : AppCompatActivity() {
 
 
     /**
-     * Function for init FragmentStateAdapter
+     * Fragment TabLayout에 추가하는 함수
      * **/
     private fun initFragmentAdapter() {
         val tabImageArray = arrayOf(

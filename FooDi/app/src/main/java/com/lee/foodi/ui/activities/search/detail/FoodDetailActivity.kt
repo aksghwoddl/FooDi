@@ -1,6 +1,5 @@
 package com.lee.foodi.ui.activities.search.detail
 
-import android.annotation.SuppressLint
 import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
@@ -10,17 +9,21 @@ import android.os.SystemClock
 import android.text.Editable
 import android.util.Log
 import android.view.View
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.jakewharton.rxbinding3.widget.textChanges
 import com.lee.foodi.R
 import com.lee.foodi.common.*
 import com.lee.foodi.common.manager.FooDiPreferenceManager
-import com.lee.foodi.data.repository.FoodiRepository
 import com.lee.foodi.data.rest.model.Food
 import com.lee.foodi.data.room.entity.DiaryItemEntity
 import com.lee.foodi.databinding.ActivityFoodDetailBinding
+import com.lee.foodi.domain.FoodiRepository
 import com.lee.foodi.receiver.TimerReceiver
+import com.lee.foodi.ui.activities.search.detail.viewmodel.FoodDetailViewModel
+import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.qualifiers.ApplicationContext
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -28,12 +31,14 @@ import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
-import java.util.*
+import javax.inject.Inject
 import kotlin.math.roundToInt
 
 private const val TAG = "FoodDetailActivity"
 
+@AndroidEntryPoint
 class FoodDetailActivity : AppCompatActivity() {
+    private val viewModel : FoodDetailViewModel by viewModels()
     private lateinit var binding : ActivityFoodDetailBinding
     private lateinit var mFood : Food
     private lateinit var mFooDiPreferenceManager: FooDiPreferenceManager
@@ -65,10 +70,6 @@ class FoodDetailActivity : AppCompatActivity() {
         }
     }
 
-    /**
-     * Init Functions
-     * **/
-    @SuppressLint("SetTextI18n")
     private fun init() {
         with(binding){
             foodNameTextView.text = mFood.foodName
@@ -79,7 +80,7 @@ class FoodDetailActivity : AppCompatActivity() {
                 companyNameTextView.text = mFood.company
             }
         }
-        mFooDiPreferenceManager = FooDiPreferenceManager.getInstance(FoodiNewApplication.getInstance())
+        mFooDiPreferenceManager = FooDiPreferenceManager.getInstance(applicationContext)
         updateIngredientTextView(false)
         addListeners()
     }
@@ -90,14 +91,19 @@ class FoodDetailActivity : AppCompatActivity() {
             addButton.setOnClickListener {
                 lifecycleScope.launch {
                     updateFoodInfo()
-                    addFoodIntoDatabase()
+                    val servingSize = binding.calculateEditText.text.toString() + binding.unitTextView.text
+                    viewModel.addFoodIntoDatabase(
+                        intent?.getStringExtra(EXTRA_SELECTED_DATE)!! ,
+                        servingSize ,
+                        mFood
+                    )
                     if(mFooDiPreferenceManager.isTimerOn){
                         Log.d(TAG, "addListeners: click addButton , timer is enable ")
                         updateTimer()
                     } else {
                         Log.d(TAG, "addListeners: click addButton , timer is not enable ")
                     }
-                    Utils.toastMessage(getString(R.string.successfully_add))
+                    Utils.toastMessage(this@FoodDetailActivity , getString(R.string.successfully_add))
                     finish()
                 }
             }
@@ -117,18 +123,8 @@ class FoodDetailActivity : AppCompatActivity() {
     }
 
     /**
-     * Function for add food into Room DB
+     * 식단 타이머 시간 update하는 함수
      * **/
-    private fun addFoodIntoDatabase() {
-        val date = intent.getStringExtra(EXTRA_SELECTED_DATE)!!
-        val time = LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH : mm"))
-        val servingSize = binding.calculateEditText.text.toString() + binding.unitTextView.text
-        val queryFood = DiaryItemEntity(null , date , mFood , time , servingSize)
-        CoroutineScope(Dispatchers.IO).launch{
-            FoodiRepository.getInstance().addDiaryItem(queryFood)
-        }
-    }
-
     private fun updateTimer() {
         val today = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy년MM월dd일"))
         if( intent.getStringExtra(EXTRA_SELECTED_DATE) == today){
@@ -155,7 +151,7 @@ class FoodDetailActivity : AppCompatActivity() {
     }
 
     /**
-     * Function for get value during EditText is changing
+     * EditText가 변함에 따라 계산된 영양소를 가져오는 함수
      * **/
     private fun getValueOnEditTextChanged(value : String , inputValue : String) : String {
         var ret = ""
@@ -172,7 +168,7 @@ class FoodDetailActivity : AppCompatActivity() {
     }
 
     /**
-     * Function for update Textview that show food info
+     * 화면에 보여지는 영양소를 업데이트 하는 함수 (changedByEditText를 통해 EditText가 변경되어 영양소를 update하는지 구분함)
      * **/
     private fun updateIngredientTextView(changedByEditText : Boolean){
         if(changedByEditText){
@@ -240,7 +236,7 @@ class FoodDetailActivity : AppCompatActivity() {
     }
 
     /**
-     * Function for update food info when insert Room DB
+     * RoomDB에 데이터 추가하기전 영양소 업데이트 하는 함수
      * **/
     private fun updateFoodInfo() {
         with(mFood){
@@ -258,7 +254,7 @@ class FoodDetailActivity : AppCompatActivity() {
     }
 
     /**
-     * Function for convert String that have double value to Integer
+     * 전달받은 영양소를 N/A가 아닐 경우에 g을 붙여 반환하도록 하는 함수
      * **/
     private fun String.convertStringToInt() : String {
         return if(this == NOT_AVAILABLE){

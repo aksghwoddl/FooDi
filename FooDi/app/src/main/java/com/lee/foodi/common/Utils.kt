@@ -11,6 +11,8 @@ import android.view.View
 import android.view.WindowManager
 import android.widget.TextView
 import android.widget.Toast
+import dagger.hilt.android.qualifiers.ApplicationContext
+import javax.inject.Inject
 import kotlin.math.abs
 
 private const val TAG = "Utils"
@@ -42,7 +44,6 @@ const val DIARY_ITEM_TABLE = "diary_item_tbl"
 
 class Utils {
     companion object{
-
         /**
          * Function that check and convert value received from server (sometimes received minus or N/A)
          * **/
@@ -95,8 +96,8 @@ class Utils {
         /**
          * Function for toast message
          * **/
-        fun toastMessage(message : String){
-            Toast.makeText(FoodiNewApplication.getInstance() , message , Toast.LENGTH_SHORT).show()
+        fun toastMessage(context : Context , message : String){
+            Toast.makeText(context , message , Toast.LENGTH_SHORT).show()
         }
 
         /**

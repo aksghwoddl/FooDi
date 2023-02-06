@@ -25,7 +25,7 @@ class SettingGoalCalorieDialog(context : Context , private val caller : UserFrag
         binding = DialogSettingGoalCalorieBinding.inflate(layoutInflater).also {
             setContentView(it.root)
         }
-        mPreferenceManager = FooDiPreferenceManager.getInstance(FoodiNewApplication.getInstance())
+        mPreferenceManager = caller.getPreferenceManager()
         addListeners()
         Utils.dialogResize(context , this , 0.9f , 0.4f)
         initNumberPicker()

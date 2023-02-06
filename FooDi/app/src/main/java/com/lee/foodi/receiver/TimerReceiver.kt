@@ -45,7 +45,7 @@ class TimerReceiver : BroadcastReceiver() {
     }
 
     /**
-     * Function for create Notification Channel when build version is over Oreo
+     * Notification Channel을 만드는 함수
      * **/
     private fun createNotificationChannel(context : Context?) {
             val channel = NotificationChannel(CHANNEL_ID , CHANNEL_NAME , NotificationManager.IMPORTANCE_DEFAULT).apply {

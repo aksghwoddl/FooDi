@@ -52,6 +52,7 @@
                         android:paddingStart="10dp"
                         android:paddingEnd="10dp"
                         android:text="@={necesarryViewModel.foodName}"
+                        android:inputType="text"
                         />
                 </LinearLayout>
 

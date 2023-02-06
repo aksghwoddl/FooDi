@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.AdapterView.OnItemSelectedListener
 import android.widget.ArrayAdapter
-import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.github.mikephil.charting.components.AxisBase
@@ -23,12 +23,11 @@ import com.lee.foodi.R
 import com.lee.foodi.common.FoodiNewApplication
 import com.lee.foodi.common.Utils
 import com.lee.foodi.common.manager.FooDiPreferenceManager
-import com.lee.foodi.data.repository.FoodiRepository
+import com.lee.foodi.data.repository.FoodiRepositoryImpl
 import com.lee.foodi.databinding.FragmentReportBinding
-import com.lee.foodi.ui.factory.FoodiViewModelFactory
-import com.lee.foodi.ui.fragments.BaseFragment
+import com.lee.foodi.ui.base.BaseFragment
 import com.lee.foodi.ui.fragments.report.viewmodel.ReportViewModel
-import kotlinx.coroutines.CoroutineScope
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -36,8 +35,10 @@ import kotlin.math.roundToInt
 
 private const val TAG = "ReportFragment"
 
+@AndroidEntryPoint
 class ReportFragment : BaseFragment<FragmentReportBinding>(R.layout.fragment_report) {
-    private lateinit var mViewModel : ReportViewModel
+    private val mViewModel : ReportViewModel by viewModels()
+    private lateinit var preferenceManager : FooDiPreferenceManager
 
     companion object{
         fun newInstance() = ReportFragment()
@@ -48,7 +49,7 @@ class ReportFragment : BaseFragment<FragmentReportBinding>(R.layout.fragment_rep
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        mViewModel = ViewModelProvider(this , FoodiViewModelFactory(FoodiRepository.getInstance()))[ReportViewModel::class.java]
+        preferenceManager = FooDiPreferenceManager.getInstance(requireContext())
         return super.onCreateView(inflater, container, savedInstanceState)
     }
 
@@ -68,7 +69,7 @@ class ReportFragment : BaseFragment<FragmentReportBinding>(R.layout.fragment_rep
             bSummaryList?.let {
                 mViewModel.setSummaryList(it)
             }
-            val preferenceManager = FooDiPreferenceManager.getInstance(FoodiNewApplication.getInstance())
+            preferenceManager = FooDiPreferenceManager.getInstance(requireContext())
             if(preferenceManager.goalCalorie  != "0"){
                 binding.reportChart.axisLeft.setAxisMaxValue(preferenceManager.goalCalorie!!.toFloat())
                 binding.reportChart.axisRight.setAxisMaxValue(preferenceManager.goalCalorie!!.toFloat())
@@ -80,11 +81,11 @@ class ReportFragment : BaseFragment<FragmentReportBinding>(R.layout.fragment_rep
 
 
     /**
-     * Function for init Spinner
+     * Spinner 초기화 하는 함수
      * **/
     private fun initSpinner() {
         val selectionArray = resources.getStringArray(R.array.report_selection_array)
-        val adapter = ArrayAdapter<String>(FoodiNewApplication.getInstance() , R.layout.spinner_item , selectionArray)
+        val adapter = ArrayAdapter<String>(requireContext() , R.layout.spinner_item , selectionArray)
         with(binding){
             reportSelection.adapter = adapter
             reportSelection.onItemSelectedListener = object : OnItemSelectedListener{
@@ -108,7 +109,7 @@ class ReportFragment : BaseFragment<FragmentReportBinding>(R.layout.fragment_rep
     }
 
     /**
-     * Function for init Chart
+     * 차트 초기화 하는 함수
      * **/
     private fun initChart() {
         binding.reportChart.apply {
@@ -132,7 +133,6 @@ class ReportFragment : BaseFragment<FragmentReportBinding>(R.layout.fragment_rep
                 typeface = Typeface.createFromAsset(requireContext().assets , "swagger.ttf")
                 textColor = resources.getColor(R.color.text_colors)
                 setStartAtZero(true)
-                val preferenceManager = FooDiPreferenceManager.getInstance(FoodiNewApplication.getInstance())
                 if(preferenceManager.goalCalorie  != "0"){
                     setAxisMaxValue(preferenceManager.goalCalorie!!.toFloat())
                 }
@@ -145,7 +145,6 @@ class ReportFragment : BaseFragment<FragmentReportBinding>(R.layout.fragment_rep
                 typeface = Typeface.createFromAsset(requireContext().assets , "swagger.ttf")
                 textColor = resources.getColor(R.color.text_colors)
                 setStartAtZero(true)
-                val preferenceManager = FooDiPreferenceManager.getInstance(FoodiNewApplication.getInstance())
                 if(preferenceManager.goalCalorie  != "0"){
                     setAxisMaxValue(preferenceManager.goalCalorie!!.toFloat())
                 }
@@ -170,8 +169,7 @@ class ReportFragment : BaseFragment<FragmentReportBinding>(R.layout.fragment_rep
      * **/
     private fun observeData() {
         with(mViewModel){
-            // Summary List
-            summaryList.observe(viewLifecycleOwner){
+            summaryList.observe(viewLifecycleOwner){ // 불러온 총 소비 칼로리 리스트
                 val labelList = arrayListOf<String>()
                 val dayList = getDays()
                 dayList.forEach {
@@ -181,15 +179,14 @@ class ReportFragment : BaseFragment<FragmentReportBinding>(R.layout.fragment_rep
                 setData()
             }
 
-            // Average Calorie
-            averageCalorie.observe(viewLifecycleOwner){
+            averageCalorie.observe(viewLifecycleOwner){ // 평균 칼로리
                 Utils.convertValueWithErrorCheck(binding.averageCalorieTextView , getString(R.string.average_calorie) , it)
             }
         }
     }
 
     /**
-     * Calculate Average Calorie as selected section
+     * 평균칼로리를 계산하는 함수
      * **/
     private fun calculateAverageCalorie() : String {
         val diaryList = mViewModel.summaryList.value
@@ -201,7 +198,7 @@ class ReportFragment : BaseFragment<FragmentReportBinding>(R.layout.fragment_rep
     }
 
     /**
-     * Function for set data at char
+     * 그래프 데이터를 세팅하는 함수
      * **/
     private fun setData() {
         val valueList = ArrayList<BarEntry>()
@@ -223,9 +220,9 @@ class ReportFragment : BaseFragment<FragmentReportBinding>(R.layout.fragment_rep
     }
 
     /**
-     * ValueFormatter for convert chart xAxis's label
+     * xAxis의 값을 바꾸기 위한 ValueFormatter class
      * **/
-    private inner class MyValueFormatter(private val dateList : ArrayList<String>) : ValueFormatter() {
+    private class MyValueFormatter(private val dateList : ArrayList<String>) : ValueFormatter() {
         override fun getAxisLabel(value: Float, axis: AxisBase?): String {
             return dateList.getOrNull(value.toInt()) ?: value.toString()
         }

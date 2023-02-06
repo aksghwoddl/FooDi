@@ -3,6 +3,8 @@ package com.lee.foodi.common.manager
 import android.content.Context
 import android.content.SharedPreferences
 import android.preference.PreferenceManager
+import dagger.hilt.android.qualifiers.ApplicationContext
+import javax.inject.Inject
 
 private const val NETWORK_PERMISSION = "network_permission"
 private const val GOAL_CALORIE = "goal_calorie"

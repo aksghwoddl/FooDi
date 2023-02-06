@@ -1,4 +1,4 @@
-package com.lee.foodi.ui.fragments
+package com.lee.foodi.ui.base
 
 import android.os.Bundle
 import android.view.LayoutInflater

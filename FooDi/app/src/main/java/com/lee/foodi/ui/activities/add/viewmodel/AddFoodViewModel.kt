@@ -1,53 +1,33 @@
 package com.lee.foodi.ui.activities.add.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import com.lee.foodi.R
-import com.lee.foodi.common.FoodiNewApplication
-import com.lee.foodi.common.Utils
-import com.lee.foodi.data.repository.FoodiRepository
+import com.lee.foodi.common.NOT_AVAILABLE
+import com.lee.foodi.common.ResourceProvider
 import com.lee.foodi.data.rest.model.AddingFood
-import com.lee.foodi.ui.activities.add.AddFoodActivity
-import com.lee.foodi.ui.factory.FoodiViewModelFactory
-import kotlinx.coroutines.*
+import com.lee.foodi.domain.FoodiRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.net.ConnectException
+import javax.inject.Inject
 
-/**
- * Singleton Pattern
- * Because of using DataBinding at AddFoodActivity
- * **/
-class AddFoodViewModel(private val repository: FoodiRepository) : ViewModel() {
+private const val TAG = "AddFoodViewModel"
 
-    companion object{
-        private lateinit var instance : AddFoodViewModel
+@HiltViewModel
+class AddFoodViewModel @Inject constructor(
+    private val repository: FoodiRepository,
+    private val resourceProvider: ResourceProvider
+) : ViewModel() {
 
-        /**
-         * Function for get Instance that already created
-         * **/
-        fun getInstance() : AddFoodViewModel? {
-            return if(::instance.isInitialized){
-                instance
-            } else {
-                null
-            }
-        }
-        /**
-         * Function for create new Instance
-         * **/
-        fun newInstance(owner : AddFoodActivity) {
-            (!::instance.isInitialized).let {
-                instance = ViewModelProvider(owner , FoodiViewModelFactory(
-                    FoodiRepository.getInstance()
-                ))[AddFoodViewModel::class.java]
-            }
-        }
-    }
     private val _headerTitle = MutableLiveData<String>()
     val headerTitle : LiveData<String>
     get() = _headerTitle
-
     fun setHeaderTitle(title : String) {
         _headerTitle.value = title
     }
@@ -55,7 +35,6 @@ class AddFoodViewModel(private val repository: FoodiRepository) : ViewModel() {
     private val _progress = MutableLiveData<Int>(1)
     val progress : LiveData<Int>
     get() = _progress
-
     fun setProgress(progress : Int){
         _progress.value = progress
     }
@@ -63,31 +42,28 @@ class AddFoodViewModel(private val repository: FoodiRepository) : ViewModel() {
     private val _buttonText = MutableLiveData<String>()
     val buttonText : LiveData<String>
     get() =  _buttonText
-
     fun setButtonText(text : String){
         _buttonText.value = text
     }
 
-    private val _errorMessage = MutableLiveData<String>()
-    val errorMessage : LiveData<String>
-    get() = _errorMessage
+    private val _activityFinish = MutableLiveData<Boolean>()
+    val activityFinish : LiveData<Boolean>
+    get() = _activityFinish
 
-    fun setErrorMessage(message : String){
-        _errorMessage.value = message
+    private val _toastMessage = MutableLiveData<String>()
+    val toastMessage : LiveData<String>
+        get() = _toastMessage
+    fun setToastMessage(message : String){
+        _toastMessage.value = message
     }
 
-    private val _isProgressShowing = MutableLiveData<Boolean>(false)
-    val isProgressShowing : LiveData<Boolean>
-    get() = _isProgressShowing
-
-    fun setIsProgress(isProgress : Boolean){
-        _isProgressShowing.value = isProgress
-    }
+    private val _isProgress = MutableLiveData<Boolean>()
+    val isProgress : LiveData<Boolean>
+        get() = _isProgress
 
     private val _isNightMode = MutableLiveData<Boolean>(false)
     val isNightMode : LiveData<Boolean>
-    get() = _isNightMode
-
+        get() = _isNightMode
     fun setIsNightMode(isNightMode : Boolean) {
         _isNightMode.value = isNightMode
     }
@@ -95,7 +71,6 @@ class AddFoodViewModel(private val repository: FoodiRepository) : ViewModel() {
     /**
      * Ingredients for add food
      * **/
-
     val foodName = MutableLiveData<String>()
     val servingSize = MutableLiveData<String>()
     val calorie = MutableLiveData<String>()
@@ -109,22 +84,40 @@ class AddFoodViewModel(private val repository: FoodiRepository) : ViewModel() {
     val cholesterol = MutableLiveData<String>()
     val companyName = MutableLiveData<String>()
 
-    suspend fun postRequestAddFood(addingFood: AddingFood){
+    fun postRequestAddFood(){
         try{
-            _isProgressShowing.postValue(true)
-            val response = repository.addNewFood(addingFood)
-            if(response.isSuccessful){
-                withContext(Dispatchers.Main) {
-                    Utils.toastMessage(FoodiNewApplication.getInstance().getString(R.string.successfully_add))
-                    _isProgressShowing.value = false
+            _isProgress.value = true
+            CoroutineScope(Dispatchers.IO).launch {
+                val addingFood = AddingFood(
+                    foodName.value?.toString() ?: NOT_AVAILABLE ,
+                    servingSize.value?.toString() ?: NOT_AVAILABLE ,
+                    calorie.value?.toString() ?: NOT_AVAILABLE ,
+                    carbohydrate.value?.toString() ?: NOT_AVAILABLE ,
+                    protein.value?.toString() ?: NOT_AVAILABLE ,
+                    fat.value?.toString() ?: NOT_AVAILABLE ,
+                    sugar.value?.toString() ?: NOT_AVAILABLE ,
+                    salt.value?.toString() ?: NOT_AVAILABLE ,
+                    cholesterol.value?.toString() ?: NOT_AVAILABLE ,
+                    saturatedFat.value?.toString() ?: NOT_AVAILABLE ,
+                    transFat.value?.toString() ?: NOT_AVAILABLE ,
+                    companyName.value?.toString() ?: NOT_AVAILABLE ,
+                )
+                val response = repository.addNewFood(addingFood)
+                if(response.isSuccessful){
+                    withContext(Dispatchers.Main) {
+                        Log.d(TAG, "postRequestAddFood: $addingFood")
+                        setToastMessage(resourceProvider.getString(R.string.successfully_add))
+                        _isProgress.value = false
+                        _activityFinish.value = true
+                    }
+                } else {
+                    setToastMessage(resourceProvider.getString(R.string.response_fail))
+                    _isProgress.value = false
                 }
-            } else {
-                _errorMessage.postValue(FoodiNewApplication.getInstance().getString(R.string.response_fail))
-                _isProgressShowing.postValue(false)
             }
         } catch (connectException : ConnectException){
-            _errorMessage.postValue(FoodiNewApplication.getInstance().getString(R.string.check_server_connection))
-            _isProgressShowing.value = false
+            setToastMessage(resourceProvider.getString(R.string.check_server_connection))
+            _isProgress.value = false
         }
     }
 }

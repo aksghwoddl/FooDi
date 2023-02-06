@@ -7,19 +7,26 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lee.foodi.common.LATELY
 import com.lee.foodi.common.MONTHLY
+import com.lee.foodi.common.ResourceProvider
 import com.lee.foodi.common.WEEKS
-import com.lee.foodi.data.repository.FoodiRepository
 import com.lee.foodi.data.room.entity.Diary
+import com.lee.foodi.domain.FoodiRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.withContext
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.*
+import javax.inject.Inject
 
 private const val TAG = "ReportViewModel"
 
-class ReportViewModel(private val repository: FoodiRepository) : ViewModel() {
+@HiltViewModel
+class ReportViewModel @Inject constructor(
+    private val repository: FoodiRepository,
+    private val resourceProvider: ResourceProvider
+) : ViewModel() {
 
     private val _summaryList = MutableLiveData<MutableList<Diary>>() // Diary Summary List
     val summaryList : LiveData<MutableList<Diary>>
@@ -39,6 +46,9 @@ class ReportViewModel(private val repository: FoodiRepository) : ViewModel() {
 
     private var days = mutableListOf<Int>()
 
+    /**
+     * 총 소비 칼로리를 불러오는 함수
+     * **/
     suspend fun getDiarySummary(selectedSection : String) : MutableList<Diary>? {
         if(days.isNotEmpty()){
             days.clear()
@@ -108,7 +118,7 @@ class ReportViewModel(private val repository: FoodiRepository) : ViewModel() {
     fun getDays() = days
 
     /**
-     * Function for get Day count as inputted Month
+     * 입력된 달의 총 날짜를 출력하는 함수
      * **/
     private fun getDayCountInMonth(year : Int , month : Int) : Int {
         Log.d(TAG, "getDayCountInMonth: year = $year , month = $month")

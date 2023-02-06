@@ -76,7 +76,7 @@ class SplashActivity : AppCompatActivity() {
         }
 
         override fun onPermissionDenied(deniedPermissions: MutableList<String>?) {
-            Utils.toastMessage(getString(R.string.add_permission))
+            Utils.toastMessage(this@SplashActivity , getString(R.string.add_permission))
         }
 
     }
