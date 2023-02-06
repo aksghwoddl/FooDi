@@ -26,6 +26,7 @@ import com.lee.foodi.common.manager.FooDiPreferenceManager
 import com.lee.foodi.data.repository.FoodiRepository
 import com.lee.foodi.databinding.FragmentReportBinding
 import com.lee.foodi.ui.factory.FoodiViewModelFactory
+import com.lee.foodi.ui.fragments.BaseFragment
 import com.lee.foodi.ui.fragments.report.viewmodel.ReportViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -35,8 +36,7 @@ import kotlin.math.roundToInt
 
 private const val TAG = "ReportFragment"
 
-class ReportFragment : Fragment() {
-    private lateinit var binding : FragmentReportBinding
+class ReportFragment : BaseFragment<FragmentReportBinding>(R.layout.fragment_report) {
     private lateinit var mViewModel : ReportViewModel
 
     companion object{
@@ -48,9 +48,8 @@ class ReportFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentReportBinding.inflate(inflater , container , false)
         mViewModel = ViewModelProvider(this , FoodiViewModelFactory(FoodiRepository.getInstance()))[ReportViewModel::class.java]
-        return binding.root
+        return super.onCreateView(inflater, container, savedInstanceState)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

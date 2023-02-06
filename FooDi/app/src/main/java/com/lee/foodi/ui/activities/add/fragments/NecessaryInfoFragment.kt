@@ -10,9 +10,9 @@ import com.lee.foodi.R
 import com.lee.foodi.common.Utils
 import com.lee.foodi.databinding.FragmentNecessaryInfoBinding
 import com.lee.foodi.ui.activities.add.viewmodel.AddFoodViewModel
+import com.lee.foodi.ui.fragments.BaseFragment
 
-class NecessaryInfoFragment : Fragment(){
-    private lateinit var binding : FragmentNecessaryInfoBinding
+class NecessaryInfoFragment : BaseFragment<FragmentNecessaryInfoBinding>(R.layout.fragment_necessary_info){
     private lateinit var mViewModel : AddFoodViewModel
     companion object{
       fun newInstance() = NecessaryInfoFragment()
@@ -23,11 +23,11 @@ class NecessaryInfoFragment : Fragment(){
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = DataBindingUtil.inflate(inflater , R.layout.fragment_necessary_info , container ,false)
+        val view = super.onCreateView(inflater, container, savedInstanceState)
         mViewModel = AddFoodViewModel.getInstance()!!
         binding.necesarryViewModel = mViewModel
         binding.lifecycleOwner = this
-        return binding.root
+        return view
     }
 
     fun checkIsEmptyStatus() : Boolean {

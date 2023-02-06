@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.NumberPicker
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.lee.foodi.R
@@ -16,6 +15,7 @@ import com.lee.foodi.common.manager.FooDiPreferenceManager
 import com.lee.foodi.data.repository.FoodiRepository
 import com.lee.foodi.databinding.FragmentUserBinding
 import com.lee.foodi.ui.factory.FoodiViewModelFactory
+import com.lee.foodi.ui.fragments.BaseFragment
 import com.lee.foodi.ui.fragments.user.dialog.SettingGoalCalorieDialog
 import com.lee.foodi.ui.fragments.user.dialog.SettingTimerDialog
 import com.lee.foodi.ui.fragments.user.viewmodel.SettingUserViewModel
@@ -27,8 +27,7 @@ private const val MIN_AGE_PICKER_VALUE = 18
 private const val MAX_AGE_VALUE = 99
 private const val MAX_WEIGHT_VALUE = 200
 
-class UserFragment : Fragment() {
-    private lateinit var binding : FragmentUserBinding
+class UserFragment : BaseFragment<FragmentUserBinding>(R.layout.fragment_user) {
     private lateinit var mGoalCalorieDialog: SettingGoalCalorieDialog
     private lateinit var mSettingTimerDialog : SettingTimerDialog
     private lateinit var mPreferenceManager: FooDiPreferenceManager
@@ -45,13 +44,9 @@ class UserFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        Log.d(TAG, "onCreateView()")
-
-        binding = FragmentUserBinding.inflate(inflater , container , false)
         mPreferenceManager = FooDiPreferenceManager.getInstance(FoodiNewApplication.getInstance())
         mViewModel = ViewModelProvider(this , FoodiViewModelFactory(FoodiRepository()))[SettingUserViewModel::class.java]
-
-        return binding.root
+        return super.onCreateView(inflater, container, savedInstanceState)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

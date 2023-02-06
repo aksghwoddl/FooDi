@@ -10,7 +10,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.DatePicker
 import android.widget.PopupMenu
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.SimpleItemAnimator
 import com.lee.foodi.R
@@ -22,6 +21,7 @@ import com.lee.foodi.data.room.entity.DiaryItem
 import com.lee.foodi.databinding.FragmentDiaryBinding
 import com.lee.foodi.ui.activities.search.SearchActivity
 import com.lee.foodi.ui.factory.FoodiViewModelFactory
+import com.lee.foodi.ui.fragments.BaseFragment
 import com.lee.foodi.ui.fragments.diary.adapter.DiaryFoodItemRecyclerAdapter
 import com.lee.foodi.ui.fragments.diary.detail.DiaryDetailActivity
 import com.lee.foodi.ui.fragments.diary.viewmodel.DiaryViewModel
@@ -33,8 +33,7 @@ import kotlin.math.roundToInt
 private const val TAG = "DiaryFragment"
 private const val INITIAL_VALUE = "0"
 
-class DiaryFragment : Fragment() {
-    private lateinit var binding : FragmentDiaryBinding
+class DiaryFragment : BaseFragment<FragmentDiaryBinding>(R.layout.fragment_diary) {
     private lateinit var mPreferenceManager: FooDiPreferenceManager
     private lateinit var mViewModel : DiaryViewModel
     private lateinit var mDiaryFoodItemRecyclerAdapter : DiaryFoodItemRecyclerAdapter
@@ -52,10 +51,9 @@ class DiaryFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentDiaryBinding.inflate(inflater , container , false)
         mPreferenceManager = FooDiPreferenceManager.getInstance(FoodiNewApplication.getInstance())
         mViewModel = ViewModelProvider(this , FoodiViewModelFactory(FoodiRepository.getInstance()))[DiaryViewModel::class.java]
-        return binding.root
+        return super.onCreateView(inflater, container, savedInstanceState)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

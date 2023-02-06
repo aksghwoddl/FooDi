@@ -13,9 +13,6 @@ import com.lee.foodi.ui.fragments.user.UserFragment
 
 class ContainerActivity : AppCompatActivity() {
     private lateinit var binding : ActivityContainerBinding
-    private lateinit var mReportFragment : ReportFragment
-    private lateinit var mDiaryFragment : DiaryFragment
-    private lateinit var mUserFragment: UserFragment
     private lateinit var mFragmentStateAdapter : ContainerFragmentStateAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,6 +23,11 @@ class ContainerActivity : AppCompatActivity() {
         mFragmentStateAdapter = ContainerFragmentStateAdapter(this)
 
         savedInstanceState?: initFragmentAdapter()
+    }
+
+    override fun onDestroy() {
+        binding.bottomTabLayout.removeAllViews()
+        super.onDestroy()
     }
 
 
@@ -39,12 +41,13 @@ class ContainerActivity : AppCompatActivity() {
             ResourcesCompat.getDrawable(resources , R.drawable.ic_baseline_settings_24 , null)
         )
 
-        mReportFragment = ReportFragment.newInstance()
-        mDiaryFragment = DiaryFragment.newInstance()
-        mUserFragment = UserFragment.newInstance()
-        mFragmentStateAdapter.appendFragment(mReportFragment)
-        mFragmentStateAdapter.appendFragment(mDiaryFragment)
-        mFragmentStateAdapter.appendFragment(mUserFragment)
+        val reportFragment = ReportFragment.newInstance()
+        val diaryFragment = DiaryFragment.newInstance()
+        val userFragment = UserFragment.newInstance()
+
+        mFragmentStateAdapter.appendFragment(reportFragment)
+        mFragmentStateAdapter.appendFragment(diaryFragment)
+        mFragmentStateAdapter.appendFragment(userFragment)
 
         with(binding){
             containerViewPager.adapter = mFragmentStateAdapter
