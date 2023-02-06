@@ -13,12 +13,14 @@ import com.lee.foodi.R
 import com.lee.foodi.common.EXTRA_CODE
 import com.lee.foodi.common.REQUEST_CODE
 import com.lee.foodi.ui.activities.splash.SplashActivity
+import dagger.hilt.android.AndroidEntryPoint
 
 private const val TAG = "TimerReceiver"
 private const val CHANNEL_ID = "notification_channel_id"
 private const val CHANNEL_NAME = "notification_channel_name"
 private const val DESCRIPTION_TEXT = "FOODI ALARM"
 
+@AndroidEntryPoint
 class TimerReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
         if(intent?.getIntExtra(EXTRA_CODE , 0) == REQUEST_CODE){
