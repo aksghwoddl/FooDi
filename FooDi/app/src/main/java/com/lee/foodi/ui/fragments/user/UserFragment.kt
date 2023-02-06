@@ -6,19 +6,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.NumberPicker
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.lee.foodi.R
 import com.lee.foodi.common.FoodiNewApplication
 import com.lee.foodi.common.Utils
 import com.lee.foodi.common.manager.FooDiPreferenceManager
-import com.lee.foodi.data.repository.FoodiRepository
+import com.lee.foodi.data.repository.FoodiRepositoryImpl
 import com.lee.foodi.databinding.FragmentUserBinding
-import com.lee.foodi.ui.factory.FoodiViewModelFactory
-import com.lee.foodi.ui.fragments.BaseFragment
+import com.lee.foodi.ui.base.BaseFragment
 import com.lee.foodi.ui.fragments.user.dialog.SettingGoalCalorieDialog
 import com.lee.foodi.ui.fragments.user.dialog.SettingTimerDialog
 import com.lee.foodi.ui.fragments.user.viewmodel.SettingUserViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
 private const val TAG = "UserFragment"
 
@@ -27,11 +28,12 @@ private const val MIN_AGE_PICKER_VALUE = 18
 private const val MAX_AGE_VALUE = 99
 private const val MAX_WEIGHT_VALUE = 200
 
+@AndroidEntryPoint
 class UserFragment : BaseFragment<FragmentUserBinding>(R.layout.fragment_user) {
     private lateinit var mGoalCalorieDialog: SettingGoalCalorieDialog
     private lateinit var mSettingTimerDialog : SettingTimerDialog
     private lateinit var mPreferenceManager: FooDiPreferenceManager
-    private lateinit var mViewModel : SettingUserViewModel
+    private val mViewModel : SettingUserViewModel by viewModels()
 
     private var isToggled = false
 
@@ -44,8 +46,7 @@ class UserFragment : BaseFragment<FragmentUserBinding>(R.layout.fragment_user) {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        mPreferenceManager = FooDiPreferenceManager.getInstance(FoodiNewApplication.getInstance())
-        mViewModel = ViewModelProvider(this , FoodiViewModelFactory(FoodiRepository()))[SettingUserViewModel::class.java]
+        mPreferenceManager = FooDiPreferenceManager.getInstance(requireContext())
         return super.onCreateView(inflater, container, savedInstanceState)
     }
 
@@ -64,7 +65,7 @@ class UserFragment : BaseFragment<FragmentUserBinding>(R.layout.fragment_user) {
         addListeners()
         observeData()
         initNumberPicker()
-        mViewModel.setIsNightMode(Utils.checkNightMode(FoodiNewApplication.getInstance()))
+        mViewModel.setIsNightMode(Utils.checkNightMode(requireContext()))
     }
 
     /**
@@ -164,6 +165,10 @@ class UserFragment : BaseFragment<FragmentUserBinding>(R.layout.fragment_user) {
                 }
             }
 
+            toastMessage.observe(viewLifecycleOwner){
+                Utils.toastMessage(requireContext() ,it)
+            }
+
             isNightMode.observe(viewLifecycleOwner){
                 if(it){
                     Glide.with(requireContext()).load(R.drawable.ic_baseline_create_24_night).into(binding.editGoalCalorieImage)
@@ -180,11 +185,13 @@ class UserFragment : BaseFragment<FragmentUserBinding>(R.layout.fragment_user) {
             Utils.convertValueWithErrorCheck(binding.goalCalorieTextView
                 , updateString
                 , mPreferenceManager.goalCalorie!!)
-            Utils.toastMessage(getString(R.string.successfully_modify))
+            mViewModel.setToastMessage(getString(R.string.successfully_modify))
         }
     }
 
     fun updateSettingTimer() {
-        Utils.toastMessage(getString(R.string.update_timer))
+        mViewModel.setToastMessage(getString(R.string.update_timer))
     }
+
+    fun getPreferenceManager() = mPreferenceManager
 }

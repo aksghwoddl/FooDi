@@ -15,21 +15,4 @@ import com.lee.foodi.data.room.entity.DiaryItemEntity
 @TypeConverters(TypeConverter::class)
 abstract class DiaryDatabase : RoomDatabase() {
     abstract fun diaryDao() : DiaryDAO
-
-    companion object{
-        private lateinit var instance : DiaryDatabase
-
-        internal fun getInstance() : DiaryDatabase {
-            if(!::instance.isInitialized){
-                synchronized(DiaryDatabase::class.java){
-                    instance = Room.databaseBuilder(
-                        FoodiNewApplication.getInstance(),
-                        DiaryDatabase::class.java ,
-                        DB_NAME ,
-                    ).build()
-                }
-            }
-            return instance
-        }
-    }
 }

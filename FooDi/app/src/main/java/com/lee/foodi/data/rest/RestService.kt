@@ -27,29 +27,3 @@ interface RestService {
     @POST(FOOD_TARGET_URL)
     suspend fun addNewFood(@Body foodData : AddingFood) : Response<Void>
 }
-
-class RestServiceInstance{
-    companion object{
-        private lateinit var restService : RestService
-
-        fun getInstance() : RestService {
-            val interceptor = HttpLoggingInterceptor()
-            interceptor.level= HttpLoggingInterceptor.Level.BODY
-
-            val okHttpClient = OkHttpClient.Builder()
-                .addInterceptor(interceptor)
-                .connectTimeout(CONNECTION_TIME_OUT , TimeUnit.MILLISECONDS)
-                .build()
-
-            if(!::restService.isInitialized){
-                val retrofit = Retrofit.Builder()
-                    .baseUrl(FOOD_TARGET_URL)
-                    .client(okHttpClient)
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build()
-                restService = retrofit.create(RestService::class.java)
-            }
-            return restService
-        }
-    }
-}

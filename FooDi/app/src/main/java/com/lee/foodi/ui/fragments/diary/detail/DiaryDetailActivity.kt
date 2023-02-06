@@ -5,25 +5,32 @@ import android.os.Bundle
 import android.text.Editable
 import android.util.Log
 import android.view.View
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.jakewharton.rxbinding3.widget.textChanges
 import com.lee.foodi.R
 import com.lee.foodi.common.EXTRA_SELECTED_DIARY_ITEM
 import com.lee.foodi.common.NOT_AVAILABLE
 import com.lee.foodi.common.Utils
-import com.lee.foodi.data.repository.FoodiRepository
+import com.lee.foodi.data.repository.FoodiRepositoryImpl
 import com.lee.foodi.data.room.entity.DiaryItem
 import com.lee.foodi.data.room.entity.DiaryItemEntity
 import com.lee.foodi.databinding.ActivityDiaryDetailBinding
+import com.lee.foodi.domain.FoodiRepository
+import com.lee.foodi.ui.fragments.diary.detail.viewmodel.DiaryDetailViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 import kotlin.math.roundToInt
 
 private const val TAG = "DiaryDetailActivity"
 
+@AndroidEntryPoint
 class DiaryDetailActivity : AppCompatActivity() {
+    private val viewModel : DiaryDetailViewModel by viewModels()
     private lateinit var binding : ActivityDiaryDetailBinding
     private lateinit var mDiaryItem : DiaryItem
     private lateinit var mTextChangedDisposable: Disposable
@@ -54,14 +61,10 @@ class DiaryDetailActivity : AppCompatActivity() {
         }
     }
 
-    /**
-     * Init Functions
-     * **/
-    @SuppressLint("SetTextI18n")
     private fun init() {
         with(binding){
             foodNameTextView.text = mDiaryItem.food!!.foodName
-            foodNameTextView.isSelected = true // for marquee setting
+            foodNameTextView.isSelected = true // marquee 동작
             if(mDiaryItem.food!!.company == NOT_AVAILABLE){
                 companyNameTextView.visibility = View.INVISIBLE
             } else {
@@ -74,40 +77,27 @@ class DiaryDetailActivity : AppCompatActivity() {
 
     private fun addListeners() {
         with(binding){
-            // Modify Button
-            modifyButton.setOnClickListener {
+            modifyButton.setOnClickListener { // 수정하기 버튼
                 updateFoodInfo()
-                updateDiaryItem()
-                Utils.toastMessage(getString(R.string.successfully_modify))
+                val servingSize = binding.calculateEditText.text.toString() + binding.unitTextView.text
+                viewModel.updateDiaryItem(mDiaryItem , servingSize)
+                Utils.toastMessage(this@DiaryDetailActivity , getString(R.string.successfully_modify))
                 finish()
             }
 
-            // Calculate EditText
-            mTextChangedDisposable = calculateEditText.textChanges().subscribe {
+            mTextChangedDisposable = calculateEditText.textChanges().subscribe { // 1회 제공량 EditText
                 updateIngredientTextView(true)
             }
 
             // Back Button
-            backButton.setOnClickListener {
+            backButton.setOnClickListener { // 뒤로가기 버튼
                 finish()
             }
         }
     }
 
-    private fun updateDiaryItem() {
-        CoroutineScope(Dispatchers.IO).launch {
-            val diaryItemEntity = DiaryItemEntity(
-                mDiaryItem.index
-                , mDiaryItem.date
-                , mDiaryItem.food
-                , mDiaryItem.time ,binding.calculateEditText.text.toString() + binding.unitTextView.text)
-            FoodiRepository.getInstance().updateDiaryItem(diaryItemEntity)
-            Log.d(TAG, "updateDiaryItem: $diaryItemEntity")
-        }
-    }
-
    /**
-    * Function for get value during EditText is changing
+    * EditText가 변함에 따라 계산된 영양소를 가져오는 함수
     * **/
     private fun getValueOnEditTextChanged(value : String , inputValue : String) : String {
         var ret = ""
@@ -124,7 +114,7 @@ class DiaryDetailActivity : AppCompatActivity() {
     }
 
     /**
-     * Function for update Textview that show food info
+     * 화면에 보여지는 영양소를 업데이트 하는 함수 (changedByEditText를 통해 EditText가 변경되어 영양소를 update하는지 구분함)
      * **/
     private fun updateIngredientTextView(changedByEditText : Boolean){
         if(changedByEditText){
@@ -192,7 +182,7 @@ class DiaryDetailActivity : AppCompatActivity() {
     }
 
     /**
-     * Function for update food info when insert Room DB
+     * RoomDB에 데이터 추가하기전 영양소 업데이트 하는 함수
      * **/
     private fun updateFoodInfo() {
         with(mDiaryItem.food!!){
@@ -210,7 +200,7 @@ class DiaryDetailActivity : AppCompatActivity() {
     }
 
     /**
-     * Function for convert String that have double value to Integer
+     * 전달받은 영양소를 N/A가 아닐 경우에 g을 붙여 반환하도록 하는 함수
      * **/
     private fun String.convertStringToInt() : String {
         return if(this == NOT_AVAILABLE){

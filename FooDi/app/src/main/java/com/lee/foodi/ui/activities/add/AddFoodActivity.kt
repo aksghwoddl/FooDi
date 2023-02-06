@@ -1,34 +1,29 @@
 package com.lee.foodi.ui.activities.add
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.jakewharton.rxbinding3.view.clicks
 import com.lee.foodi.R
-import com.lee.foodi.common.FoodiNewApplication
 import com.lee.foodi.common.NETWORK_NOT_CONNECTED
-import com.lee.foodi.common.NOT_AVAILABLE
 import com.lee.foodi.common.Utils
-import com.lee.foodi.data.rest.model.AddingFood
 import com.lee.foodi.databinding.ActivityAddFoodBinding
 import com.lee.foodi.ui.activities.add.fragments.AdditionalInfoFragment
 import com.lee.foodi.ui.activities.add.fragments.NecessaryInfoFragment
 import com.lee.foodi.ui.activities.add.viewmodel.AddFoodViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.disposables.CompositeDisposable
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.util.concurrent.TimeUnit
 
 private const val TAG = "AddFoodActivity"
 
+@AndroidEntryPoint
 class AddFoodActivity : AppCompatActivity() {
     private lateinit var binding : ActivityAddFoodBinding
     private lateinit var mNecessaryInfoFragment : NecessaryInfoFragment
     private lateinit var mAdditionalInfoFragment : AdditionalInfoFragment
-    private lateinit var mViewModel : AddFoodViewModel
+    private val mViewModel : AddFoodViewModel by viewModels()
     private lateinit var mCompositeDisposable: CompositeDisposable
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,11 +31,9 @@ class AddFoodActivity : AppCompatActivity() {
         binding = ActivityAddFoodBinding.inflate(layoutInflater).also {
             setContentView(it.root)
         }
-        AddFoodViewModel.newInstance(this)
-        mViewModel = AddFoodViewModel.getInstance()!!
         addListeners()
         observeData()
-        mViewModel.setIsNightMode(Utils.checkNightMode(FoodiNewApplication.getInstance()))
+        mViewModel.setIsNightMode(Utils.checkNightMode(this@AddFoodActivity))
         savedInstanceState?:let {
             mNecessaryInfoFragment = NecessaryInfoFragment.newInstance()
             supportFragmentManager.beginTransaction().add(R.id.contentsFragment ,  mNecessaryInfoFragment).commit()
@@ -54,9 +47,6 @@ class AddFoodActivity : AppCompatActivity() {
         }
     }
 
-    /**
-     * Function for add listeners
-     * **/
     private fun addListeners() {
         // Confirm Button
         with(binding){
@@ -75,32 +65,10 @@ class AddFoodActivity : AppCompatActivity() {
                     }
                 } else { // When progress is 2
                     if(!Utils.checkNetworkConnection(this@AddFoodActivity)){
-                        mViewModel.setErrorMessage(NETWORK_NOT_CONNECTED)
+                        mViewModel.setToastMessage(NETWORK_NOT_CONNECTED)
                         return@setOnClickListener
                     }
-                    CoroutineScope(Dispatchers.IO).launch {
-                        val addingFood : AddingFood
-                        with(mViewModel){
-                            addingFood = AddingFood(
-                                foodName.value?.toString() ?: NOT_AVAILABLE ,
-                                servingSize.value?.toString() ?: NOT_AVAILABLE ,
-                                calorie.value?.toString() ?: NOT_AVAILABLE ,
-                                carbohydrate.value?.toString() ?: NOT_AVAILABLE ,
-                                protein.value?.toString() ?: NOT_AVAILABLE ,
-                                fat.value?.toString() ?: NOT_AVAILABLE ,
-                                sugar.value?.toString() ?: NOT_AVAILABLE ,
-                                salt.value?.toString() ?: NOT_AVAILABLE ,
-                                cholesterol.value?.toString() ?: NOT_AVAILABLE ,
-                                saturatedFat.value?.toString() ?: NOT_AVAILABLE ,
-                                transFat.value?.toString() ?: NOT_AVAILABLE ,
-                                companyName.value?.toString() ?: NOT_AVAILABLE ,
-                            )
-                        }
-                        mViewModel.postRequestAddFood(addingFood)
-                        withContext(Dispatchers.Main){
-                            finish()
-                        }
-                    }
+                    mViewModel.postRequestAddFood()
                 }
             }
 
@@ -131,9 +99,6 @@ class AddFoodActivity : AppCompatActivity() {
         }
     }
 
-    /**
-     * Function for Observe LiveData
-     * **/
     private fun observeData() {
         with(mViewModel){
             progress.observe(this@AddFoodActivity){
@@ -148,11 +113,7 @@ class AddFoodActivity : AppCompatActivity() {
                 binding.confirmButton.text = it
             }
 
-            errorMessage.observe(this@AddFoodActivity){
-                Utils.toastMessage(it)
-            }
-
-            isProgressShowing.observe(this@AddFoodActivity){
+            isProgress.observe(this@AddFoodActivity){
                 if(it){
                     binding.progressBar.visibility = View.VISIBLE
                 } else {
@@ -160,11 +121,23 @@ class AddFoodActivity : AppCompatActivity() {
                 }
             }
 
+            toastMessage.observe(this@AddFoodActivity){
+                Utils.toastMessage(this@AddFoodActivity , it)
+            }
+
             isNightMode.observe(this@AddFoodActivity){
                 if(it){
                     binding.backButton.setImageResource(R.drawable.ic_baseline_arrow_back_24_night)
                 } else {
                     binding.backButton.setImageResource(R.drawable.ic_baseline_arrow_back_24)
+                }
+            }
+
+            activityFinish.observe(this@AddFoodActivity){
+                if(it){
+                    if(!this@AddFoodActivity.isFinishing){
+                        finish()
+                    }
                 }
             }
         }

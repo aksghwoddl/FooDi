@@ -4,14 +4,13 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.KeyEvent
 import android.view.View
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
 import com.lee.foodi.R
 import com.lee.foodi.common.*
 import com.lee.foodi.common.manager.CustomLinearLayoutManager
-import com.lee.foodi.data.repository.FoodiRepository
 import com.lee.foodi.data.rest.model.Food
 import com.lee.foodi.databinding.ActivitySearchBinding
 import com.lee.foodi.ui.activities.add.AddFoodActivity
@@ -19,12 +18,13 @@ import com.lee.foodi.ui.activities.search.adapter.SearchFoodRecyclerAdapter
 import com.lee.foodi.ui.activities.search.detail.FoodDetailActivity
 import com.lee.foodi.ui.activities.search.dialog.AddNewFoodDialog
 import com.lee.foodi.ui.activities.search.viewmodel.SearchFoodViewModel
-import com.lee.foodi.ui.factory.FoodiViewModelFactory
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class SearchActivity : AppCompatActivity() {
 
     private lateinit var binding : ActivitySearchBinding
-    private lateinit var mViewModel : SearchFoodViewModel
+    private val mViewModel : SearchFoodViewModel by viewModels()
     private lateinit var mSearchFoodRecyclerAdapter: SearchFoodRecyclerAdapter
     private lateinit var mAddNewFoodDialog : AddNewFoodDialog
 
@@ -35,11 +35,10 @@ class SearchActivity : AppCompatActivity() {
         binding = ActivitySearchBinding.inflate(layoutInflater).also {
             setContentView(it.root)
         }
-        mViewModel = ViewModelProvider(this , FoodiViewModelFactory(FoodiRepository.getInstance()))[SearchFoodViewModel::class.java]
         initRecyclerView()
         addListeners()
         observeData()
-        mViewModel.setIsNightMode(Utils.checkNightMode(FoodiNewApplication.getInstance()))
+        mViewModel.setIsNightMode(Utils.checkNightMode(this@SearchActivity))
         if(!::mAddNewFoodDialog.isInitialized){
             mAddNewFoodDialog = AddNewFoodDialog(this)
         }
@@ -68,19 +67,19 @@ class SearchActivity : AppCompatActivity() {
 
     private fun addListeners(){
         with(binding){
-            // Search Button Listener
-            searchInputTextLayout.setEndIconOnClickListener {
+
+            searchInputTextLayout.setEndIconOnClickListener { // 검색
                 if(Utils.checkNetworkConnection(this@SearchActivity)){
                     val foodName = searchInputText.text.toString()
                     mViewModel.getSearchFoodList(foodName , PAGE_ONE)
                     mCurrentPage = 1
                 } else {
-                    mViewModel.setErrorMessage(NETWORK_NOT_CONNECTED)
+                    mViewModel.setToastMessage(NETWORK_NOT_CONNECTED)
                 }
             }
 
             // Key Event Listener
-            searchInputText.setOnKeyListener { _ , keyCode, _ ->
+            searchInputText.setOnKeyListener { _ , keyCode, _ -> // EditText 확인 눌렸을때 동작
                 when(keyCode){
                     KeyEvent.KEYCODE_ENTER -> {
                         if(Utils.checkNetworkConnection(this@SearchActivity)){
@@ -88,15 +87,14 @@ class SearchActivity : AppCompatActivity() {
                             mViewModel.getSearchFoodList(foodName , PAGE_ONE)
                             mCurrentPage = 1
                         } else {
-                            mViewModel.setErrorMessage(NETWORK_NOT_CONNECTED)
+                            mViewModel.setToastMessage(NETWORK_NOT_CONNECTED)
                         }
                     }
                 }
                 false
             }
 
-            // Next Button Listener
-            nextButton.setOnClickListener {
+            nextButton.setOnClickListener { // 다음버튼
                 val foodName = searchInputText.text.toString()
                 mViewModel.getSearchFoodList(foodName , (++mCurrentPage).toString())
                 mViewModel.setPreviousEnable(true)
@@ -104,7 +102,7 @@ class SearchActivity : AppCompatActivity() {
             }
 
             // Previous Button Listener
-            previousButton.setOnClickListener {
+            previousButton.setOnClickListener { // 이전버튼
                 if(mCurrentPage > 1){
                     val foodName = searchInputText.text.toString()
                     mViewModel.getSearchFoodList(foodName , (--mCurrentPage).toString())
@@ -115,11 +113,11 @@ class SearchActivity : AppCompatActivity() {
                 }
             }
 
-            addFoodButton.setOnClickListener {
+            addFoodButton.setOnClickListener { // 음식 추가하기
                 moveToAddNewFood()
             }
 
-            backButton.setOnClickListener {
+            backButton.setOnClickListener { // 뒤로가기
                 finish()
             }
         }
@@ -131,7 +129,7 @@ class SearchActivity : AppCompatActivity() {
     private fun observeData() {
        with(mViewModel){
            // Searched List
-           foodList.observe(this@SearchActivity){
+           foodList.observe(this@SearchActivity){ // 검색한 음식 리스트
                it?.let {
                    if(it.isNotEmpty()){
                        mSearchFoodRecyclerAdapter.run {
@@ -141,13 +139,13 @@ class SearchActivity : AppCompatActivity() {
                        setAddFoodLayoutVisible(false)
                    } else {
                        setAddFoodLayoutVisible(true)
-                       setProgressVisible(false)
+                       setIsProgress(false)
                    }
                }
            }
 
-           // Progress bar showing
-           isProgressVisible.observe(this@SearchActivity) {
+
+           isProgress.observe(this@SearchActivity) { // 진행상태
                if (it) {
                    binding.progressBar.visibility = View.VISIBLE
                } else {
@@ -155,13 +153,8 @@ class SearchActivity : AppCompatActivity() {
                }
            }
 
-           // Error Message
-           errorMessage.observe(this@SearchActivity){
-               Utils.toastMessage(it)
-           }
-
            // When there are no search results
-           addFoodLayoutVisible.observe(this@SearchActivity){
+           addFoodLayoutVisible.observe(this@SearchActivity){ // 음식 추가하기 레이아웃 보여주기 여부
                if(it){
                    with(binding){
                        searchFoodRecyclerView.visibility = View.GONE
@@ -178,17 +171,21 @@ class SearchActivity : AppCompatActivity() {
            }
 
            // Next Button enable
-           isNextEnable.observe(this@SearchActivity){
+           isNextEnable.observe(this@SearchActivity){ // 다음버튼 보여주기 여부
                binding.nextButton.isEnabled = it
            }
 
            // Previous Button enable
-           isPreviousEnable.observe(this@SearchActivity){
+           isPreviousEnable.observe(this@SearchActivity){ // 이전버튼 보여주기 여부
                binding.previousButton.isEnabled = it
            }
 
+           toastMessage.observe(this@SearchActivity){ // Toast Message
+               Utils.toastMessage(this@SearchActivity , it)
+           }
+
            // Night Mode
-           isNightMode.observe(this@SearchActivity){
+           isNightMode.observe(this@SearchActivity){ // 다크모드인지 확인
                if(it){
                    binding.backButton.setImageResource(R.drawable.ic_baseline_arrow_back_24_night)
                } else {
@@ -199,7 +196,7 @@ class SearchActivity : AppCompatActivity() {
     }
 
     /**
-     * Function for move to AddFoodActivity
+     * 음식 추가하기 화면으로 이동하는 함수
      * **/
     fun moveToAddNewFood() {
         with(Intent(this , AddFoodActivity::class.java)){

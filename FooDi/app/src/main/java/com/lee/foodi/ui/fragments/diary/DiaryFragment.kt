@@ -10,21 +10,23 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.DatePicker
 import android.widget.PopupMenu
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.SimpleItemAnimator
 import com.lee.foodi.R
-import com.lee.foodi.common.*
+import com.lee.foodi.common.EXTRA_SELECTED_DATE
+import com.lee.foodi.common.EXTRA_SELECTED_DIARY_ITEM
+import com.lee.foodi.common.NOT_AVAILABLE
+import com.lee.foodi.common.Utils
 import com.lee.foodi.common.manager.CustomLinearLayoutManager
 import com.lee.foodi.common.manager.FooDiPreferenceManager
-import com.lee.foodi.data.repository.FoodiRepository
 import com.lee.foodi.data.room.entity.DiaryItem
 import com.lee.foodi.databinding.FragmentDiaryBinding
 import com.lee.foodi.ui.activities.search.SearchActivity
-import com.lee.foodi.ui.factory.FoodiViewModelFactory
-import com.lee.foodi.ui.fragments.BaseFragment
+import com.lee.foodi.ui.base.BaseFragment
 import com.lee.foodi.ui.fragments.diary.adapter.DiaryFoodItemRecyclerAdapter
 import com.lee.foodi.ui.fragments.diary.detail.DiaryDetailActivity
 import com.lee.foodi.ui.fragments.diary.viewmodel.DiaryViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.*
@@ -33,9 +35,10 @@ import kotlin.math.roundToInt
 private const val TAG = "DiaryFragment"
 private const val INITIAL_VALUE = "0"
 
+@AndroidEntryPoint
 class DiaryFragment : BaseFragment<FragmentDiaryBinding>(R.layout.fragment_diary) {
     private lateinit var mPreferenceManager: FooDiPreferenceManager
-    private lateinit var mViewModel : DiaryViewModel
+    private val mViewModel : DiaryViewModel by viewModels()
     private lateinit var mDiaryFoodItemRecyclerAdapter : DiaryFoodItemRecyclerAdapter
 
     private var mYear = Calendar.getInstance().get(Calendar.YEAR)
@@ -51,8 +54,7 @@ class DiaryFragment : BaseFragment<FragmentDiaryBinding>(R.layout.fragment_diary
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        mPreferenceManager = FooDiPreferenceManager.getInstance(FoodiNewApplication.getInstance())
-        mViewModel = ViewModelProvider(this , FoodiViewModelFactory(FoodiRepository.getInstance()))[DiaryViewModel::class.java]
+        mPreferenceManager = FooDiPreferenceManager.getInstance(requireContext())
         return super.onCreateView(inflater, container, savedInstanceState)
     }
 
@@ -62,7 +64,7 @@ class DiaryFragment : BaseFragment<FragmentDiaryBinding>(R.layout.fragment_diary
         init()
         addListeners()
         observeData()
-        mViewModel.setIsNightMode(Utils.checkNightMode(FoodiNewApplication.getInstance()))
+        mViewModel.setIsNightMode(Utils.checkNightMode(requireContext()))
     }
 
 
@@ -77,9 +79,6 @@ class DiaryFragment : BaseFragment<FragmentDiaryBinding>(R.layout.fragment_diary
         }
     }
 
-    /**
-     * Function for observe Live Datas
-     * **/
     private fun observeData() {
         with(mViewModel){
             // Header Date
@@ -182,21 +181,21 @@ class DiaryFragment : BaseFragment<FragmentDiaryBinding>(R.layout.fragment_diary
         with(binding){
             // Food Search Listeners
             headerSearchLayout.setOnClickListener {
-                with(Intent(FoodiNewApplication.getInstance() , SearchActivity::class.java)){
+                with(Intent(requireContext() , SearchActivity::class.java)){
                     putExtra(EXTRA_SELECTED_DATE , mViewModel.date.value)
                     startActivity(this)
                 }
             }
 
             searchButton.setOnClickListener {
-                with(Intent(FoodiNewApplication.getInstance() , SearchActivity::class.java)){
+                with(Intent(requireContext() , SearchActivity::class.java)){
                     putExtra(EXTRA_SELECTED_DATE , mViewModel.date.value)
                     startActivity(this)
                 }
             }
 
             addButton.setOnClickListener {
-                with(Intent(FoodiNewApplication.getInstance() , SearchActivity::class.java)){
+                with(Intent(requireContext() , SearchActivity::class.java)){
                     putExtra(EXTRA_SELECTED_DATE , mViewModel.date.value)
                     startActivity(this)
                 }
@@ -213,7 +212,7 @@ class DiaryFragment : BaseFragment<FragmentDiaryBinding>(R.layout.fragment_diary
     }
 
     /**
-     * Function for update food summary
+     * 음식 정보 update하는 함수
      * **/
     private fun updateFoodSummary(){
         Log.d(TAG, "updateFoodSummary()")
@@ -250,6 +249,9 @@ class DiaryFragment : BaseFragment<FragmentDiaryBinding>(R.layout.fragment_diary
         }
     }
 
+    /**
+     * 음식 정보 초기화 하는 함수
+     * **/
     private fun initFoodSummary() {
         with(mViewModel){
             setSpendCalorie(INITIAL_VALUE)
@@ -260,7 +262,7 @@ class DiaryFragment : BaseFragment<FragmentDiaryBinding>(R.layout.fragment_diary
     }
 
     /**
-     * Function for update bottom calorie progress value
+     * 칼로리 소비 ProgressBar를 update하는 함수
      * **/
     private fun updateCalorieProgress() {
         Log.d(TAG, "updateCalorieProgress()")
@@ -272,7 +274,9 @@ class DiaryFragment : BaseFragment<FragmentDiaryBinding>(R.layout.fragment_diary
         }
     }
 
-    /** For Date PickerDialog **/
+   /**
+    * DatePickerDialog 리스너
+    * **/
    private inner class DatePickerListener : DatePickerDialog.OnDateSetListener {
         override fun onDateSet(datePicker: DatePicker?, year: Int, month: Int, day: Int) {
             val selectedDate = LocalDate.of(year, month+1 ,day).format(DateTimeFormatter.ofPattern("yyyy년MM월dd일"))
@@ -281,7 +285,9 @@ class DiaryFragment : BaseFragment<FragmentDiaryBinding>(R.layout.fragment_diary
         }
     }
 
-    /** For Popup Menu click **/
+    /**
+     * PopupMenu 클릭 리스너
+     * **/
    private inner class PopupMenuItemClickListener : PopupMenu.OnMenuItemClickListener {
         override fun onMenuItemClick(item: MenuItem?): Boolean {
             when(item?.itemId){
@@ -293,6 +299,9 @@ class DiaryFragment : BaseFragment<FragmentDiaryBinding>(R.layout.fragment_diary
         }
     }
 
+    /**
+     * 다이어리 아이템 클릭 리스너
+     * **/
    private inner class OnDiaryItemClickListener : DiaryFoodItemRecyclerAdapter.OnItemClickListener {
         override fun onItemClick(v: View, model: DiaryItem, position: Int) {
             super.onItemClick(v, model, position)
