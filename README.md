@@ -87,3 +87,4 @@
 ##### 6️⃣ Repository를 사용하여 Data를 관리 하였습니다.
 ##### 7️⃣ MPAndroidChart 라이브러리를 통해 내부 저장소에 저장된 정보를 그래프로 시각화 하였습니다.
 ##### 8️⃣ SharedPreference를 활용한 설정 정보를 저장하여 앱 내부에서 모두 공유 할 수 있도록 하였습니다.
+##### 8️⃣ Clean Architecture를 위해 Module화를 통해 각 Layer를 분리해주었습니다.
