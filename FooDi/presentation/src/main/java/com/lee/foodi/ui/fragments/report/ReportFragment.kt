@@ -10,7 +10,6 @@ import android.widget.AdapterView
 import android.widget.AdapterView.OnItemSelectedListener
 import android.widget.ArrayAdapter
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.github.mikephil.charting.components.AxisBase
 import com.github.mikephil.charting.components.Legend
@@ -20,10 +19,8 @@ import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.formatter.ValueFormatter
 import com.lee.foodi.R
-import com.lee.foodi.common.FoodiNewApplication
 import com.lee.foodi.common.Utils
 import com.lee.foodi.common.manager.FooDiPreferenceManager
-import com.lee.foodi.data.repository.FoodiRepositoryImpl
 import com.lee.foodi.databinding.FragmentReportBinding
 import com.lee.foodi.ui.base.BaseFragment
 import com.lee.foodi.ui.fragments.report.viewmodel.ReportViewModel
@@ -33,8 +30,9 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlin.math.roundToInt
 
-private const val TAG = "ReportFragment"
-
+/**
+ * 리포트 Fragment class
+ * **/
 @AndroidEntryPoint
 class ReportFragment : BaseFragment<FragmentReportBinding>(R.layout.fragment_report) {
     private val mViewModel : ReportViewModel by viewModels()

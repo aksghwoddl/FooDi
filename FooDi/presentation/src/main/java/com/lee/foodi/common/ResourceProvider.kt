@@ -4,6 +4,9 @@ import android.content.Context
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
+/**
+ * Resource를 제공하기 위한 Provider class
+ * **/
 class ResourceProvider @Inject constructor(
     @ApplicationContext private val context : Context
 ) {

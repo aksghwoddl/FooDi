@@ -1,33 +1,25 @@
 package com.lee.foodi.ui.fragments.diary.detail
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.text.Editable
-import android.util.Log
 import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.jakewharton.rxbinding3.widget.textChanges
+import com.lee.domain.model.local.DiaryItem
 import com.lee.foodi.R
 import com.lee.foodi.common.EXTRA_SELECTED_DIARY_ITEM
 import com.lee.foodi.common.NOT_AVAILABLE
 import com.lee.foodi.common.Utils
-import com.lee.foodi.data.repository.FoodiRepositoryImpl
-import com.lee.foodi.data.room.entity.DiaryItem
-import com.lee.foodi.data.room.entity.DiaryItemEntity
 import com.lee.foodi.databinding.ActivityDiaryDetailBinding
-import com.lee.foodi.domain.FoodiRepository
 import com.lee.foodi.ui.fragments.diary.detail.viewmodel.DiaryDetailViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.disposables.Disposable
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import javax.inject.Inject
 import kotlin.math.roundToInt
 
-private const val TAG = "DiaryDetailActivity"
-
+/**
+ * 다이어리 음식 상세정보 Activity class
+ * **/
 @AndroidEntryPoint
 class DiaryDetailActivity : AppCompatActivity() {
     private val viewModel : DiaryDetailViewModel by viewModels()
@@ -63,12 +55,12 @@ class DiaryDetailActivity : AppCompatActivity() {
 
     private fun init() {
         with(binding){
-            foodNameTextView.text = mDiaryItem.food!!.foodName
+            foodNameTextView.text = mDiaryItem.food.foodName
             foodNameTextView.isSelected = true // marquee 동작
-            if(mDiaryItem.food!!.company == NOT_AVAILABLE){
+            if(mDiaryItem.food.company == NOT_AVAILABLE){
                 companyNameTextView.visibility = View.INVISIBLE
             } else {
-                companyNameTextView.text = mDiaryItem.food!!.company
+                companyNameTextView.text = mDiaryItem.food.company
             }
         }
         updateIngredientTextView(false)
@@ -168,15 +160,15 @@ class DiaryDetailActivity : AppCompatActivity() {
                 Utils.convertValueWithErrorCheck(transFatTextView , getString(R.string.trans_fat) ,mDiaryItem.food!!.transFat.convertStringToInt())
                 calculateEditText.text = Editable.Factory.getInstance().newEditable(mDiaryItem.servingSize.convertStringToInt())
 
-                mCalculatedCalorie = mDiaryItem.food!!.calorie
-                mCalculatedCarbohydrate = mDiaryItem.food!!.carbohydrate
-                mCalculatedProtein = mDiaryItem.food!!.protein
-                mCalculatedFat = mDiaryItem.food!!.fat
-                mCalculatedSugar = mDiaryItem.food!!.sugar
-                mCalculatedSalt = mDiaryItem.food!!.salt
-                mCalculatedCholesterol = mDiaryItem.food!!.cholesterol
-                mCalculatedSaturatedFat = mDiaryItem.food!!.saturatedFat
-                mCalculatedTransFat = mDiaryItem.food!!.transFat
+                mCalculatedCalorie = mDiaryItem.food.calorie
+                mCalculatedCarbohydrate = mDiaryItem.food.carbohydrate
+                mCalculatedProtein = mDiaryItem.food.protein
+                mCalculatedFat = mDiaryItem.food.fat
+                mCalculatedSugar = mDiaryItem.food.sugar
+                mCalculatedSalt = mDiaryItem.food.salt
+                mCalculatedCholesterol = mDiaryItem.food.cholesterol
+                mCalculatedSaturatedFat = mDiaryItem.food.saturatedFat
+                mCalculatedTransFat = mDiaryItem.food.transFat
             }
         }
     }
@@ -185,7 +177,7 @@ class DiaryDetailActivity : AppCompatActivity() {
      * RoomDB에 데이터 추가하기전 영양소 업데이트 하는 함수
      * **/
     private fun updateFoodInfo() {
-        with(mDiaryItem.food!!){
+        with(mDiaryItem.food){
             calorie = mCalculatedCalorie
             carbohydrate = mCalculatedCarbohydrate
             protein = mCalculatedProtein

@@ -5,12 +5,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.lee.domain.model.local.Diary
+import com.lee.domain.usecase.GetDiary
 import com.lee.foodi.common.LATELY
 import com.lee.foodi.common.MONTHLY
 import com.lee.foodi.common.ResourceProvider
 import com.lee.foodi.common.WEEKS
-import com.lee.foodi.data.room.entity.Diary
-import com.lee.foodi.domain.FoodiRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -20,11 +20,13 @@ import java.time.format.DateTimeFormatter
 import java.util.*
 import javax.inject.Inject
 
+/**
+ * 리포트 ViewModel
+ * **/
 private const val TAG = "ReportViewModel"
-
 @HiltViewModel
 class ReportViewModel @Inject constructor(
-    private val repository: FoodiRepository,
+    private val getDiary: GetDiary,
     private val resourceProvider: ResourceProvider
 ) : ViewModel() {
 
@@ -71,7 +73,7 @@ class ReportViewModel @Inject constructor(
                         days.reverse()
                         days.forEach {
                             val queryDate = LocalDate.of(year , month , it).format(DateTimeFormatter.ofPattern("yyyy년MM월dd일"))
-                            diarySummaryList.add(repository.getDiarySummary(queryDate))
+                            diarySummaryList.add(getDiary.invoke(queryDate))
                         }
                         diarySummaryList
                     }
@@ -88,7 +90,7 @@ class ReportViewModel @Inject constructor(
                         days.reverse()
                         days.forEach {
                             val queryDate = LocalDate.of(year , month , it).format(DateTimeFormatter.ofPattern("yyyy년MM월dd일"))
-                            diarySummaryList.add(repository.getDiarySummary(queryDate))
+                            diarySummaryList.add(getDiary.invoke(queryDate))
                         }
                         diarySummaryList
                     }
@@ -101,7 +103,7 @@ class ReportViewModel @Inject constructor(
                         }
                         days.forEach {
                             val queryDate = LocalDate.of(year , month , it).format(DateTimeFormatter.ofPattern("yyyy년MM월dd일"))
-                            diarySummaryList.add(repository.getDiarySummary(queryDate))
+                            diarySummaryList.add(getDiary.invoke(queryDate))
                         }
                         diarySummaryList
                     }

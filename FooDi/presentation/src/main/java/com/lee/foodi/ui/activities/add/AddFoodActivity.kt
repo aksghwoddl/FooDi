@@ -6,7 +6,6 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.jakewharton.rxbinding3.view.clicks
 import com.lee.foodi.R
-import com.lee.foodi.common.NETWORK_NOT_CONNECTED
 import com.lee.foodi.common.Utils
 import com.lee.foodi.databinding.ActivityAddFoodBinding
 import com.lee.foodi.ui.activities.add.fragments.AdditionalInfoFragment
@@ -16,8 +15,9 @@ import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.disposables.CompositeDisposable
 import java.util.concurrent.TimeUnit
 
-private const val TAG = "AddFoodActivity"
-
+/**
+ * 음식 추가하기 Activity class
+ * **/
 @AndroidEntryPoint
 class AddFoodActivity : AppCompatActivity() {
     private lateinit var binding : ActivityAddFoodBinding
@@ -65,7 +65,7 @@ class AddFoodActivity : AppCompatActivity() {
                     }
                 } else { // When progress is 2
                     if(!Utils.checkNetworkConnection(this@AddFoodActivity)){
-                        mViewModel.setToastMessage(NETWORK_NOT_CONNECTED)
+                        mViewModel.setToastMessage(getString(R.string.check_network))
                         return@setOnClickListener
                     }
                     mViewModel.postRequestAddFood()

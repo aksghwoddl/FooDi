@@ -10,11 +10,12 @@ import com.lee.foodi.databinding.DialogSettingTimerBinding
 import com.lee.foodi.ui.fragments.user.UserFragment
 import dagger.hilt.android.qualifiers.ApplicationContext
 
-private const val TAG = "SettingTimerDialog"
+/**
+ * 식단 타이머 시간 설정하는 팝업 class
+ * **/
 private const val MIN_VALUE = 0
 private const val MAX_HOUR = 12
 private const val MAX_MINUTE = 59
-
 
 class SettingTimerDialog(context : Context , private val caller : UserFragment) : Dialog(context) {
     private lateinit var binding : DialogSettingTimerBinding

@@ -1,11 +1,10 @@
 package com.lee.foodi.ui.activities.search.detail.viewmodel
 
 import androidx.lifecycle.ViewModel
-import com.lee.foodi.common.EXTRA_SELECTED_DATE
+import com.lee.domain.model.local.DiaryItemEntity
+import com.lee.domain.model.remote.Food
+import com.lee.domain.usecase.AddDiaryItem
 import com.lee.foodi.common.ResourceProvider
-import com.lee.foodi.data.rest.model.Food
-import com.lee.foodi.data.room.entity.DiaryItemEntity
-import com.lee.foodi.domain.FoodiRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -14,9 +13,12 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
+/**
+ * 음식 상세정보 ViewModel
+ * **/
 @HiltViewModel
 class FoodDetailViewModel @Inject constructor(
-    private val repository: FoodiRepository ,
+    private val addDiaryItem: AddDiaryItem ,
     private val resourceProvider: ResourceProvider
 ) : ViewModel() {
     /**
@@ -24,9 +26,9 @@ class FoodDetailViewModel @Inject constructor(
      * **/
     fun addFoodIntoDatabase(date : String , servingSize : String , food : Food) {
         val time = LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH : mm"))
-        val queryFood = DiaryItemEntity(null , date , food , time , servingSize)
+        val queryFood = DiaryItemEntity(null, date, food, time, servingSize)
         CoroutineScope(Dispatchers.IO).launch{
-            repository.addDiaryItem(queryFood)
+            addDiaryItem.invoke(queryFood)
         }
     }
 }

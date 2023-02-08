@@ -5,10 +5,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
 import androidx.recyclerview.widget.RecyclerView
+import com.lee.domain.model.local.DiaryItem
 import com.lee.foodi.R
-import com.lee.foodi.data.room.entity.DiaryItem
 import com.lee.foodi.databinding.DiaryFoodItemBinding
 
+/**
+ * 다이어리의 음식 목록을 관리하는 Adapter class
+ * **/
 class DiaryFoodItemRecyclerAdapter : RecyclerView.Adapter<DiaryFoodItemRecyclerAdapter.DiaryFoodItemViewHolder>() {
     private var mDiaryList = mutableListOf<DiaryItem>()
     private var mMenuItemClickListener : PopupMenu.OnMenuItemClickListener? = null
@@ -50,7 +53,7 @@ class DiaryFoodItemRecyclerAdapter : RecyclerView.Adapter<DiaryFoodItemRecyclerA
         fun bind(data: DiaryItem){
             with(binding){
                 timeTextView.text = data.time
-                foodNameTextView.text = data.food?.foodName
+                foodNameTextView.text = data.food.foodName
                 servingSizeTextView.text = data.servingSize
             }
             val position = adapterPosition

@@ -11,6 +11,9 @@ import com.lee.foodi.ui.activities.add.viewmodel.AddFoodViewModel
 import com.lee.foodi.ui.base.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
 
+/**
+ * 추가 음식 정보 Fragment class
+ * **/
 @AndroidEntryPoint
 class AdditionalInfoFragment : BaseFragment<FragmentAdditionalInfoBinding>(R.layout.fragment_additional_info) {
     private val mViewModel : AddFoodViewModel by activityViewModels()

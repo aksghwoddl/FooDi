@@ -15,9 +15,11 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import kotlin.math.abs
 
+/**
+ * Presentation 모듈에서 common하게 사용되는 Util class
+ * **/
+
 private const val TAG = "Utils"
-
-
 const val EXTRA_SELECTED_FOOD = "selectedFood"
 const val EXTRA_SELECTED_DATE = "selected_date"
 const val EXTRA_SELECTED_DIARY_ITEM = "selected_diary_item"
@@ -34,13 +36,6 @@ const val EXTRA_COUNT = "count"
 const val LATELY = "최근"
 const val WEEKS = "7일"
 const val MONTHLY = "한달"
-
-const val DESCRIPTION_KOREAN = "desc_kor"
-const val PAGE_NUMBER = "pageNo"
-
-const val DB_NAME = "diary.db"
-const val DIARY_TABLE = "diary_tbl"
-const val DIARY_ITEM_TABLE = "diary_item_tbl"
 
 class Utils {
     companion object{

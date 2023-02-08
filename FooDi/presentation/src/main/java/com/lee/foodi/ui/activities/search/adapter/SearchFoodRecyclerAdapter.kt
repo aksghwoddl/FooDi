@@ -4,15 +4,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.lee.foodi.data.rest.model.Food
+import com.lee.domain.model.remote.Food
 import com.lee.foodi.databinding.SearchFoodItemBinding
 
+/**
+ * 검색한 음식 목록을 관리하는 Adapter class
+ * **/
 class SearchFoodRecyclerAdapter : RecyclerView.Adapter<SearchFoodRecyclerAdapter.SearchFoodViewHolder>() {
     private var mSearchFoodList = mutableListOf<Food>()
     private var mItemClickListener : OnItemClickListener? = null
 
     interface OnItemClickListener{
-        fun onItemClick(v: View, model : Food, position: Int) {}
+        fun onItemClick(v: View, model : Food , position: Int) {}
     }
 
     fun setOnItemClickListener(listener: OnItemClickListener) {

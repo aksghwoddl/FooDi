@@ -12,6 +12,9 @@ import com.lee.foodi.ui.fragments.report.ReportFragment
 import com.lee.foodi.ui.fragments.user.UserFragment
 import dagger.hilt.android.AndroidEntryPoint
 
+/**
+ * Main화면으로 각각의 Fragment를 가지고있는 Activity class
+ * **/
 @AndroidEntryPoint
 class ContainerActivity : AppCompatActivity() {
     private lateinit var binding : ActivityContainerBinding

@@ -4,11 +4,11 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.lee.domain.model.remote.AddingFoodRequest
+import com.lee.domain.usecase.AddNewFood
 import com.lee.foodi.R
 import com.lee.foodi.common.NOT_AVAILABLE
 import com.lee.foodi.common.ResourceProvider
-import com.lee.foodi.data.rest.model.AddingFood
-import com.lee.foodi.domain.FoodiRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -17,11 +17,13 @@ import kotlinx.coroutines.withContext
 import java.net.ConnectException
 import javax.inject.Inject
 
+/**
+ * 음식 추가하기 ViewModel
+ * **/
 private const val TAG = "AddFoodViewModel"
-
 @HiltViewModel
 class AddFoodViewModel @Inject constructor(
-    private val repository: FoodiRepository,
+    private val addNewFood: AddNewFood ,
     private val resourceProvider: ResourceProvider
 ) : ViewModel() {
 
@@ -88,21 +90,21 @@ class AddFoodViewModel @Inject constructor(
         try{
             _isProgress.value = true
             CoroutineScope(Dispatchers.IO).launch {
-                val addingFood = AddingFood(
-                    foodName.value?.toString() ?: NOT_AVAILABLE ,
-                    servingSize.value?.toString() ?: NOT_AVAILABLE ,
-                    calorie.value?.toString() ?: NOT_AVAILABLE ,
-                    carbohydrate.value?.toString() ?: NOT_AVAILABLE ,
-                    protein.value?.toString() ?: NOT_AVAILABLE ,
-                    fat.value?.toString() ?: NOT_AVAILABLE ,
-                    sugar.value?.toString() ?: NOT_AVAILABLE ,
-                    salt.value?.toString() ?: NOT_AVAILABLE ,
-                    cholesterol.value?.toString() ?: NOT_AVAILABLE ,
-                    saturatedFat.value?.toString() ?: NOT_AVAILABLE ,
-                    transFat.value?.toString() ?: NOT_AVAILABLE ,
-                    companyName.value?.toString() ?: NOT_AVAILABLE ,
+                val addingFood = AddingFoodRequest(
+                    foodName.value?.toString() ?: NOT_AVAILABLE,
+                    servingSize.value?.toString() ?: NOT_AVAILABLE,
+                    calorie.value?.toString() ?: NOT_AVAILABLE,
+                    carbohydrate.value?.toString() ?: NOT_AVAILABLE,
+                    protein.value?.toString() ?: NOT_AVAILABLE,
+                    fat.value?.toString() ?: NOT_AVAILABLE,
+                    sugar.value?.toString() ?: NOT_AVAILABLE,
+                    salt.value?.toString() ?: NOT_AVAILABLE,
+                    cholesterol.value?.toString() ?: NOT_AVAILABLE,
+                    saturatedFat.value?.toString() ?: NOT_AVAILABLE,
+                    transFat.value?.toString() ?: NOT_AVAILABLE,
+                    companyName.value?.toString() ?: NOT_AVAILABLE,
                 )
-                val response = repository.addNewFood(addingFood)
+                val response = addNewFood.invoke(addingFood)
                 if(response.isSuccessful){
                     withContext(Dispatchers.Main) {
                         Log.d(TAG, "postRequestAddFood: $addingFood")

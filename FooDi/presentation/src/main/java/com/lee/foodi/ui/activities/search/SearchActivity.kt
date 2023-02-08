@@ -8,10 +8,13 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
+import com.lee.domain.model.remote.Food
 import com.lee.foodi.R
-import com.lee.foodi.common.*
+import com.lee.foodi.common.EXTRA_SELECTED_DATE
+import com.lee.foodi.common.EXTRA_SELECTED_FOOD
+import com.lee.foodi.common.PAGE_ONE
+import com.lee.foodi.common.Utils
 import com.lee.foodi.common.manager.CustomLinearLayoutManager
-import com.lee.foodi.data.rest.model.Food
 import com.lee.foodi.databinding.ActivitySearchBinding
 import com.lee.foodi.ui.activities.add.AddFoodActivity
 import com.lee.foodi.ui.activities.search.adapter.SearchFoodRecyclerAdapter
@@ -20,6 +23,9 @@ import com.lee.foodi.ui.activities.search.dialog.AddNewFoodDialog
 import com.lee.foodi.ui.activities.search.viewmodel.SearchFoodViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
+/**
+ * 음식 검색 Activity class
+ * **/
 @AndroidEntryPoint
 class SearchActivity : AppCompatActivity() {
 
@@ -74,7 +80,7 @@ class SearchActivity : AppCompatActivity() {
                     mViewModel.getSearchFoodList(foodName , PAGE_ONE)
                     mCurrentPage = 1
                 } else {
-                    mViewModel.setToastMessage(NETWORK_NOT_CONNECTED)
+                    mViewModel.setToastMessage(getString(R.string.check_network))
                 }
             }
 
@@ -87,7 +93,7 @@ class SearchActivity : AppCompatActivity() {
                             mViewModel.getSearchFoodList(foodName , PAGE_ONE)
                             mCurrentPage = 1
                         } else {
-                            mViewModel.setToastMessage(NETWORK_NOT_CONNECTED)
+                            mViewModel.setToastMessage(getString(R.string.check_network))
                         }
                     }
                 }

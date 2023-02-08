@@ -20,6 +20,9 @@ private const val CHANNEL_ID = "notification_channel_id"
 private const val CHANNEL_NAME = "notification_channel_name"
 private const val DESCRIPTION_TEXT = "FOODI ALARM"
 
+/**
+ * 식단 타이머를 작동시키는 BroadcastReceiver class
+ * **/
 @AndroidEntryPoint
 class TimerReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {

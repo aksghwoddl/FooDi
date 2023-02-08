@@ -12,6 +12,7 @@ import android.widget.DatePicker
 import android.widget.PopupMenu
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.SimpleItemAnimator
+import com.lee.domain.model.local.DiaryItem
 import com.lee.foodi.R
 import com.lee.foodi.common.EXTRA_SELECTED_DATE
 import com.lee.foodi.common.EXTRA_SELECTED_DIARY_ITEM
@@ -19,7 +20,6 @@ import com.lee.foodi.common.NOT_AVAILABLE
 import com.lee.foodi.common.Utils
 import com.lee.foodi.common.manager.CustomLinearLayoutManager
 import com.lee.foodi.common.manager.FooDiPreferenceManager
-import com.lee.foodi.data.room.entity.DiaryItem
 import com.lee.foodi.databinding.FragmentDiaryBinding
 import com.lee.foodi.ui.activities.search.SearchActivity
 import com.lee.foodi.ui.base.BaseFragment
@@ -32,9 +32,11 @@ import java.time.format.DateTimeFormatter
 import java.util.*
 import kotlin.math.roundToInt
 
+/**
+ * 다이어리 Fragment class
+ * **/
 private const val TAG = "DiaryFragment"
 private const val INITIAL_VALUE = "0"
-
 @AndroidEntryPoint
 class DiaryFragment : BaseFragment<FragmentDiaryBinding>(R.layout.fragment_diary) {
     private lateinit var mPreferenceManager: FooDiPreferenceManager

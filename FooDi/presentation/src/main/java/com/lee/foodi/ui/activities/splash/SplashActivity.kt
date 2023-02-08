@@ -17,8 +17,10 @@ import com.lee.foodi.ui.activities.splash.dialog.NetworkDialog
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
+/**
+ * Splash Activity class
+ * **/
 private const val TAG = "SplashActivity"
-
 @SuppressLint("CustomSplashScreen")
 class SplashActivity : AppCompatActivity() {
     private lateinit var binding : ActivitySplashBinding

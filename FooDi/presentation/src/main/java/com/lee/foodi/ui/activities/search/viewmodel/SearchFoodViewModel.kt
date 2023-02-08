@@ -5,25 +5,25 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.lee.domain.model.remote.Food
+import com.lee.domain.usecase.GetSearchFood
 import com.lee.foodi.R
 import com.lee.foodi.common.ResourceProvider
-import com.lee.foodi.data.rest.model.Food
-import com.lee.foodi.data.rest.model.SearchingFoodResponse
-import com.lee.foodi.domain.FoodiRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import retrofit2.Response
 import java.net.ConnectException
 import java.net.SocketTimeoutException
 import javax.inject.Inject
 
-private const val TAG = "FoodInfoViewModel"
-
+/**
+ * 음식 검색 ViewModel
+ * **/
+private const val TAG = "SearchFoodViewModel"
 @HiltViewModel
 class SearchFoodViewModel @Inject constructor(
-    private val repository: FoodiRepository ,
+    private val getSearchFood: GetSearchFood ,
     private val resourceProvider: ResourceProvider
 ) : ViewModel() {
     private val _foodList = MutableLiveData<MutableList<Food>>() // Food List that searched
@@ -82,34 +82,21 @@ class SearchFoodViewModel @Inject constructor(
         Log.d(TAG, "getSearchFoodList()")
             if(foodName.isNotEmpty()){
                 try{
-                    var response : Response<SearchingFoodResponse>? = null
                     viewModelScope.launch {
-                        try{
-                            setIsProgress(true)
-                            response = withContext(Dispatchers.IO){
-                                repository.getNewSearchFood(foodName , page)
-                            }
-                        } catch(connectException : ConnectException) { // 서버가 켜져 있지 않을때
-                            setToastMessage(resourceProvider.getString(R.string.check_server_connection))
-                            setIsProgress(false)
+                        setIsProgress(true)
+                        val response = withContext(Dispatchers.IO){
+                            getSearchFood.invoke(foodName , page)
                         }
-                        response?.let { // 서버가 켜져 있고 Response를 전달 받았을때
-                            if(it.isSuccessful){
-                                it.body()?.let { searchResponse ->
-                                    _foodList.value = searchResponse.results
-                                    setIsProgress(false)
-                                    val totalCount = it.body()?.totalCount!!
-                                    _isNextEnable.value = totalCount >= 1 && searchResponse.totalCount > page.toInt()
-                                }
-                            } else {
-                                Log.d(TAG, "getSearchFoodList: ${it.code()}")
-                                setToastMessage(resourceProvider.getString(R.string.response_fail))
-                                setIsProgress(false)
-                            }
-                        }
+                        _foodList.value = response.results
+                        val totalCount = response.totalCount
+                        _isNextEnable.value = totalCount >= 1 && response.totalCount > page.toInt()
+                        setIsProgress(false)
                     }
-                }  catch (socketTimeOutException : SocketTimeoutException){ // 통신시간 초과
+                } catch (socketTimeOutException : SocketTimeoutException){ // 통신시간 초과
                     setToastMessage(resourceProvider.getString(R.string.check_socket_timeout))
+                    setIsProgress(false)
+                } catch(connectException : ConnectException) { // 서버가 켜져 있지 않을때
+                    setToastMessage(resourceProvider.getString(R.string.check_server_connection))
                     setIsProgress(false)
                 }
             } else {

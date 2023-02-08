@@ -7,16 +7,17 @@ import androidx.lifecycle.ViewModel
 import com.lee.foodi.R
 import com.lee.foodi.common.*
 import com.lee.foodi.common.manager.FooDiPreferenceManager
-import com.lee.foodi.domain.FoodiRepository
+import com.lee.domain.repository.FoodiRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlin.math.roundToInt
 
+/**
+ * 사용자 Setting ViewModel
+ * **/
 private const val TAG = "SettingUserViewModel"
-
 @HiltViewModel
 class SettingUserViewModel @Inject constructor(
-    private val repository: FoodiRepository ,
     private val resourceProvider: ResourceProvider
 ) : ViewModel() {
     var weight = 0

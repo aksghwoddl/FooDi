@@ -13,29 +13,25 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.jakewharton.rxbinding3.widget.textChanges
+import com.lee.domain.model.remote.Food
 import com.lee.foodi.R
 import com.lee.foodi.common.*
 import com.lee.foodi.common.manager.FooDiPreferenceManager
-import com.lee.foodi.data.rest.model.Food
-import com.lee.foodi.data.room.entity.DiaryItemEntity
 import com.lee.foodi.databinding.ActivityFoodDetailBinding
-import com.lee.foodi.domain.FoodiRepository
 import com.lee.foodi.receiver.TimerReceiver
 import com.lee.foodi.ui.activities.search.detail.viewmodel.FoodDetailViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import dagger.hilt.android.qualifiers.ApplicationContext
 import io.reactivex.disposables.CompositeDisposable
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.time.LocalDate
-import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
-import javax.inject.Inject
 import kotlin.math.roundToInt
 
-private const val TAG = "FoodDetailActivity"
 
+/**
+ * 음식 상제정보 Activity
+ * **/
+private const val TAG = "FoodDetailActivity"
 @AndroidEntryPoint
 class FoodDetailActivity : AppCompatActivity() {
     private val viewModel : FoodDetailViewModel by viewModels()

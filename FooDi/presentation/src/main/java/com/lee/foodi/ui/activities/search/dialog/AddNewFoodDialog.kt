@@ -5,6 +5,9 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.lee.foodi.databinding.DialogAddNewFoodBinding
 import com.lee.foodi.ui.activities.search.SearchActivity
 
+/**
+ * 새로운 음식 등록기능 유도를 위한 BottomSheetDialog class
+ * **/
 class AddNewFoodDialog(private val owner : SearchActivity) : BottomSheetDialog(owner) {
     private lateinit var binding : DialogAddNewFoodBinding
 

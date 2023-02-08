@@ -4,6 +4,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 
+/**
+ * ViewPager의 Fragment를 관리하는 Adapter class
+ * **/
 class ContainerFragmentStateAdapter(fragmentActivity : FragmentActivity) : FragmentStateAdapter(fragmentActivity) {
     private val fragments = mutableListOf<Fragment>()
 

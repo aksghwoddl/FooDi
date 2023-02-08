@@ -7,13 +7,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.NumberPicker
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.lee.foodi.R
-import com.lee.foodi.common.FoodiNewApplication
 import com.lee.foodi.common.Utils
 import com.lee.foodi.common.manager.FooDiPreferenceManager
-import com.lee.foodi.data.repository.FoodiRepositoryImpl
 import com.lee.foodi.databinding.FragmentUserBinding
 import com.lee.foodi.ui.base.BaseFragment
 import com.lee.foodi.ui.fragments.user.dialog.SettingGoalCalorieDialog
@@ -21,8 +18,10 @@ import com.lee.foodi.ui.fragments.user.dialog.SettingTimerDialog
 import com.lee.foodi.ui.fragments.user.viewmodel.SettingUserViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
+/**
+ * 사용자 Setting Fragment class
+ * **/
 private const val TAG = "UserFragment"
-
 private const val MIN_WEIGHT_PICKER_VALUE = 0
 private const val MIN_AGE_PICKER_VALUE = 18
 private const val MAX_AGE_VALUE = 99
@@ -56,8 +55,8 @@ class UserFragment : BaseFragment<FragmentUserBinding>(R.layout.fragment_user) {
         isToggled = mPreferenceManager.gender
 
         with(mViewModel){
-            setMaintenanceCalorie(mPreferenceManager.maintenanceCalorie.toString()) // Set maintenance calorie that in the SharedPreference
-            setGenderButtonToggle(isToggled) // Set Gender Button value that in the SharedPreference
+            setMaintenanceCalorie(mPreferenceManager.maintenanceCalorie.toString()) // 유지 칼로리 세팅
+            setGenderButtonToggle(isToggled) // 성별 버튼 이전 성별로 세팅
             setTimerOn(mPreferenceManager.isTimerOn)
         }
 
@@ -69,7 +68,7 @@ class UserFragment : BaseFragment<FragmentUserBinding>(R.layout.fragment_user) {
     }
 
     /**
-     * Function for init Number Pickers
+     * NumberPicker 초기 작업하는 함수
      * **/
     private fun initNumberPicker() {
         with(binding) {
@@ -92,42 +91,35 @@ class UserFragment : BaseFragment<FragmentUserBinding>(R.layout.fragment_user) {
 
     private fun addListeners() {
         with(binding){
-            // Goal calorie layout
-            goalCalorieLayout.setOnClickListener {
+            goalCalorieLayout.setOnClickListener { // 목표 칼로리 레이아웃 클릭시
                 mGoalCalorieDialog = SettingGoalCalorieDialog(requireContext() , this@UserFragment)
                 mGoalCalorieDialog.show()
             }
 
-            // Gender Button
-            genderToggleButton.setOnClickListener {
+            genderToggleButton.setOnClickListener { // 성별 버튼
                 isToggled = !isToggled
                 mViewModel.setGenderButtonToggle(isToggled)
             }
 
-            // Age NumberPicker
-            agePicker.setOnValueChangedListener { _, _ , value ->
+            agePicker.setOnValueChangedListener { _, _ , value -> // 나이 NumberPicker
                 mViewModel.age = value
             }
 
-            // Weight NumberPicker
-            weightPicker.setOnValueChangedListener { _, _ , value  ->
+            weightPicker.setOnValueChangedListener { _, _ , value  -> // 몸무게 NumberPicker
                 mViewModel.weight = value
             }
 
-            //Confirm Button
-            confirmButton.setOnClickListener {
+            confirmButton.setOnClickListener { // 설정 변경하기 버튼
                 mViewModel.updateAllUserInfo(mPreferenceManager)
                 mViewModel.updateMaintenanceCalorie(mPreferenceManager)
             }
 
-            // Setting Timer Button
-            settingTimerButton.setOnClickListener {
+            settingTimerButton.setOnClickListener { // 타이머 스위치 Listener
                 mSettingTimerDialog = SettingTimerDialog(requireContext() , this@UserFragment)
                 mSettingTimerDialog.show()
             }
 
-            // Setting Timer Switch
-            settingTimerSwitch.setOnCheckedChangeListener { _ , isOn ->
+            settingTimerSwitch.setOnCheckedChangeListener { _ , isOn -> // 타이머 스위치 설정
                 mViewModel.setTimerOn(isOn)
             }
         }
@@ -135,13 +127,11 @@ class UserFragment : BaseFragment<FragmentUserBinding>(R.layout.fragment_user) {
 
     private fun observeData() {
         with(mViewModel){
-            // Maintenance calorie
-            maintenanceCalorie.observe(viewLifecycleOwner){
+            maintenanceCalorie.observe(viewLifecycleOwner){ // 유지 칼로리
                 binding.maintenanceCalorie.text = String.format(getString(R.string.maintenance_calorie) , it)
             }
 
-            // Gender
-            genderButtonToggled.observe(viewLifecycleOwner){
+            genderButtonToggled.observe(viewLifecycleOwner){ // 성별
                 if(it){
                     with(binding.genderToggleButton){
                         setBackgroundColor(resources.getColor(R.color.toggle_female))
@@ -156,8 +146,7 @@ class UserFragment : BaseFragment<FragmentUserBinding>(R.layout.fragment_user) {
                 gender = binding.genderToggleButton.text.toString()
             }
 
-            // Setting Timer
-            isOnSettingTimer.observe(viewLifecycleOwner){
+            isOnSettingTimer.observe(viewLifecycleOwner){ // 타이머 설정 여부
                 mPreferenceManager.isTimerOn = it
                 with(binding){
                     settingTimerSwitch.isChecked = it
@@ -165,11 +154,11 @@ class UserFragment : BaseFragment<FragmentUserBinding>(R.layout.fragment_user) {
                 }
             }
 
-            toastMessage.observe(viewLifecycleOwner){
+            toastMessage.observe(viewLifecycleOwner){ // Toast Message
                 Utils.toastMessage(requireContext() ,it)
             }
 
-            isNightMode.observe(viewLifecycleOwner){
+            isNightMode.observe(viewLifecycleOwner){ // 다크모드인지 판단
                 if(it){
                     Glide.with(requireContext()).load(R.drawable.ic_baseline_create_24_night).into(binding.editGoalCalorieImage)
                 } else {
@@ -180,7 +169,7 @@ class UserFragment : BaseFragment<FragmentUserBinding>(R.layout.fragment_user) {
     }
 
     fun updateGoalCalorie() {
-        if(mPreferenceManager.goalCalorie!!.isNotEmpty()){ // Update when goal calorie is not empty
+        if(mPreferenceManager.goalCalorie!!.isNotEmpty()){ // 목표칼로리 setting
             val updateString = resources.getString(R.string.goal_calorie)
             Utils.convertValueWithErrorCheck(binding.goalCalorieTextView
                 , updateString

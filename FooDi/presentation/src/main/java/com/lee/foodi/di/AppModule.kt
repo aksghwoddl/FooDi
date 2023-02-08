@@ -1,15 +1,21 @@
 package com.lee.foodi.di
 
 import android.content.Context
+import androidx.room.PrimaryKey
 import androidx.room.Room
-import com.lee.foodi.common.CONNECTION_TIME_OUT
-import com.lee.foodi.common.DB_NAME
-import com.lee.foodi.common.FOOD_TARGET_URL
-import com.lee.foodi.data.repository.FoodiRepositoryImpl
-import com.lee.foodi.data.rest.RestService
-import com.lee.foodi.data.room.dao.DiaryDAO
-import com.lee.foodi.data.room.db.DiaryDatabase
-import com.lee.foodi.domain.FoodiRepository
+import com.lee.data.api.rest.RestService
+import com.lee.data.api.room.DiaryDAO
+import com.lee.data.common.BASE_URL
+import com.lee.data.common.CONNECTION_TIME_OUT
+import com.lee.data.common.FOOD_TARGET_URL
+import com.lee.data.datasource.RemoteDateSource
+import com.lee.data.model.local.db.DiaryDatabase
+import com.lee.data.repository.FoodiRepositoryImpl
+import com.lee.domain.repository.FoodiRepository
+import com.lee.data.common.DB_NAME
+import com.lee.data.datasource.LocalDataSource
+import com.lee.data.datasource.LocalDataSourceImpl
+import com.lee.data.datasource.RemoteDataSourceImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -22,6 +28,9 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
+/**
+ * Hilt에게 의존성 주입 방법을 알려주는 module object
+ * **/
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
@@ -47,7 +56,7 @@ object AppModule {
     @Singleton
     fun provideRestService(okHttpClient: OkHttpClient): RestService {
         val retrofit = Retrofit.Builder()
-            .baseUrl(FOOD_TARGET_URL)
+            .baseUrl(BASE_URL)
             .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
@@ -62,8 +71,8 @@ object AppModule {
     fun provideDiaryDatabase(@ApplicationContext context : Context) : DiaryDatabase {
         return Room.databaseBuilder(
             context ,
-            DiaryDatabase::class.java ,
-            DB_NAME ,
+            DiaryDatabase::class.java,
+            DB_NAME,
         ).build()
     }
 
@@ -81,7 +90,25 @@ object AppModule {
      * **/
     @Provides
     @Singleton
-    fun provideRepository(restService: RestService , diaryDAO: DiaryDAO) : FoodiRepository{
-        return FoodiRepositoryImpl(restService , diaryDAO)
+    fun provideRepository(remoteDateSource: RemoteDateSource, localDateSource: LocalDataSource) : FoodiRepository {
+        return FoodiRepositoryImpl(remoteDateSource, localDateSource)
+    }
+
+    /**
+     * RemoteDataSource를 provide하는 함수
+     * **/
+    @Provides
+    @Singleton
+    fun provideRemoteDateSource(resetService : RestService) : RemoteDateSource {
+        return RemoteDataSourceImpl(resetService)
+    }
+
+    /**
+     * LocalDataSource를 provide하는 함수
+     * **/
+    @Provides
+    @Singleton
+    fun provideLocalDataSource(diaryDAO: DiaryDAO) : LocalDataSource {
+        return LocalDataSourceImpl(diaryDAO)
     }
 }

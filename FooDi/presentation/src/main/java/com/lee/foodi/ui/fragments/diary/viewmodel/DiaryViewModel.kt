@@ -5,23 +5,29 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.lee.domain.model.local.DiaryEntity
+import com.lee.domain.model.local.DiaryItem
+import com.lee.domain.model.local.DiaryItemEntity
+import com.lee.domain.usecase.AddDiary
+import com.lee.domain.usecase.DeleteDiaryItem
+import com.lee.domain.usecase.GetAllDiaryItems
 import com.lee.foodi.R
 import com.lee.foodi.common.ResourceProvider
-import com.lee.foodi.data.room.entity.DiaryEntity
-import com.lee.foodi.data.room.entity.DiaryItem
-import com.lee.foodi.data.room.entity.DiaryItemEntity
-import com.lee.foodi.domain.FoodiRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
+/**
+ * 다이어리 ViewModel
+ * **/
 private const val TAG = "DiaryViewModel"
-
 @HiltViewModel
 class DiaryViewModel @Inject constructor(
-    private val repository: FoodiRepository ,
+    private val getAllDiaryItems: GetAllDiaryItems,
+    private val addDiary: AddDiary ,
+    private val deleteDiaryItem: DeleteDiaryItem ,
     private val resourceProvider: ResourceProvider
 ) : ViewModel() {
     private lateinit var addDiaryJob : Job
@@ -104,7 +110,7 @@ class DiaryViewModel @Inject constructor(
          viewModelScope.launch {
              _isProgress.value = true
              val diaryItem = withContext(Dispatchers.IO){
-                 repository.getAllDiaryItems(date.value!!)
+                 getAllDiaryItems.invoke(date.value!!)
              }
             _diaryItems.value = diaryItem
              _isProgress.value = false
@@ -117,12 +123,14 @@ class DiaryViewModel @Inject constructor(
     fun addDiarySummary() {
         Log.d(TAG, "addDiarySummary()")
         addDiaryJob = CoroutineScope(Dispatchers.IO).launch {
-            val diary = DiaryEntity(date.value!! 
-                , spendCalories.value!! 
-                , amountCarbon.value!! 
-                , amountProtein.value!! 
-                , amountFat.value!!)
-            repository.addDiary(diary)
+            val diary = DiaryEntity(
+                date.value!!,
+                spendCalories.value!!,
+                amountCarbon.value!!,
+                amountProtein.value!!,
+                amountFat.value!!
+            )
+            addDiary.invoke(diary)
             Log.d(TAG, "addDiarySummary: success add diary DB!!")
         }
     }
@@ -135,9 +143,15 @@ class DiaryViewModel @Inject constructor(
             withContext(Dispatchers.IO){
                 val selectedEntity : DiaryItemEntity
                 with(diaryItem){
-                    selectedEntity = DiaryItemEntity(index, date , food , time , servingSize)
+                    selectedEntity = DiaryItemEntity(
+                        index,
+                        date,
+                        food,
+                        time,
+                        servingSize
+                    )
                 }
-                repository.deleteDiaryItem(selectedEntity)
+                deleteDiaryItem.invoke(selectedEntity)
             }
             getDiaryItems()
             _toastMessage.value = resourceProvider.getString(R.string.successfully_delete)

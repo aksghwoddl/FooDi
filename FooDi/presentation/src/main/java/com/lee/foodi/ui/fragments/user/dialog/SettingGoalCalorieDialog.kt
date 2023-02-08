@@ -10,8 +10,10 @@ import com.lee.foodi.common.manager.FooDiPreferenceManager
 import com.lee.foodi.databinding.DialogSettingGoalCalorieBinding
 import com.lee.foodi.ui.fragments.user.UserFragment
 
+/**
+ * 목표칼로리 setting하는 팝업 class
+ * **/
 private const val TAG = "SettingGoalCalorieDialog"
-
 private const val MIN_CALORIE = 1000
 private const val MAX_CALORIE = 10000
 
