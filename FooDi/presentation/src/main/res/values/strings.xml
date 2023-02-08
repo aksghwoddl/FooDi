@@ -1,0 +1,106 @@
+<resources>
+    <string name="app_name">푸디</string>
+    <string name="sub_title">내손안에 식단 플래너</string>
+    <string name="network_dialog_header">네트워크 연결 상태를 \n확인 해주세요.</string>
+    <string name="network_dialog_content">네트워크 연결 후에 확인 버튼을 눌러주세요.</string>
+    <string name="confirm">확인</string>
+    <string name="next">다음</string>
+    <string name="add">추가하기</string>
+    <string name="modify">수정하기</string>
+    <string name="delete">삭제하기</string>
+    <string name="search_edit_text_hint">검색할 음식을 입력해주세요.</string>
+    <string name="add_food_header_title">필수 음식 정보를 \n입력해주세요.</string>
+    <string name="next_add_food_header_title">추가 음식 정보를 \n입력해주세요.</string>
+    <string name="average_calorie">평균 섭취 칼로리 : %s kcal</string>
+    <string name="common_carbohydrate">탄수화물</string>
+    <string name="common_protein">단백질</string>
+    <string name="common_fat">지방</string>
+    <string name="zero_gram">0g</string>
+    <string name="spend_calorie">소비 칼로리 : %s kcal</string>
+    <string name="notification_timer_contents">식사할 시간입니다!</string>
+    <string name="successfully_add">정상적으로 추가되었습니다.</string>
+    <string name="successfully_modify">정상적으로 수정 되었습니다.</string>
+    <string name="check_server_connection">서버와의 연결 상태를 확인해주세요.</string>
+    <string name="check_network">네트워크와 연결되어 있지 않습니다.</string>
+    <string name="check_socket_timeout">서버와 통신시간이 초과하였습니다. 다시 시도해주세요.</string>
+    <string name="empty_search">검색어가 입력되지 않았습니다.</string>
+    <string name="response_fail">서버에서 정상적으로 값을 받아오지 못했습니다.</string>
+    <string name="add_permission">권한을 허용해야 앱 이용이 가능합니다.</string>
+    <string name="set_push_permission">푸시 알림 권한을 허용 해주세요.</string>
+
+    <!-- Food Info -->
+    <string name="food_name">음식이름</string>
+    <string name="company_name">회사이름</string>
+    <string name="no_search_food">검색한 음식이 존재하지 않습니다.\n 새로 추가 하시겠습니까?</string>
+    <string name="ask_add_food">검색한 음식이 존재하지 않나요?\n 새로 추가 해보세요!</string>
+    <string name="serving_size">1회 제공량 : </string>
+    <string name="calories">칼로리 : %s kcal</string>
+    <string name="carbohydrate">탄수화물 : %s g</string>
+    <string name="protein">단백질 : %s g</string>
+    <string name="fat">지방 : %s g</string>
+    <string name="sugar">당류 : %s g</string>
+    <string name="salt">나트륨 : %s mg</string>
+    <string name="cholesterol">콜레스테롤 : %s mg</string>
+    <string name="saturated_fat">포화지방 : %s g</string>
+    <string name="trans_fat">트랜스지방 : %s g</string>
+    <string name="begin_year">제조년월 : %s</string>
+    <string name="more_info">상세정보</string>
+    <string name="gram">g</string>
+    <!---->
+
+    <!-- Add Food -->
+    <string name="add_food_name">음식이름</string>
+    <string name="add_calories">칼로리 </string>
+    <string name="add_carbohydrate">탄수화물 </string>
+    <string name="add_protein">단백질 </string>
+    <string name="add_fat">지방 </string>
+    <string name="add_sugar">당류 </string>
+    <string name="add_salt">나트륨 </string>
+    <string name="add_cholesterol">콜레스테롤 </string>
+    <string name="add_saturated_fat">포화지방 </string>
+    <string name="add_trans_fat">트랜스지방</string>
+    <string name="add_serving_size">1회 제공량</string>
+    <string name="add_company_name">회사이름</string>
+    <string name="input_food_name">음식 이름을 입력해주새요.</string>
+    <string name="input_serving_size">1회 제공량을 입력해주세요.</string>
+    <string name="input_calorie">칼로리 정보를 입력해주세요.</string>
+    <string name="input_carbon">탄수화물 정보를 입력해주세요.</string>
+    <string name="input_protein">단백질 정보를 입력해주세요.</string>
+    <string name="input_fat">지방 정보를 입력해주세요.</string>
+    <!---->
+
+    <!-- Diary -->
+    <string name="no_diary_item">아직 기록한 음식이 없네요. \n 추가해보세요.</string>
+    <string name="header_date">%s</string>
+    <string name="summary_format">%sg</string>
+    <string name="date_format">%d년%d월%d일</string>
+    <string name="search">검색하기</string>
+    <string name="time">시간</string>
+    <string name="food">음식</string>
+    <string name="serving">먹은양</string>
+    <string name="successfully_delete">정상적으로 삭제되었습니다.</string>
+    <!---->
+
+    <!-- User -->
+    <string name="maintenance_calorie">유지 칼로리 : %s kcal</string>
+    <string name="goal_calorie">목표 칼로리 : %s kcal</string>
+    <string name="user_setting_help">나이,몸무게,성별을 입력하시면\n유지 칼로리를 알 수 있습니다.</string>
+    <string name="unit_calorie">kcal</string>
+    <string name="age">나이 : </string>
+    <string name="weight">몸무게 : </string>
+    <string name="setting_timer_clock">식단 타이머 설정하기</string>
+    <string name="setting_timer">타이머 설정</string>
+    <string name="input_goal_calorie">목표칼로리를 입력해주세요.</string>
+    <string name="male">남</string>
+    <string name="female">여</string>
+    <string name="user_setting">설정 변경하기</string>
+    <string name="setting_timer_header">몇시간 마다 식사 하시나요?</string>
+    <string name="hour">시간</string>
+    <string name="minute">분</string>
+    <string name="update_timer">알람시간이 설정 되었습니다!</string>
+    <!---->
+
+    <!-- Report -->
+    <string name="spend_calorie_title">칼로리 소모량</string>
+
+</resources>
