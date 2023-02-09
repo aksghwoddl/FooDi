@@ -54,7 +54,6 @@ class SearchActivity : AppCompatActivity() {
     private fun initRecyclerView(){
         mSearchFoodRecyclerAdapter = SearchFoodRecyclerAdapter()
         mSearchFoodRecyclerAdapter.setOnItemClickListener(object : SearchFoodRecyclerAdapter.OnItemClickListener{
-            // move to FoodDetailActivity when item selected
             override fun onItemClick(v: View, model: Food, position: Int) {
                 super.onItemClick(v, model, position)
                 with(Intent(this@SearchActivity , FoodDetailActivity::class.java)){
@@ -67,7 +66,7 @@ class SearchActivity : AppCompatActivity() {
         with(binding.searchFoodRecyclerView){
             layoutManager = CustomLinearLayoutManager(context , RecyclerView.VERTICAL , false)
             adapter = mSearchFoodRecyclerAdapter
-            (itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false // RecyclerView 깜빡임 현상 없애기
+            itemAnimator = null // RecyclerView 깜빡임 현상 없애기
         }
     }
 
@@ -84,7 +83,6 @@ class SearchActivity : AppCompatActivity() {
                 }
             }
 
-            // Key Event Listener
             searchInputText.setOnKeyListener { _ , keyCode, _ -> // EditText 확인 눌렸을때 동작
                 when(keyCode){
                     KeyEvent.KEYCODE_ENTER -> {
@@ -107,7 +105,6 @@ class SearchActivity : AppCompatActivity() {
                 binding.searchFoodRecyclerView.smoothScrollToPosition(0)
             }
 
-            // Previous Button Listener
             previousButton.setOnClickListener { // 이전버튼
                 if(mCurrentPage > 1){
                     val foodName = searchInputText.text.toString()
@@ -159,7 +156,6 @@ class SearchActivity : AppCompatActivity() {
                }
            }
 
-           // When there are no search results
            addFoodLayoutVisible.observe(this@SearchActivity){ // 음식 추가하기 레이아웃 보여주기 여부
                if(it){
                    with(binding){
@@ -176,12 +172,10 @@ class SearchActivity : AppCompatActivity() {
                }
            }
 
-           // Next Button enable
            isNextEnable.observe(this@SearchActivity){ // 다음버튼 보여주기 여부
                binding.nextButton.isEnabled = it
            }
 
-           // Previous Button enable
            isPreviousEnable.observe(this@SearchActivity){ // 이전버튼 보여주기 여부
                binding.previousButton.isEnabled = it
            }
@@ -190,7 +184,6 @@ class SearchActivity : AppCompatActivity() {
                Utils.toastMessage(this@SearchActivity , it)
            }
 
-           // Night Mode
            isNightMode.observe(this@SearchActivity){ // 다크모드인지 확인
                if(it){
                    binding.backButton.setImageResource(R.drawable.ic_baseline_arrow_back_24_night)

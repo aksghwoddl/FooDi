@@ -26,28 +26,28 @@ class SearchFoodViewModel @Inject constructor(
     private val getSearchFood: GetSearchFood ,
     private val resourceProvider: ResourceProvider
 ) : ViewModel() {
-    private val _foodList = MutableLiveData<MutableList<Food>>() // Food List that searched
+    private val _foodList = MutableLiveData<MutableList<Food>>() // 검색된 음식 목록
     val foodList : LiveData<MutableList<Food>>
     get() = _foodList
     fun setFoodList(list : MutableList<Food>) {
         _foodList.value = list
     }
 
-    private val _addFoodLayoutVisible = MutableLiveData<Boolean>() // Manage status that no food
+    private val _addFoodLayoutVisible = MutableLiveData<Boolean>() // 음식추가 레이아웃 표시여부
     val addFoodLayoutVisible : LiveData<Boolean>
     get() = _addFoodLayoutVisible
     fun setAddFoodLayoutVisible(visible: Boolean){
         _addFoodLayoutVisible.value = visible
     }
 
-    private val _isNextEnable = MutableLiveData<Boolean>() // Manage next button enable
+    private val _isNextEnable = MutableLiveData<Boolean>() // 다음버튼 활성화 여부
     val isNextEnable : LiveData<Boolean>
     get() = _isNextEnable
     fun setNextEnable(enable : Boolean){
         _isNextEnable.value = enable
     }
 
-    private val _isPreviousEnable = MutableLiveData<Boolean>() // Manage previous button enable
+    private val _isPreviousEnable = MutableLiveData<Boolean>() // 이전버튼 활성화 여부
     val isPreviousEnable : LiveData<Boolean>
     get() = _isPreviousEnable
     fun setPreviousEnable(enable : Boolean) {
@@ -76,7 +76,7 @@ class SearchFoodViewModel @Inject constructor(
     }
 
     /**
-     * For Get FoodList that searched from repository
+     * 음식을 검색하는 함수
      * **/
     fun getSearchFoodList(foodName : String , page : String) {
         Log.d(TAG, "getSearchFoodList()")
