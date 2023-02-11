@@ -6,8 +6,8 @@ import android.view.KeyEvent
 import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.SimpleItemAnimator
 import com.lee.domain.model.remote.Food
 import com.lee.foodi.R
 import com.lee.foodi.common.EXTRA_SELECTED_DATE
@@ -30,30 +30,26 @@ import dagger.hilt.android.AndroidEntryPoint
 class SearchActivity : AppCompatActivity() {
 
     private lateinit var binding : ActivitySearchBinding
-    private val mViewModel : SearchFoodViewModel by viewModels()
-    private lateinit var mSearchFoodRecyclerAdapter: SearchFoodRecyclerAdapter
-    private lateinit var mAddNewFoodDialog : AddNewFoodDialog
-
-    private var mCurrentPage = 0
+    private val viewModel : SearchFoodViewModel by viewModels()
+    private lateinit var searchFoodRecyclerAdapter: SearchFoodRecyclerAdapter
+    private lateinit var addNewFoodDialog : AddNewFoodDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivitySearchBinding.inflate(layoutInflater).also {
-            setContentView(it.root)
-        }
+        binding = DataBindingUtil.setContentView(this@SearchActivity , R.layout.activity_search)
         initRecyclerView()
         addListeners()
         observeData()
-        mViewModel.setIsNightMode(Utils.checkNightMode(this@SearchActivity))
-        if(!::mAddNewFoodDialog.isInitialized){
-            mAddNewFoodDialog = AddNewFoodDialog(this)
+        viewModel.setIsNightMode(Utils.checkNightMode(this@SearchActivity))
+        if(!::addNewFoodDialog.isInitialized){
+            addNewFoodDialog = AddNewFoodDialog(this)
         }
-        mAddNewFoodDialog.show()
+        addNewFoodDialog.show()
     }
 
     private fun initRecyclerView(){
-        mSearchFoodRecyclerAdapter = SearchFoodRecyclerAdapter()
-        mSearchFoodRecyclerAdapter.setOnItemClickListener(object : SearchFoodRecyclerAdapter.OnItemClickListener{
+        searchFoodRecyclerAdapter = SearchFoodRecyclerAdapter()
+        searchFoodRecyclerAdapter.setOnItemClickListener(object : SearchFoodRecyclerAdapter.OnItemClickListener{
             override fun onItemClick(v: View, model: Food, position: Int) {
                 super.onItemClick(v, model, position)
                 with(Intent(this@SearchActivity , FoodDetailActivity::class.java)){
@@ -65,21 +61,18 @@ class SearchActivity : AppCompatActivity() {
         })
         with(binding.searchFoodRecyclerView){
             layoutManager = CustomLinearLayoutManager(context , RecyclerView.VERTICAL , false)
-            adapter = mSearchFoodRecyclerAdapter
+            adapter = searchFoodRecyclerAdapter
             itemAnimator = null // RecyclerView 깜빡임 현상 없애기
         }
     }
 
     private fun addListeners(){
         with(binding){
-
             searchInputTextLayout.setEndIconOnClickListener { // 검색
                 if(Utils.checkNetworkConnection(this@SearchActivity)){
-                    val foodName = searchInputText.text.toString()
-                    mViewModel.getSearchFoodList(foodName , PAGE_ONE)
-                    mCurrentPage = 1
+                    viewModel.setPage(PAGE_ONE)
                 } else {
-                    mViewModel.setToastMessage(getString(R.string.check_network))
+                    viewModel.setToastMessage(getString(R.string.check_network))
                 }
             }
 
@@ -87,11 +80,9 @@ class SearchActivity : AppCompatActivity() {
                 when(keyCode){
                     KeyEvent.KEYCODE_ENTER -> {
                         if(Utils.checkNetworkConnection(this@SearchActivity)){
-                            val foodName = searchInputText.text.toString()
-                            mViewModel.getSearchFoodList(foodName , PAGE_ONE)
-                            mCurrentPage = 1
+                           viewModel.setPage(PAGE_ONE)
                         } else {
-                            mViewModel.setToastMessage(getString(R.string.check_network))
+                            viewModel.setToastMessage(getString(R.string.check_network))
                         }
                     }
                 }
@@ -99,20 +90,23 @@ class SearchActivity : AppCompatActivity() {
             }
 
             nextButton.setOnClickListener { // 다음버튼
-                val foodName = searchInputText.text.toString()
-                mViewModel.getSearchFoodList(foodName , (++mCurrentPage).toString())
-                mViewModel.setPreviousEnable(true)
+                viewModel.run {
+                    page.value?.let {
+                        setPage(it + 1)
+                    }
+                    setPreviousEnable(true)
+                }
                 binding.searchFoodRecyclerView.smoothScrollToPosition(0)
             }
 
             previousButton.setOnClickListener { // 이전버튼
-                if(mCurrentPage > 1){
-                    val foodName = searchInputText.text.toString()
-                    mViewModel.getSearchFoodList(foodName , (--mCurrentPage).toString())
-                    if(mCurrentPage == 1){
-                        mViewModel.setPreviousEnable(false)
-                    }
-                    binding.searchFoodRecyclerView.smoothScrollToPosition(0)
+                viewModel.run {
+                    page.value?.let {
+                        if(it > 1){
+                            setPage(it - 1)
+                        }
+                }
+                binding.searchFoodRecyclerView.smoothScrollToPosition(0)
                 }
             }
 
@@ -130,16 +124,17 @@ class SearchActivity : AppCompatActivity() {
      * Function for observing ViewModel Data
      * **/
     private fun observeData() {
-       with(mViewModel){
-           // Searched List
+       with(viewModel){
            foodList.observe(this@SearchActivity){ // 검색한 음식 리스트
                it?.let {
                    if(it.isNotEmpty()){
-                       mSearchFoodRecyclerAdapter.run {
-                           setList(it)
-                           notifyItemRangeChanged(0 , itemCount)
+                       searchFoodRecyclerAdapter.run {
+                           val searchList = mutableListOf<Food>()
+                           searchList.addAll(it)
+                           submitList(searchList)
                        }
                        setAddFoodLayoutVisible(false)
+                       setIsProgress(false)
                    } else {
                        setAddFoodLayoutVisible(true)
                        setIsProgress(false)
@@ -147,6 +142,12 @@ class SearchActivity : AppCompatActivity() {
                }
            }
 
+           page.observe(this@SearchActivity){
+               if(it == PAGE_ONE){
+                   setPreviousEnable(false)
+               }
+               getSearchFoodList()
+           }
 
            isProgress.observe(this@SearchActivity) { // 진행상태
                if (it) {
