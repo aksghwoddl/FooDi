@@ -1,9 +1,12 @@
 package com.lee.foodi.ui.fragments.diary.adapter
 
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.lee.domain.model.local.DiaryItem
 import com.lee.foodi.R
@@ -12,11 +15,10 @@ import com.lee.foodi.databinding.DiaryFoodItemBinding
 /**
  * 다이어리의 음식 목록을 관리하는 Adapter class
  * **/
-class DiaryFoodItemRecyclerAdapter : RecyclerView.Adapter<DiaryFoodItemRecyclerAdapter.DiaryFoodItemViewHolder>() {
-    private var mDiaryList = mutableListOf<DiaryItem>()
-    private var mMenuItemClickListener : PopupMenu.OnMenuItemClickListener? = null
-    private var mOnItemClickListener : OnItemClickListener? = null
-    private lateinit var mSelectedDiaryItem : DiaryItem
+class DiaryFoodItemRecyclerAdapter : ListAdapter<DiaryItem , DiaryFoodItemRecyclerAdapter.DiaryFoodItemViewHolder>(DiffUtilCallBack()) {
+    private var menuItemClickListener : PopupMenu.OnMenuItemClickListener? = null
+    private var itemClickListener : OnItemClickListener? = null
+    private lateinit var selectedDiaryItem : DiaryItem
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DiaryFoodItemViewHolder {
         val binding = DiaryFoodItemBinding.inflate(LayoutInflater.from(parent.context) , parent , false)
@@ -24,32 +26,32 @@ class DiaryFoodItemRecyclerAdapter : RecyclerView.Adapter<DiaryFoodItemRecyclerA
     }
 
     override fun onBindViewHolder(holder: DiaryFoodItemViewHolder, position: Int) {
-        holder.bind(mDiaryList[position])
+        holder.bind(getItem(position))
     }
 
-    override fun getItemCount() = mDiaryList.size
+    fun getSelectedItem() = selectedDiaryItem
 
-    fun getSelectedItem() = mSelectedDiaryItem
-
-    fun setDiaryList(list : MutableList<DiaryItem>){
-        mDiaryList = list
-    }
-
-    /**Set Popup Menu Click Listener **/
+    /**
+     * Popup Menu 클릭 리스너
+     * **/
     fun setOnMenuItemClickListener(listener: PopupMenu.OnMenuItemClickListener){
-        mMenuItemClickListener = listener
+        menuItemClickListener = listener
     }
 
-    /**Set Item Click Listener **/
+    /**
+     * Item 클릭 리스너
+     * **/
     interface OnItemClickListener{
         fun onItemClick(v: View, model : DiaryItem, position: Int) {}
     }
 
     fun setOnItemClickListener(listener: OnItemClickListener) {
-        mOnItemClickListener = listener
+        itemClickListener = listener
     }
 
-    inner class DiaryFoodItemViewHolder(private val binding : DiaryFoodItemBinding) : RecyclerView.ViewHolder(binding.root){
+   inner class DiaryFoodItemViewHolder(
+        private val binding : DiaryFoodItemBinding
+    ) : RecyclerView.ViewHolder(binding.root){
         fun bind(data: DiaryItem){
             with(binding){
                 timeTextView.text = data.time
@@ -57,21 +59,32 @@ class DiaryFoodItemRecyclerAdapter : RecyclerView.Adapter<DiaryFoodItemRecyclerA
                 servingSizeTextView.text = data.servingSize
             }
             val position = adapterPosition
+            selectedDiaryItem = data
+
             // Setting Listener
             if(position != RecyclerView.NO_POSITION){
                 itemView.setOnLongClickListener {
-                    mSelectedDiaryItem = data
                     val popupMenu = PopupMenu(binding.root.context , it)
                     popupMenu.menuInflater.inflate(R.menu.diary_selected_menu , popupMenu.menu)
-                    popupMenu.setOnMenuItemClickListener(mMenuItemClickListener!!)
+                    popupMenu.setOnMenuItemClickListener(menuItemClickListener)
                     popupMenu.show()
                     true
                 }
 
                 itemView.setOnClickListener {
-                    mOnItemClickListener?.onItemClick(it , data , position)
+                    itemClickListener?.onItemClick(it , data , position)
                 }
             }
+        }
+    }
+
+    private class DiffUtilCallBack : DiffUtil.ItemCallback<DiaryItem>() {
+        override fun areItemsTheSame(oldItem: DiaryItem, newItem: DiaryItem): Boolean {
+            return oldItem.index == newItem.index
+        }
+
+        override fun areContentsTheSame(oldItem: DiaryItem, newItem: DiaryItem): Boolean {
+            return oldItem == newItem
         }
     }
 }

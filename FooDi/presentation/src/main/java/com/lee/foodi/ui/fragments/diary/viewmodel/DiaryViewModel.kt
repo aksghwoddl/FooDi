@@ -32,56 +32,56 @@ class DiaryViewModel @Inject constructor(
 ) : ViewModel() {
     private lateinit var addDiaryJob : Job
 
-    private val _date = MutableLiveData<String>(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy년MM월dd일"))) // Selected date
+    private val _date = MutableLiveData(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy년MM월dd일"))) // 선텍된 날짜
     val date : LiveData<String>
     get() = _date
     fun setDate(date : String){
         _date.value = date
     }
 
-    private val _diaryItems = MutableLiveData<MutableList<DiaryItem>>() // Diary items in Room
+    private val _diaryItems = MutableLiveData<MutableList<DiaryItem>>() // 기록된 음식
     val diaryItems : LiveData<MutableList<DiaryItem>>
     get() = _diaryItems
     fun setDiaryItems(items: MutableList<DiaryItem>) {
         _diaryItems.value = items
     }
 
-    private val _goalCalorie = MutableLiveData<String>("0") // Goal calorie
+    private val _goalCalorie = MutableLiveData<String>("0") // 목표 칼로리
     val goalCalorie : LiveData<String>
     get() = _goalCalorie
     fun setGoalCalorie(calorie : String){
         _goalCalorie.value = calorie
     }
 
-    private val _spendCalories = MutableLiveData<String>("0") // Spend Calorie
+    private val _spendCalories = MutableLiveData<String>("0") // 소비 칼로리
     val spendCalories : LiveData<String>
     get() = _spendCalories
     fun setSpendCalorie(calorie: String){
         _spendCalories.value = calorie
     }
 
-    private val _amountCarbon  = MutableLiveData<String>("0")
+    private val _amountCarbon  = MutableLiveData<String>("0") // 총 탄수화물
     val amountCarbon : LiveData<String>
     get() = _amountCarbon
     fun setAmountCarbon(carbon : String){
         _amountCarbon.value = carbon
     }
 
-    private val _amountProtein  = MutableLiveData<String>("0")
+    private val _amountProtein  = MutableLiveData<String>("0") // 총 단백질
     val amountProtein : LiveData<String>
     get() = _amountProtein
     fun setAmountProtein(protein : String){
         _amountProtein.value = protein
     }
 
-    private val _amountFat  = MutableLiveData<String>("0")
+    private val _amountFat  = MutableLiveData<String>("0") // 총 지방
     val amountFat : LiveData<String>
     get() = _amountFat
     fun setAmountFat(fat : String) {
         _amountFat.value = fat
     }
 
-    private val _calorieProgress = MutableLiveData<Double>(0.0) // Manage calorie progress bar
+    private val _calorieProgress = MutableLiveData<Double>(0.0) // 칼로리 소비량 프로그래스
     val calorieProgress : LiveData<Double>
     get() = _calorieProgress
     fun setCalorieProgress(calorie: Double) {
@@ -95,6 +95,9 @@ class DiaryViewModel @Inject constructor(
     private val _isProgress = MutableLiveData<Boolean>()
     val isProgress : LiveData<Boolean>
     get() = _isProgress
+    fun setIsProgress(progress : Boolean){
+        _isProgress.value = progress
+    }
 
     private val _isNightMode = MutableLiveData<Boolean>(false)
     val isNightMode : LiveData<Boolean>
@@ -104,7 +107,7 @@ class DiaryViewModel @Inject constructor(
     }
 
     /**
-     * Function for get diary item as selected date
+     * 섭취한 음식 불러오기
      * **/
      fun getDiaryItems(){
          viewModelScope.launch {
@@ -113,15 +116,13 @@ class DiaryViewModel @Inject constructor(
                  getAllDiaryItems.invoke(date.value!!)
              }
             _diaryItems.value = diaryItem
-             _isProgress.value = false
         }
     }
 
     /**
-     * Function for add Diary Summary of the day
+     * 다이어리 정보 DB에 기록하기
      * **/
     fun addDiarySummary() {
-        Log.d(TAG, "addDiarySummary()")
         addDiaryJob = CoroutineScope(Dispatchers.IO).launch {
             val diary = DiaryEntity(
                 date.value!!,
@@ -136,7 +137,7 @@ class DiaryViewModel @Inject constructor(
     }
 
     /**
-     * Function for delete selected diary item when popup menu clicked
+     * 선택된 음식 삭제 하기
      * **/
     fun deleteSelectedDiaryItem(diaryItem: DiaryItem){
         viewModelScope.launch {
