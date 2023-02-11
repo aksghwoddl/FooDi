@@ -275,7 +275,7 @@ class DiaryFragment : BaseFragment<FragmentDiaryBinding>(R.layout.fragment_diary
     * **/
    private inner class DatePickerListener : DatePickerDialog.OnDateSetListener {
         override fun onDateSet(datePicker: DatePicker?, _year: Int, _month: Int, _day: Int) {
-            val selectedDate = LocalDate.of(year, month+1 ,day).format(DateTimeFormatter.ofPattern("yyyy년MM월dd일"))
+            val selectedDate = LocalDate.of(_year , _month+1 , _day).format(DateTimeFormatter.ofPattern("yyyy년MM월dd일"))
             year = _year ; month = _month ; day = _day
             viewModel.setDate(selectedDate)
         }
