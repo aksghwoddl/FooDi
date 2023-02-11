@@ -39,13 +39,13 @@ private const val TAG = "DiaryFragment"
 private const val INITIAL_VALUE = "0"
 @AndroidEntryPoint
 class DiaryFragment : BaseFragment<FragmentDiaryBinding>(R.layout.fragment_diary) {
-    private lateinit var mPreferenceManager: FooDiPreferenceManager
-    private val mViewModel : DiaryViewModel by viewModels()
-    private lateinit var mDiaryFoodItemRecyclerAdapter : DiaryFoodItemRecyclerAdapter
+    private val viewModel : DiaryViewModel by viewModels()
+    private lateinit var preferenceManager: FooDiPreferenceManager
+    private lateinit var diaryFoodItemRecyclerAdapter : DiaryFoodItemRecyclerAdapter
 
-    private var mYear = Calendar.getInstance().get(Calendar.YEAR)
-    private var mMonth = Calendar.getInstance().get(Calendar.MONTH)
-    private var mDay = Calendar.getInstance().get(Calendar.DATE)
+    private var year = Calendar.getInstance().get(Calendar.YEAR)
+    private var month = Calendar.getInstance().get(Calendar.MONTH)
+    private var day = Calendar.getInstance().get(Calendar.DATE)
 
     companion object{
         fun newInstance() = DiaryFragment()
@@ -56,25 +56,25 @@ class DiaryFragment : BaseFragment<FragmentDiaryBinding>(R.layout.fragment_diary
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        mPreferenceManager = FooDiPreferenceManager.getInstance(requireContext())
+        preferenceManager = FooDiPreferenceManager.getInstance(requireContext())
         return super.onCreateView(inflater, container, savedInstanceState)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         Log.d(TAG, "onViewCreated()")
         super.onViewCreated(view, savedInstanceState)
-        init()
+        initRecyclerView()
         addListeners()
         observeData()
-        mViewModel.setIsNightMode(Utils.checkNightMode(requireContext()))
+        viewModel.setIsNightMode(Utils.checkNightMode(requireContext()))
     }
 
 
     override fun onResume() {
         Log.d(TAG, "onResume()")
         super.onResume()
-        mViewModel.run {
-            mPreferenceManager.goalCalorie?.let {
+        viewModel.run {
+            preferenceManager.goalCalorie?.let {
                 setGoalCalorie(it)
             }
             getDiaryItems()
@@ -82,66 +82,63 @@ class DiaryFragment : BaseFragment<FragmentDiaryBinding>(R.layout.fragment_diary
     }
 
     private fun observeData() {
-        with(mViewModel){
+        with(viewModel){
             // Header Date
-            date.observe(viewLifecycleOwner){
+            date.observe(viewLifecycleOwner){ // 선택된 날짜
                 Utils.convertValueWithErrorCheck(binding.headerDateTextView , getString(R.string.header_date), it)
-                mViewModel.getDiaryItems()
+                viewModel.getDiaryItems()
             }
 
-            // Diary Items
-            diaryItems.observe(viewLifecycleOwner){
+            diaryItems.observe(viewLifecycleOwner){ // 섭취 음식 목록
                 if(it.isEmpty()){
                     Log.d(TAG, "observeDate: diaryItems is empty")
                     binding.noDiaryItemLayout.visibility = View.VISIBLE
                     binding.diaryListLayout.visibility = View.GONE
                     initFoodSummary()
                     setCalorieProgress(0.0)
-                    mViewModel.addDiarySummary()
+                    addDiarySummary()
+                    setIsProgress(false)
                 } else {
                     Log.d(TAG, "observeDate: diaryItems is not empty")
                     binding.noDiaryItemLayout.visibility = View.GONE
                     binding.diaryListLayout.visibility = View.VISIBLE
-                    mDiaryFoodItemRecyclerAdapter.run {
-                        setDiaryList(it)
-                        notifyItemRangeChanged(0 , itemCount)
+                    diaryFoodItemRecyclerAdapter.run {
+                        val diaryItems = mutableListOf<DiaryItem>()
+                        diaryItems.addAll(it)
+                        submitList(diaryItems)
                     }
+                    setIsProgress(false)
                     updateFoodSummary()
                     updateCalorieProgress()
-                    mViewModel.addDiarySummary()
+                    addDiarySummary()
                 }
             }
 
-            // Goal Calorie
-            goalCalorie.observe(viewLifecycleOwner){
+            goalCalorie.observe(viewLifecycleOwner){ // 목표 칼로리
                 Utils.convertValueWithErrorCheck(binding.goalCalorieTextView, getString(R.string.goal_calorie), it)
             }
 
-            // Spend Calorie
-            spendCalories.observe(viewLifecycleOwner){
+            spendCalories.observe(viewLifecycleOwner){ // 소비 칼로리
                 Utils.convertValueWithErrorCheck(binding.spendCalorieTextView, getString(R.string.spend_calorie), it)
             }
 
-            // Progress bar
-            calorieProgress.observe(viewLifecycleOwner){
+            calorieProgress.observe(viewLifecycleOwner){ // 섭취 칼로리 정도
                 binding.spendCalorieProgressBar.progress = it.toInt()
             }
 
-            // Food Summary Layout observer
-            amountCarbon.observe(viewLifecycleOwner){
+            amountCarbon.observe(viewLifecycleOwner){ // 총 탄수화물
                 Utils.convertValueWithErrorCheck(binding.amountCarbonTextView , getString(R.string.summary_format) , it)
             }
 
-            amountProtein.observe(viewLifecycleOwner){
+            amountProtein.observe(viewLifecycleOwner){ // 총 단백질
                 Utils.convertValueWithErrorCheck(binding.amountProteinTextView , getString(R.string.summary_format) , it)
             }
 
-            amountFat.observe(viewLifecycleOwner){
+            amountFat.observe(viewLifecycleOwner){ // 총 지방
                 Utils.convertValueWithErrorCheck(binding.amountFatTextView , getString(R.string.summary_format) , it)
             }
 
-            // Night Mode
-            isNightMode.observe(viewLifecycleOwner){
+            isNightMode.observe(viewLifecycleOwner){ // 다크모드인지 확인
                 if(it){
                     with(binding){
                         calendarButton.setImageResource(R.drawable.ic_baseline_calendar_month_24_night)
@@ -155,8 +152,7 @@ class DiaryFragment : BaseFragment<FragmentDiaryBinding>(R.layout.fragment_diary
                 }
             }
 
-            // Progress
-            isProgress.observe(viewLifecycleOwner){
+            isProgress.observe(viewLifecycleOwner){ // 진행 상태
                 if(it){
                     binding.progressBar.visibility = View.VISIBLE
                 } else {
@@ -166,48 +162,46 @@ class DiaryFragment : BaseFragment<FragmentDiaryBinding>(R.layout.fragment_diary
         }
     }
 
-    private fun init() {
-        // Init RecyclerView
-        mDiaryFoodItemRecyclerAdapter = DiaryFoodItemRecyclerAdapter()
-        mDiaryFoodItemRecyclerAdapter.setOnMenuItemClickListener(PopupMenuItemClickListener())
-        mDiaryFoodItemRecyclerAdapter.setOnItemClickListener(OnDiaryItemClickListener())
-
+    private fun initRecyclerView() {
+        diaryFoodItemRecyclerAdapter = DiaryFoodItemRecyclerAdapter()
+        diaryFoodItemRecyclerAdapter.run {
+            setOnMenuItemClickListener(PopupMenuItemClickListener())
+            setOnItemClickListener(OnDiaryItemClickListener())
+        }
         binding.diaryRecyclerView.run {
             layoutManager = CustomLinearLayoutManager(requireContext())
-            adapter = mDiaryFoodItemRecyclerAdapter
-            (itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false // RecyclerView 깜빡임 현상 없애기
+            adapter = diaryFoodItemRecyclerAdapter
+            itemAnimator = null // RecyclerView 깜빡임 현상 없애기
         }
     }
 
     private fun addListeners() {
         with(binding){
-            // Food Search Listeners
-            headerSearchLayout.setOnClickListener {
+            headerSearchLayout.setOnClickListener { // 검색하기 레이아웃
                 with(Intent(requireContext() , SearchActivity::class.java)){
-                    putExtra(EXTRA_SELECTED_DATE , mViewModel.date.value)
+                    putExtra(EXTRA_SELECTED_DATE , viewModel.date.value)
                     startActivity(this)
                 }
             }
 
-            searchButton.setOnClickListener {
+            searchButton.setOnClickListener { // 검색하기 버튼
                 with(Intent(requireContext() , SearchActivity::class.java)){
-                    putExtra(EXTRA_SELECTED_DATE , mViewModel.date.value)
+                    putExtra(EXTRA_SELECTED_DATE , viewModel.date.value)
                     startActivity(this)
                 }
             }
 
-            addButton.setOnClickListener {
+            addButton.setOnClickListener { // 추가하기 버튼
                 with(Intent(requireContext() , SearchActivity::class.java)){
-                    putExtra(EXTRA_SELECTED_DATE , mViewModel.date.value)
+                    putExtra(EXTRA_SELECTED_DATE , viewModel.date.value)
                     startActivity(this)
                 }
             }
 
-            // Calendar Listener
-            calendarButton.setOnClickListener {
+            calendarButton.setOnClickListener { // 달력 버튼
                 val listener = DatePickerListener()
-                Log.d(TAG, "addListeners: year = $mYear , month = $mMonth , day = $mDay")
-                val calendarDialog = DatePickerDialog(requireContext() , listener ,mYear , mMonth , mDay)
+                Log.d(TAG, "addListeners: year = $year , month = $month , day = $day")
+                val calendarDialog = DatePickerDialog(requireContext() , listener , year , month , day)
                 calendarDialog.show()
             }
         }
@@ -222,28 +216,28 @@ class DiaryFragment : BaseFragment<FragmentDiaryBinding>(R.layout.fragment_diary
         var carbondydrate = 0
         var protein = 0
         var fat  = 0
-        mViewModel.diaryItems.value!!.forEach {
-            // Calorie
-            if(it.food?.calorie!! != NOT_AVAILABLE){
-                calorie+= it.food?.calorie!!.toDouble().roundToInt()
+        viewModel.diaryItems.value!!.forEach {
+            // 칼로리
+            if(it.food.calorie != NOT_AVAILABLE){
+                calorie+= it.food.calorie.toDouble().roundToInt()
             }
 
-            // Carbohydrate
-            if(it.food?.carbohydrate!! != NOT_AVAILABLE){
-                carbondydrate += it.food?.carbohydrate!!.toDouble().roundToInt()
+            // 탄수화물
+            if(it.food.carbohydrate != NOT_AVAILABLE){
+                carbondydrate += it.food.carbohydrate.toDouble().roundToInt()
             }
 
-            // Protein
-            if(it.food?.protein!! != NOT_AVAILABLE){
-                protein += it.food?.protein!!.toDouble().roundToInt()
+            // 단백질
+            if(it.food.protein != NOT_AVAILABLE){
+                protein += it.food.protein.toDouble().roundToInt()
             }
 
-            // Fat
-            if(it.food?.fat!! != NOT_AVAILABLE){
-                fat += it.food?.fat!!.toDouble().roundToInt()
+            // 지방
+            if(it.food.fat != NOT_AVAILABLE){
+                fat += it.food.fat.toDouble().roundToInt()
             }
         }
-        with(mViewModel) {
+        with(viewModel) {
             setSpendCalorie(calorie.toString())
             setAmountCarbon(carbondydrate.toString())
             setAmountProtein(protein.toString())
@@ -255,7 +249,7 @@ class DiaryFragment : BaseFragment<FragmentDiaryBinding>(R.layout.fragment_diary
      * 음식 정보 초기화 하는 함수
      * **/
     private fun initFoodSummary() {
-        with(mViewModel){
+        with(viewModel){
             setSpendCalorie(INITIAL_VALUE)
             setAmountCarbon(INITIAL_VALUE)
             setAmountProtein(INITIAL_VALUE)
@@ -268,7 +262,7 @@ class DiaryFragment : BaseFragment<FragmentDiaryBinding>(R.layout.fragment_diary
      * **/
     private fun updateCalorieProgress() {
         Log.d(TAG, "updateCalorieProgress()")
-        with(mViewModel){
+        with(viewModel){
             if(spendCalories.value != "0" && goalCalorie.value != "0"){
                 val progress = spendCalories.value!!.toDouble()/goalCalorie.value!!.toInt() * 100
                 setCalorieProgress(progress)
@@ -280,10 +274,10 @@ class DiaryFragment : BaseFragment<FragmentDiaryBinding>(R.layout.fragment_diary
     * DatePickerDialog 리스너
     * **/
    private inner class DatePickerListener : DatePickerDialog.OnDateSetListener {
-        override fun onDateSet(datePicker: DatePicker?, year: Int, month: Int, day: Int) {
+        override fun onDateSet(datePicker: DatePicker?, _year: Int, _month: Int, _day: Int) {
             val selectedDate = LocalDate.of(year, month+1 ,day).format(DateTimeFormatter.ofPattern("yyyy년MM월dd일"))
-            mYear = year ; mMonth = month ; mDay = day
-            mViewModel.setDate(selectedDate)
+            year = _year ; month = _month ; day = _day
+            viewModel.setDate(selectedDate)
         }
     }
 
@@ -294,7 +288,7 @@ class DiaryFragment : BaseFragment<FragmentDiaryBinding>(R.layout.fragment_diary
         override fun onMenuItemClick(item: MenuItem?): Boolean {
             when(item?.itemId){
                 R.id.itemDelete -> {
-                    mViewModel.deleteSelectedDiaryItem(mDiaryFoodItemRecyclerAdapter.getSelectedItem())
+                    viewModel.deleteSelectedDiaryItem(diaryFoodItemRecyclerAdapter.getSelectedItem())
                 }
             }
             return true

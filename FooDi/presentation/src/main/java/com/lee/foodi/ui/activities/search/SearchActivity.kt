@@ -37,6 +37,7 @@ class SearchActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this@SearchActivity , R.layout.activity_search)
+        binding.searchViewModel = viewModel
         initRecyclerView()
         addListeners()
         observeData()
