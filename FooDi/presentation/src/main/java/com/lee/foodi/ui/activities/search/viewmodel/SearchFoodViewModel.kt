@@ -26,11 +26,20 @@ class SearchFoodViewModel @Inject constructor(
     private val getSearchFood: GetSearchFood ,
     private val resourceProvider: ResourceProvider
 ) : ViewModel() {
+    val searchFoodName = MutableLiveData<String>()
+
     private val _foodList = MutableLiveData<MutableList<Food>>() // 검색된 음식 목록
     val foodList : LiveData<MutableList<Food>>
     get() = _foodList
     fun setFoodList(list : MutableList<Food>) {
         _foodList.value = list
+    }
+
+    private val _page = MutableLiveData<Int>()
+    val page : LiveData<Int>
+    get() = _page
+    fun setPage(page : Int){
+        _page.value = page
     }
 
     private val _addFoodLayoutVisible = MutableLiveData<Boolean>() // 음식추가 레이아웃 표시여부
@@ -78,19 +87,19 @@ class SearchFoodViewModel @Inject constructor(
     /**
      * 음식을 검색하는 함수
      * **/
-    fun getSearchFoodList(foodName : String , page : String) {
+    fun getSearchFoodList() {
         Log.d(TAG, "getSearchFoodList()")
-            if(foodName.isNotEmpty()){
+        searchFoodName.value?.let {
+            if(it.isNotEmpty()){
                 try{
                     viewModelScope.launch {
                         setIsProgress(true)
                         val response = withContext(Dispatchers.IO){
-                            getSearchFood.invoke(foodName , page)
+                            getSearchFood.invoke(it , page.value!!.toString())
                         }
                         _foodList.value = response.results
                         val totalCount = response.totalCount
-                        _isNextEnable.value = totalCount >= 1 && response.totalCount > page.toInt()
-                        setIsProgress(false)
+                        _isNextEnable.value = totalCount >= 1 && response.totalCount > page.value!!
                     }
                 } catch (socketTimeOutException : SocketTimeoutException){ // 통신시간 초과
                     setToastMessage(resourceProvider.getString(R.string.check_socket_timeout))
@@ -103,5 +112,6 @@ class SearchFoodViewModel @Inject constructor(
                 setToastMessage(resourceProvider.getString(R.string.empty_search))
                 setIsProgress(false)
             }
+        }
     }
 }
