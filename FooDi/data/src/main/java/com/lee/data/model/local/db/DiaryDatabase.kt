@@ -3,10 +3,10 @@ package com.lee.data.model.local.db
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.lee.data.api.room.DiaryDAO
+import com.lee.data.model.local.dao.DiaryDAO
 import com.lee.data.model.local.TypeConverter
-import com.lee.domain.model.local.DiaryEntity
-import com.lee.domain.model.local.DiaryItemEntity
+import com.lee.data.model.local.entity.DiaryEntity
+import com.lee.data.model.local.entity.DiaryItemEntity
 
 /**
  * 다이어리 Database class

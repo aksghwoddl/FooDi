@@ -1,10 +1,10 @@
-package com.lee.data.api.room
+package com.lee.data.model.local.dao
 
 import androidx.room.*
+import com.lee.data.model.local.entity.DiaryEntity
+import com.lee.data.model.local.entity.DiaryItemEntity
 import com.lee.domain.model.local.Diary
-import com.lee.domain.model.local.DiaryEntity
 import com.lee.domain.model.local.DiaryItem
-import com.lee.domain.model.local.DiaryItemEntity
 
 /**
  * Room의 DAO class

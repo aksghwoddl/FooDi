@@ -35,7 +35,7 @@ import kotlin.math.roundToInt
  * **/
 @AndroidEntryPoint
 class ReportFragment : BaseFragment<FragmentReportBinding>(R.layout.fragment_report) {
-    private val mViewModel : ReportViewModel by viewModels()
+    private val viewModel : ReportViewModel by viewModels()
     private lateinit var preferenceManager : FooDiPreferenceManager
 
     companion object{
@@ -62,10 +62,10 @@ class ReportFragment : BaseFragment<FragmentReportBinding>(R.layout.fragment_rep
         super.onResume()
         lifecycleScope.launch {
             val bSummaryList = withContext(Dispatchers.IO){
-                mViewModel.getDiarySummary(binding.reportSelection.selectedItem.toString())
+                viewModel.getDiarySummary(binding.reportSelection.selectedItem.toString())
             }
             bSummaryList?.let {
-                mViewModel.setSummaryList(it)
+                viewModel.setSummaryList(it)
             }
             preferenceManager = FooDiPreferenceManager.getInstance(requireContext())
             if(preferenceManager.goalCalorie  != "0"){
@@ -73,7 +73,7 @@ class ReportFragment : BaseFragment<FragmentReportBinding>(R.layout.fragment_rep
                 binding.reportChart.axisRight.setAxisMaxValue(preferenceManager.goalCalorie!!.toFloat())
             }
             binding.reportChart.animateY(1000)
-            mViewModel.setAverageCalorie(calculateAverageCalorie())
+            viewModel.setAverageCalorie(calculateAverageCalorie())
         }
     }
 
@@ -89,7 +89,7 @@ class ReportFragment : BaseFragment<FragmentReportBinding>(R.layout.fragment_rep
             reportSelection.onItemSelectedListener = object : OnItemSelectedListener{
                 override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
                     lifecycleScope.launch {
-                        with(mViewModel){
+                        with(viewModel){
                             val bSummaryList = withContext(Dispatchers.IO){
                                 getDiarySummary(reportSelection.selectedItem.toString())
                             }
@@ -166,7 +166,7 @@ class ReportFragment : BaseFragment<FragmentReportBinding>(R.layout.fragment_rep
      * Function for observe Live data
      * **/
     private fun observeData() {
-        with(mViewModel){
+        with(viewModel){
             summaryList.observe(viewLifecycleOwner){ // 불러온 총 소비 칼로리 리스트
                 val labelList = arrayListOf<String>()
                 val dayList = getDays()
@@ -187,7 +187,7 @@ class ReportFragment : BaseFragment<FragmentReportBinding>(R.layout.fragment_rep
      * 평균칼로리를 계산하는 함수
      * **/
     private fun calculateAverageCalorie() : String {
-        val diaryList = mViewModel.summaryList.value
+        val diaryList = viewModel.summaryList.value
         var sum  = 0.0
         diaryList?.forEach { diary ->
            diary?.let { sum += it.totalCalorie.toDouble() }
@@ -201,7 +201,7 @@ class ReportFragment : BaseFragment<FragmentReportBinding>(R.layout.fragment_rep
     private fun setData() {
         val valueList = ArrayList<BarEntry>()
         val title = getString(R.string.spend_calorie_title)
-        val summaryList = mViewModel.summaryList.value
+        val summaryList = viewModel.summaryList.value
         summaryList?.forEachIndexed{index , diary ->
             diary?.let { valueList.add(BarEntry(index.toFloat() , diary.totalCalorie.toFloat())) }
         }

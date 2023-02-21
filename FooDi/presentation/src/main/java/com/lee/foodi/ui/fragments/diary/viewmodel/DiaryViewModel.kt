@@ -5,9 +5,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.lee.domain.model.local.DiaryEntity
+import com.lee.domain.model.local.Diary
 import com.lee.domain.model.local.DiaryItem
-import com.lee.domain.model.local.DiaryItemEntity
 import com.lee.domain.usecase.AddDiary
 import com.lee.domain.usecase.DeleteDiaryItem
 import com.lee.domain.usecase.GetAllDiaryItems
@@ -124,7 +123,7 @@ class DiaryViewModel @Inject constructor(
      * **/
     fun addDiarySummary() {
         addDiaryJob = CoroutineScope(Dispatchers.IO).launch {
-            val diary = DiaryEntity(
+            val diary = Diary(
                 date.value!!,
                 spendCalories.value!!,
                 amountCarbon.value!!,
@@ -142,17 +141,7 @@ class DiaryViewModel @Inject constructor(
     fun deleteSelectedDiaryItem(diaryItem: DiaryItem){
         viewModelScope.launch {
             withContext(Dispatchers.IO){
-                val selectedEntity : DiaryItemEntity
-                with(diaryItem){
-                    selectedEntity = DiaryItemEntity(
-                        index,
-                        date,
-                        food,
-                        time,
-                        servingSize
-                    )
-                }
-                deleteDiaryItem.invoke(selectedEntity)
+                deleteDiaryItem.invoke(diaryItem)
             }
             getDiaryItems()
             _toastMessage.value = resourceProvider.getString(R.string.successfully_delete)

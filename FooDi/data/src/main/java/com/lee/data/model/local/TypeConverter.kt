@@ -1,7 +1,6 @@
 package com.lee.data.model.local
 
 import com.google.gson.Gson
-import com.lee.data.model.remote.FoodResponse
 import com.lee.domain.model.remote.Food
 
 /**

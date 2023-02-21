@@ -6,7 +6,7 @@ import java.io.Serializable
 /**
  * 검색한 음식 DTO class
  * **/
-data class FoodResponse (
+data class FoodDTO (
     var id : Int ,
     @SerializedName("DESC_KOR")
     var foodName : String ,

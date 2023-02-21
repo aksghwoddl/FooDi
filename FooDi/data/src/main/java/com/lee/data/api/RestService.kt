@@ -1,9 +1,9 @@
-package com.lee.data.api.rest
+package com.lee.data.api
 
 import com.lee.data.common.DESCRIPTION_KOREAN
 import com.lee.data.common.FOOD_TARGET_URL
 import com.lee.data.common.PAGE_NUMBER
-import com.lee.domain.model.remote.SearchingFood
+import com.lee.data.model.remote.SearchingFoodDTO
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -18,7 +18,7 @@ interface RestService {
     suspend fun getNewSearchFood(
         @Query(DESCRIPTION_KOREAN) foodName : String
         , @Query(PAGE_NUMBER) page : String
-    ) : SearchingFood
+    ) : SearchingFoodDTO
 
     @POST(FOOD_TARGET_URL)
     suspend fun addNewFood(@Body foodData : com.lee.domain.model.remote.AddingFoodRequest) : Response<Void>

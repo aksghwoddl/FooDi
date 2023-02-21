@@ -1,7 +1,7 @@
 package com.lee.foodi.ui.activities.search.detail.viewmodel
 
 import androidx.lifecycle.ViewModel
-import com.lee.domain.model.local.DiaryItemEntity
+import com.lee.domain.model.local.DiaryItem
 import com.lee.domain.model.remote.Food
 import com.lee.domain.usecase.AddDiaryItem
 import com.lee.foodi.common.ResourceProvider
@@ -26,7 +26,7 @@ class FoodDetailViewModel @Inject constructor(
      * **/
     fun addFoodIntoDatabase(date : String , servingSize : String , food : Food) {
         val time = LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH : mm"))
-        val queryFood = DiaryItemEntity(null, date, food, time, servingSize)
+        val queryFood = DiaryItem(null, date, food, time, servingSize)
         CoroutineScope(Dispatchers.IO).launch{
             addDiaryItem.invoke(queryFood)
         }
