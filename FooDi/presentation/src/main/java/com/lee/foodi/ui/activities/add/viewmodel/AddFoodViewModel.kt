@@ -10,11 +10,9 @@ import com.lee.foodi.R
 import com.lee.foodi.common.NOT_AVAILABLE
 import com.lee.foodi.common.ResourceProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import java.net.ConnectException
+import java.net.SocketTimeoutException
 import javax.inject.Inject
 
 /**
@@ -86,40 +84,48 @@ class AddFoodViewModel @Inject constructor(
     val cholesterol = MutableLiveData<String>()
     val companyName = MutableLiveData<String>()
 
-    fun postRequestAddFood(){
-        try{
-            _isProgress.value = true
-            CoroutineScope(Dispatchers.IO).launch {
-                val addingFood = AddingFoodRequest(
-                    foodName.value?.toString() ?: NOT_AVAILABLE,
-                    servingSize.value?.toString() ?: NOT_AVAILABLE,
-                    calorie.value?.toString() ?: NOT_AVAILABLE,
-                    carbohydrate.value?.toString() ?: NOT_AVAILABLE,
-                    protein.value?.toString() ?: NOT_AVAILABLE,
-                    fat.value?.toString() ?: NOT_AVAILABLE,
-                    sugar.value?.toString() ?: NOT_AVAILABLE,
-                    salt.value?.toString() ?: NOT_AVAILABLE,
-                    cholesterol.value?.toString() ?: NOT_AVAILABLE,
-                    saturatedFat.value?.toString() ?: NOT_AVAILABLE,
-                    transFat.value?.toString() ?: NOT_AVAILABLE,
-                    companyName.value?.toString() ?: NOT_AVAILABLE,
-                )
-                val response = addNewFood.invoke(addingFood)
-                if(response.isSuccessful){
-                    withContext(Dispatchers.Main) {
-                        Log.d(TAG, "postRequestAddFood: $addingFood")
-                        setToastMessage(resourceProvider.getString(R.string.successfully_add))
-                        _isProgress.value = false
-                        _activityFinish.value = true
-                    }
-                } else {
-                    setToastMessage(resourceProvider.getString(R.string.response_fail))
-                    _isProgress.value = false
-                }
+    private val exceptionHandler = CoroutineExceptionHandler { _ , exception ->
+        when(exception){
+            is SocketTimeoutException -> {
+                setToastMessage(resourceProvider.getString(R.string.check_socket_timeout))
+                _isProgress.value = false
             }
-        } catch (connectException : ConnectException){
-            setToastMessage(resourceProvider.getString(R.string.check_server_connection))
-            _isProgress.value = false
+            is ConnectException -> {
+                setToastMessage(resourceProvider.getString(R.string.check_server_connection))
+                _isProgress.value = false
+            }
+        }
+    }
+
+    fun postRequestAddFood(){
+        _isProgress.value = true
+        CoroutineScope(Dispatchers.IO).launch(exceptionHandler) {
+            val addingFood = AddingFoodRequest(
+                foodName.value?.toString() ?: NOT_AVAILABLE,
+                servingSize.value?.toString() ?: NOT_AVAILABLE,
+                calorie.value?.toString() ?: NOT_AVAILABLE,
+                carbohydrate.value?.toString() ?: NOT_AVAILABLE,
+                protein.value?.toString() ?: NOT_AVAILABLE,
+                fat.value?.toString() ?: NOT_AVAILABLE,
+                sugar.value?.toString() ?: NOT_AVAILABLE,
+                salt.value?.toString() ?: NOT_AVAILABLE,
+                cholesterol.value?.toString() ?: NOT_AVAILABLE,
+                saturatedFat.value?.toString() ?: NOT_AVAILABLE,
+                transFat.value?.toString() ?: NOT_AVAILABLE,
+                companyName.value?.toString() ?: NOT_AVAILABLE,
+            )
+            val response = addNewFood.invoke(addingFood)
+            if(response.isSuccessful){
+                withContext(Dispatchers.Main) {
+                    Log.d(TAG, "postRequestAddFood: $addingFood")
+                    setToastMessage(resourceProvider.getString(R.string.successfully_add))
+                    _isProgress.value = false
+                    _activityFinish.value = true
+                }
+            } else {
+                setToastMessage(resourceProvider.getString(R.string.response_fail))
+                _isProgress.value = false
+            }
         }
     }
 }

@@ -10,6 +10,7 @@ import com.lee.domain.usecase.GetSearchFood
 import com.lee.foodi.R
 import com.lee.foodi.common.ResourceProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -84,15 +85,28 @@ class SearchFoodViewModel @Inject constructor(
         _isNightMode.value = isNightMode
     }
 
+    private val exceptionHandler = CoroutineExceptionHandler { _ , exception ->
+        when(exception){
+            is SocketTimeoutException -> {
+                setToastMessage(resourceProvider.getString(R.string.check_socket_timeout))
+                setIsProgress(false)
+            }
+            is ConnectException -> {
+                setToastMessage(resourceProvider.getString(R.string.check_server_connection))
+                setIsProgress(false)
+            }
+        }
+    }
+
     /**
      * 음식을 검색하는 함수
      * **/
     fun getSearchFoodList() {
         Log.d(TAG, "getSearchFoodList()")
+
         searchFoodName.value?.let {
             if(it.isNotEmpty()){
-                try{
-                    viewModelScope.launch {
+                    viewModelScope.launch(exceptionHandler){
                         setIsProgress(true)
                         val response = withContext(Dispatchers.IO){
                             getSearchFood.invoke(it , page.value!!.toString())
@@ -101,13 +115,6 @@ class SearchFoodViewModel @Inject constructor(
                         val totalCount = response.totalCount
                         _isNextEnable.value = totalCount >= 1 && response.totalCount > page.value!!
                     }
-                } catch (socketTimeOutException : SocketTimeoutException){ // 통신시간 초과
-                    setToastMessage(resourceProvider.getString(R.string.check_socket_timeout))
-                    setIsProgress(false)
-                } catch(connectException : ConnectException) { // 서버가 켜져 있지 않을때
-                    setToastMessage(resourceProvider.getString(R.string.check_server_connection))
-                    setIsProgress(false)
-                }
             } else {
                 setToastMessage(resourceProvider.getString(R.string.empty_search))
                 setIsProgress(false)
