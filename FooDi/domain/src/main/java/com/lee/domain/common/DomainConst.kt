@@ -1,4 +1,4 @@
-package com.lee.domain.model.common
+package com.lee.domain.common
 
 /**
  * Data Layer에서 common하게 사용하는 const class

@@ -1,13 +1,11 @@
 package com.lee.foodi.di
 
 import android.content.Context
-import androidx.room.PrimaryKey
 import androidx.room.Room
-import com.lee.data.api.rest.RestService
-import com.lee.data.api.room.DiaryDAO
+import com.lee.data.api.RestService
+import com.lee.data.model.local.dao.DiaryDAO
 import com.lee.data.common.BASE_URL
 import com.lee.data.common.CONNECTION_TIME_OUT
-import com.lee.data.common.FOOD_TARGET_URL
 import com.lee.data.datasource.RemoteDateSource
 import com.lee.data.model.local.db.DiaryDatabase
 import com.lee.data.repository.FoodiRepositoryImpl

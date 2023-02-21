@@ -1,6 +1,6 @@
 package com.lee.domain.usecase
 
-import com.lee.domain.model.local.DiaryItemEntity
+import com.lee.domain.model.local.DiaryItem
 import com.lee.domain.repository.FoodiRepository
 import javax.inject.Inject
 
@@ -10,5 +10,5 @@ import javax.inject.Inject
 class UpdateDiaryItem @Inject constructor(
     private val repository: FoodiRepository
 ) {
-    suspend fun invoke(diaryItemEntity: DiaryItemEntity) = repository.updateDiaryItem(diaryItemEntity)
+    suspend fun invoke(diaryItem: DiaryItem) = repository.updateDiaryItem(diaryItem)
 }

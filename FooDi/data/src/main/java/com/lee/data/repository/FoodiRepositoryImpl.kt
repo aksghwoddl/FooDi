@@ -2,8 +2,8 @@ package com.lee.data.repository
 
 import com.lee.data.datasource.LocalDataSource
 import com.lee.data.datasource.RemoteDateSource
-import com.lee.domain.model.local.DiaryEntity
-import com.lee.domain.model.local.DiaryItemEntity
+import com.lee.domain.model.local.Diary
+import com.lee.domain.model.local.DiaryItem
 import com.lee.domain.model.remote.AddingFoodRequest
 import com.lee.domain.repository.FoodiRepository
 import javax.inject.Inject
@@ -39,20 +39,20 @@ class FoodiRepositoryImpl @Inject constructor(
     /**
      * 다이어리에 음식 정보 추가하기
      * **/
-    override suspend fun addDiaryItem(diaryItem: DiaryItemEntity) = localDataSource.addDiaryItem(diaryItem)
+    override suspend fun addDiaryItem(diaryItem: DiaryItem) = localDataSource.addDiaryItem(diaryItem)
 
     /**
      * 당일의 다이어리 정보 추가하기
      * **/
-    override suspend fun addDiary(diary: DiaryEntity) = localDataSource.addDiary(diary)
+    override suspend fun addDiary(diary: Diary) = localDataSource.addDiary(diary)
 
     /**
      * 다이어리에 기록된 음식 삭제하기
      * **/
-    override suspend fun deleteDiaryItem(diaryItem: DiaryItemEntity) = localDataSource.deleteDiaryItem(diaryItem)
+    override suspend fun deleteDiaryItem(diaryItem: DiaryItem) = localDataSource.deleteDiaryItem(diaryItem)
 
     /**
      * 다이어리에 기록된 음식 업데이트하기
      * **/
-    override suspend fun updateDiaryItem(diaryItem: DiaryItemEntity) = localDataSource.updateDiaryItem(diaryItem)
+    override suspend fun updateDiaryItem(diaryItem: DiaryItem) = localDataSource.updateDiaryItem(diaryItem)
 }

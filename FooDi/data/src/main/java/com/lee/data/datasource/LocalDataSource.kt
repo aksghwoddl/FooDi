@@ -1,10 +1,9 @@
 package com.lee.data.datasource
 
-import com.lee.data.api.room.DiaryDAO
+import com.lee.data.mapper.LocalMapper
+import com.lee.data.model.local.dao.DiaryDAO
 import com.lee.domain.model.local.Diary
-import com.lee.domain.model.local.DiaryEntity
 import com.lee.domain.model.local.DiaryItem
-import com.lee.domain.model.local.DiaryItemEntity
 import javax.inject.Inject
 
 interface LocalDataSource{
@@ -12,13 +11,13 @@ interface LocalDataSource{
 
     suspend fun getDiary(date : String) : Diary
 
-    suspend fun addDiaryItem(item: DiaryItemEntity)
+    suspend fun addDiaryItem(diaryItem : DiaryItem)
 
-    suspend fun addDiary(diary : DiaryEntity)
+    suspend fun addDiary(diary : Diary)
 
-    suspend fun deleteDiaryItem(diaryItemEntity: DiaryItemEntity)
+    suspend fun deleteDiaryItem(diaryItem : DiaryItem)
 
-    suspend fun updateDiaryItem(diaryItemEntity: DiaryItemEntity)
+    suspend fun updateDiaryItem(diaryItem : DiaryItem)
 }
 
 class LocalDataSourceImpl @Inject constructor(
@@ -28,11 +27,11 @@ class LocalDataSourceImpl @Inject constructor(
 
     override suspend fun getDiary(date: String) = diaryDAO.getDiaryByDate(date)
 
-    override suspend fun addDiaryItem(item: DiaryItemEntity) = diaryDAO.addDiaryItem(item)
+    override suspend fun addDiaryItem(diaryItem: DiaryItem) = diaryDAO.addDiaryItem(LocalMapper.mapperToDiaryItemEntity(diaryItem))
 
-    override suspend fun addDiary(diary: DiaryEntity)  = diaryDAO.addDiary(diary)
+    override suspend fun addDiary(diary: Diary)  = diaryDAO.addDiary(LocalMapper.mapperToDiaryEntity(diary))
 
-    override suspend fun deleteDiaryItem(diaryItemEntity: DiaryItemEntity) = diaryDAO.deleteDiaryItem(diaryItemEntity)
+    override suspend fun deleteDiaryItem(diaryItem : DiaryItem) = diaryDAO.deleteDiaryItem(LocalMapper.mapperToDiaryItemEntity(diaryItem))
 
-    override suspend fun updateDiaryItem(diaryItemEntity: DiaryItemEntity)  = diaryDAO.updateDiaryItem(diaryItemEntity)
+    override suspend fun updateDiaryItem(diaryItem : DiaryItem)  = diaryDAO.updateDiaryItem(LocalMapper.mapperToDiaryItemEntity(diaryItem))
 }
