@@ -29,6 +29,7 @@
 <img src="https://img.shields.io/badge/MVVM-0F9D58?style=for-the-badge&logo=&logoColor=white">
 <img src="https://img.shields.io/badge/Coroutine-0F9D58?style=for-the-badge&logo=&logoColor=white">
 <img src="https://img.shields.io/badge/MpAndriodChart-0F9D58?style=for-the-badge&logo=&logoColor=white">
+<img src="https://img.shields.io/badge/Hilt-0F9D58?style=for-the-badge&logo=&logoColor=white">
 </p>
 
 #### ▪️ Server
